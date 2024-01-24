@@ -1,9 +1,12 @@
 import React from 'react'
+import style from "./Home.module.css"
 
-const Homess = () => {
+const Home = () => {
   return (
-    <div>Homess</div>
+    <div className={style.main_container}>
+      View del Home
+    </div>
   )
 }
 
-export default Homess
+export default Home

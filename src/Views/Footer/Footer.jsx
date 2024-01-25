@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Footer = () => {
+const PieDePagina = () => {
   return (
-    <div>Footer</div>
+    <div>PieDePagina</div>
   )
 }
 
-export default Footer
+export default PieDePagina

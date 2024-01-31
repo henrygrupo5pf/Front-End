@@ -1,31 +1,72 @@
-import { useState } from 'react'
-import{Route, Routes} from "react-router-dom"
-import Home from './Views/Home/Home'
-import Profile from "./Views/Profile/Profile"
-import NavBar from './Components/NavBar/NavBar'
-import Footer from './Components/Footer/Footer'
-import './App.css'
+import { createContext, useState } from "react";
+import { useLocation } from "react-router-dom";
+import styled, { ThemeProvider } from "styled-components";
+import { Dark, Light } from "../src/styles/themes";
+import { Sidebar } from "./components/organismos/sidebar/sidebar";
+import MyRoutes from "./routes/routes";
+import { Device } from "./styles/breakpoints";
+
+export const ThemeContext = createContext(null);
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [themeuse, setTheme] = useState("light");
+  const theme = themeuse === "light" ? "light" : "dark";
+  const themeStyle = theme === "light" ? Light : Dark;
 
+  const [sidebar, setSidebar] = useState(false);
+
+  const { pathname } = useLocation();
   return (
-    <div className='App'>
-        <NavBar></NavBar>
-        <Routes>
-            <Route path='/' element={<Home/>}></Route>
-            <Route path='/profile' element={<Profile/>}></Route>
-            {/* Este componente deberia funcionar como un detail pero para usuarios */}
-            {/* si se hace click en el perfil de un vendedor, usa la id del vendedor para mostrar sus datos
-            si se hace click en "mi perfil" o algo similar, usa la id del usuario para mostrar sus datos */}
-
-        </Routes>
-        <Footer></Footer>
-
-    </div>
-      
-  )
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      <ThemeProvider theme={themeStyle}>
+            <Container className={sidebar ? "active" : ""}>
+              <section className="ContentSideBar">
+                <Sidebar state={sidebar} setState={setSidebar} />
+              </section>
+              <section className="ContentRoutes">
+                <MyRoutes />
+              </section>
+            </Container>
+      </ThemeProvider>
+    </ThemeContext.Provider>
+  );
 }
 
-export default App
-//mensaje de prueba git
+export default App;
+
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: ${({ theme }) => theme.bgtotal};
+  .ContentSideBar {
+    display: none;
+  }
+  .ContentMenuHamburguer {
+    display: block;
+    position: absolute;
+    left: 20px;
+  }
+
+  @media ${Device.tablet} {
+    grid-template-columns: 65px 1fr;
+    &.active {
+      grid-template-columns: 220px 1fr;
+    }
+
+    .ContentSideBar {
+      display: initial;
+    }
+
+    .ContentMenuHamburguer {
+      display: none;
+    }
+  }
+
+  .ContentRoutes {
+    grid-column: 1;
+    width: 100%;
+    @media ${Device.tablet} {
+      grid-column: 2;
+    }
+  }
+`;

@@ -9,4 +9,4 @@ export const Device = {
   tablet: `(min-width: ${sizes.tablet})`,
   laptop: `(min-width: ${sizes.laptop})`,
   desktop: `(min-width: ${sizes.desktop})`,
-};.
+};

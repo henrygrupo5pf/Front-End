@@ -1,3 +1,6 @@
+import React from "react";
+import { Provider } from "react-redux";
+import store from "./Redux/store"; // Asegúrate de importar tu store correctamente
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createContext, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -14,7 +17,9 @@ function App() {
   const themeStyle = theme === "light" ? Light : Dark;
   const [sidebar, setSidebar] = useState(false);
   const { pathname } = useLocation();
+
   return (
+    <Provider store={store}>
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <ThemeProvider theme={themeStyle}>
             <Container className={sidebar ? "active" : ""}>
@@ -31,6 +36,7 @@ function App() {
           <ReactQueryDevtools initialIsOpen={false} />
       </ThemeProvider>
     </ThemeContext.Provider>
+    </Provider>
   );
 }
 export default App;

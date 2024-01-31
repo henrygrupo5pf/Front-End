@@ -1,1 +1,2 @@
-//Este archivo en redux se utiliza para guardar los textos (cases) del acctions.js en constantes para despues sean utilizados en reducersjs
+export const SET_SEARCH_TEXT = "SET_SEARCH_TEXT";
+export const SHOW_SEARCH_RESULTS = "SHOW_SEARCH_RESULTS";

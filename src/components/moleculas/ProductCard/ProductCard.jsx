@@ -5,17 +5,21 @@ export const ProductCard = ({ product }) => {
     <CardContainer>
       <div className="title">{product?.name}</div>
       <div className="imgContainer">
-        {/* <img src="" alt="" /> */}
+        <img
+          className="imgClass"
+          src={
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBMo0fDVD7zUjGjTFUui-TwOvlZ4ADpEfgbKYclMG6xA&s"
+          }
+          alt=""
+        />
       </div>
       <div className="description">{product?.description}</div>
     </CardContainer>
   );
 };
 
-
-
 const CardContainer = styled.div`
-  /* border: 1px solid red; */
+  border: 1px solid red;
   /* width: 400px; */
   display: flex;
   justify-content: center;
@@ -29,6 +33,8 @@ const CardContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+    text-transform: uppercase;
+    padding: 10px;
   }
 
   .description {
@@ -41,9 +47,14 @@ const CardContainer = styled.div`
     border: 1px solid gray;
     /* justify-content: center; */
   }
-  .imgContainer{
+  .imgContainer {
     height: 200px;
     width: 100%;
+  }
+
+  .imgClass {
+    width: 100%;
+    height: 200px;
   }
 `;
 

@@ -7,6 +7,9 @@ import { Sidebar } from "./components/organismos/sidebar/sidebar";
 import MyRoutes from "./routes/routes";
 import { Device } from "./styles/breakpoints";
 import { MenuHambur } from "./components/organismos/MenuHambur";
+import { Provider } from "react-redux";
+import store from "./Redux/store";
+
 export const ThemeContext = createContext(null);
 function App() {
   const [themeuse, setTheme] = useState("light");
@@ -15,6 +18,7 @@ function App() {
   const [sidebar, setSidebar] = useState(false);
   const { pathname } = useLocation();
   return (
+    <Provider store={store}>
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <ThemeProvider theme={themeStyle}>
             <Container className={sidebar ? "active" : ""}>
@@ -31,6 +35,7 @@ function App() {
           <ReactQueryDevtools initialIsOpen={false} />
       </ThemeProvider>
     </ThemeContext.Provider>
+    </Provider>
   );
 }
 export default App;

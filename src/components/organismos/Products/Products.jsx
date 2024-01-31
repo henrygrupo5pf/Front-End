@@ -46,7 +46,7 @@ const Products = () => {
     country: '',
     location: '',
   });
-  const [localProductState, setlocalProductState]= useState()
+  
   
 
   const query = useQuery({

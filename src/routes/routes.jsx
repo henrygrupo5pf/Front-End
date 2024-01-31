@@ -1,11 +1,23 @@
 import { Route, Routes } from "react-router-dom";
-import { Home, ProductForm } from "../pages/index";
+import { FirstComponent } from "../components/pruebas/PruebaReposAndGists";
+import { Random } from "../components/pruebas/Random";
+import { RandomWithQuery } from "../components/pruebas/RandomWithQuery";
+import { UserAuth } from "../context/AuthContext";
+import { ProtectedRoute } from "../hooks";
+import { Home, Login } from "../pages/index";
+// import { ProtectedRoute } from "../hooks/ProtectedRoute";
 
 const MyRoutes = () => {
+  const { user } = UserAuth();
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/productForm" element={<ProductForm />} />
+      <Route path="/login" element={<Login />} />
+      <Route element={<ProtectedRoute user={user} redirectTo="/login" />}>
+        <Route path="/" element={<Home />} />
+      </Route>
+      <Route path="/random" element={<Random/>} />
+      <Route path="/randomWithQuery" element={<RandomWithQuery/>} />
+      <Route path="/reposGists" element={<FirstComponent/>} />
     </Routes>
   );
 };

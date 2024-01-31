@@ -1,8 +1,12 @@
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createContext, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 import { Dark, Light } from "../src/styles/themes";
+import { MenuHambur } from "./components/organismos/MenuHambur";
 import { Sidebar } from "./components/organismos/sidebar/sidebar";
+import { AuthContextProvider } from "./context/AuthContext";
+import { Login } from "./pages";
 import MyRoutes from "./routes/routes";
 import { Device } from "./styles/breakpoints";
 
@@ -19,14 +23,25 @@ function App() {
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <ThemeProvider theme={themeStyle}>
+        <AuthContextProvider>
+          {pathname !== "/login" ? (
             <Container className={sidebar ? "active" : ""}>
               <section className="ContentSideBar">
                 <Sidebar state={sidebar} setState={setSidebar} />
+              </section>
+              <section className="ContentMenuHamburguer">
+                <MenuHambur state={sidebar} setState={setSidebar} />
               </section>
               <section className="ContentRoutes">
                 <MyRoutes />
               </section>
             </Container>
+          ) : (
+            <Login />
+          )}
+
+          <ReactQueryDevtools initialIsOpen={false} />
+        </AuthContextProvider>
       </ThemeProvider>
     </ThemeContext.Provider>
   );

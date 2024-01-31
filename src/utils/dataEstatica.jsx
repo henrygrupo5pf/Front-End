@@ -32,9 +32,14 @@ export const LinksArray = [
     to: "/",
   },
   {
-    label: "Nuevo Producto",
+    label: "Kardex",
+    icon: <v.iconocategorias />,
+    to: "/kardex",
+  },
+  {
+    label: "Reportes",
     icon: <v.iconoreportes />,
-    to: "/productForm",
+    to: "/reportes",
   },
  
 ];

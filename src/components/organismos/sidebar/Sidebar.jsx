@@ -21,7 +21,7 @@ export function Sidebar({ state, setState }) {
           <div className="imgcontent">
             <img src={v.logo} />
           </div>
-          <h2>RentaÚTILES</h2>
+          <h2>StockPRO</h2>
         </div>
         {LinksArray.map(({ icon, label, to }) => (
           <div
@@ -41,8 +41,26 @@ export function Sidebar({ state, setState }) {
           </div>
         ))}
         <Divider />
+        {SecondarylinksArray.map(({ icon, label, to }) => (
+          <div
+            className={state ? "LinkContainer active" : "LinkContainer"}
+            key={label}
+          >
+            <NavLink
+              to={to}
+              className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
+            >
+              <div className="Linkicon">{icon}</div>
+              <span className={state ? "label_ver" : "label_oculto"}>
+                {label}
+              </span>
+             
+            </NavLink>
+          </div>
+        ))}
         <ToggleTema/>
         <Divider />
+        {state && <SidebarCard />}
       </Container>
     </Main>
   );

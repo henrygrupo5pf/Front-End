@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom"
 import {useState, useEffect} from "react"
 
 export const ProductDetail = () => {
-
     const BASE_URL = "https://pf-server-93lj.onrender.com"
 
     const {id} = useParams()
@@ -17,16 +16,19 @@ export const ProductDetail = () => {
 
     useEffect(() => {
         const getData = async() =>{
-            const responseProduct = await fetch(`${BASE_URL}/product/${id}`)
-            if (!responseProduct.ok) {
-                throw new Error(`Error de red - Código de estado: ${response.status}`);
+            if (Object.keys(product).length === 0) {
+                const responseProduct = await fetch(`${BASE_URL}/product/${id}`)
+                if (!responseProduct.ok) {
+                    throw new Error(`Error de red - Código de estado: ${response.status}`);
+                }
+
+                const data = await responseProduct.json();
+
+                setProduct(data)
+                setUser({...user, ...data.User})
+                console.log(data);
+                
             }
-
-            const data = await responseProduct.json();
-
-            setProduct(data)
-            setUser({...user, ...data.User})
-            console.log(data);
         }
 
         getData()
@@ -58,5 +60,4 @@ export const ProductDetail = () => {
         </div>
     )
 }
-
 export default ProductDetail;

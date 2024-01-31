@@ -71,21 +71,21 @@ const Products = () => {
 
   return (
     <Container>
-      <FilterControls applyFilters={handleApplyFilters} clearFilters={handleClearFilters}/>
       {query.isLoading || query.isFetching ? (
         'Loading...'
       ) : (
         <>
-          <ContainerProducts>
-            {query?.data.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </ContainerProducts>
           <Pagination
             numberPage={pageNumber}
             setNumberPage={setPageNumber}
             totalPages={query?.data?.totalPages}
           />
+          <ContainerProducts>
+            {query?.data.products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </ContainerProducts>
+          <FilterControls applyFilters={handleApplyFilters} clearFilters={handleClearFilters}/>
         </>
       )}
     </Container>

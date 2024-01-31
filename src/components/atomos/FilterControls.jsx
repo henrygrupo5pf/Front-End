@@ -92,6 +92,7 @@ const Button = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin: 2px;
 `;
 
 export default FilterControls;

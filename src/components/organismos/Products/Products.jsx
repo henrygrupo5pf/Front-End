@@ -1,58 +1,98 @@
-/* eslint-disable no-unused-vars */
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import styled from "styled-components";
-import ProductCard from "../../moleculas/ProductCard/ProductCard";
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import styled from 'styled-components';
+import ProductCard from '../../moleculas/ProductCard/ProductCard';
+import Pagination from '../../atomos/Pagination';
+import FilterControls from '../../atomos/FilterControls';
 
 const fetchProducts = ({ queryKey }) => {
-  //? Hacemos destructuring de la data que pasamos por queryKey
-  const [getProducts, numberPage] = queryKey;
+  const [getProducts, numberPage, filters] = queryKey;
 
-  console.log("Hola soy un número de página", numberPage);
-  return fetch(
-    `https://pf-server-93lj.onrender.com/product?page=${numberPage}`
-  ).then((response) => {
-    if (response.status !== 200) {
-      throw new Error(`Something went wrong. Try again.`);
-    }
+  const params = new URLSearchParams();
+  params.append('page', numberPage);
+  params.append('pageSize', filters.pageSize);
 
-    return response.json();
-  });
+  if (filters.category) params.append('category', filters.category);
+  if (filters.costRange) params.append('costRange', filters.costRange);
+  if (filters.country) params.append('country', filters.country);
+  if (filters.location) params.append('location', filters.location);
+
+  const url = filters
+    ? `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
+    : `https://pf-server-93lj.onrender.com/product?${params.toString()}`;
+
+  return fetch(url)
+    .then((response) => {
+      if (response.status !== 200) {
+        throw new Error(`Something went wrong. Try again.`);
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data); // Log the data to see the structure of the response
+      return data;
+    });
+
 };
 
 const Products = () => {
-  //! Creamos useState el cual tendrá el número de página
-  const [numberPage, setNumberPage] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [filters, setFilters] = useState({
+    pageSize: 10,
+    category: '',
+    costRange: '',
+    country: '',
+    location: '',
+  });
 
-  //! Hacemos uso de useQuery para hacer el fetch de datos
-  //? Primer parámetro: Nombre de la query, y useStates que modificarán la petición
-  //? Segundo parámetro: función para fetchear los datos
   const query = useQuery({
-    queryKey: ["get-products", numberPage],
+    queryKey: ['get-products', pageNumber, filters],
     queryFn: fetchProducts,
   });
+
+  const handleApplyFilters = (newFilters) => {
+    setPageNumber(1); // Reset page number when applying new filters
+    setFilters({ ...filters, ...newFilters });
+  };
+
+  const handleClearFilters = () => {
+    setPageNumber(1); // Reset page number when clearing filters
+    setFilters({
+      pageSize: 10,
+      category: '',
+      costRange: '',
+      country: '',
+      location: '',
+    });
+  };
+
   if (query.isError) return <p>{query.error.message}</p>;
 
   return (
     <Container>
       {query.isLoading || query.isFetching ? (
-        "Loading..."
+        'Loading...'
       ) : (
-        <ContainerProducts>
-          {query?.data.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </ContainerProducts>
+        <>
+          <Pagination
+            numberPage={pageNumber}
+            setNumberPage={setPageNumber}
+            totalPages={query?.data?.totalPages}
+          />
+          <ContainerProducts>
+            {query?.data.products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </ContainerProducts>
+          <FilterControls applyFilters={handleApplyFilters} clearFilters={handleClearFilters}/>
+        </>
       )}
-
-      <button onClick={() => setNumberPage(numberPage + 1)}>changePage</button>
     </Container>
   );
 };
 
-export default Products;
-
-export const ContainerProducts = styled.div`
+const ContainerProducts = styled.div`
   display: grid;
   width: 100%;
   grid-template-columns: repeat(2, 1fr);
@@ -60,7 +100,9 @@ export const ContainerProducts = styled.div`
   padding: 20px;
 `;
 
-export const Container = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column-reverse;
 `;
+
+export default Products;

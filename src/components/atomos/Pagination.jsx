@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Pagination = ({ numberPage, setNumberPage, totalPages }) => {
+export const Pagination = ({ numberPage, setNumberPage, totalPages }) => {
     const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
   
     return (
@@ -31,4 +31,3 @@ const Pagination = ({ numberPage, setNumberPage, totalPages }) => {
   margin: 2px;
 `;
   
-  export default Pagination;

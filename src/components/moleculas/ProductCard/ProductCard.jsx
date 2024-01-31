@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import styled from "styled-components";
-const ProductCard = ({ product }) => {
+export const ProductCard = ({ product }) => {
   return (
     <CardContainer>
       <div className="title">{product?.name}</div>
@@ -12,7 +12,7 @@ const ProductCard = ({ product }) => {
   );
 };
 
-export default ProductCard;
+
 
 const CardContainer = styled.div`
   /* border: 1px solid red; */

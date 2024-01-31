@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
-import ProductCard from '../../moleculas/ProductCard/ProductCard';
-import Pagination from '../../atomos/Pagination';
-import FilterControls from '../../atomos/FilterControls';
+import {ProductCard} from '../../moleculas/index';
+import {Pagination} from '../../atomos/index';
+import {FilterControls} from '../../atomos/index';
+
 
 const fetchProducts = ({ queryKey }) => {
-  const [getProducts, numberPage, filters] = queryKey;
+  const [numberPage, filters] = queryKey;
 
   const params = new URLSearchParams();
   params.append('page', numberPage);
@@ -16,10 +17,10 @@ const fetchProducts = ({ queryKey }) => {
   if (filters.costRange) params.append('costRange', filters.costRange);
   if (filters.country) params.append('country', filters.country);
   if (filters.location) params.append('location', filters.location);
-
+  console.log(filters);
   const url = filters
     ? `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
-    : `https://pf-server-93lj.onrender.com/product?${params.toString()}`;
+    : `https://pf-server-93lj.onrender.com/product`;
 
   return fetch(url)
     .then((response) => {
@@ -30,7 +31,7 @@ const fetchProducts = ({ queryKey }) => {
       return response.json();
     })
     .then((data) => {
-      console.log(data); // Log the data to see the structure of the response
+      console.log(data); 
       return data;
     });
 
@@ -45,19 +46,22 @@ const Products = () => {
     country: '',
     location: '',
   });
+  const [localProductState, setlocalProductState]= useState()
+  
 
   const query = useQuery({
-    queryKey: ['get-products', pageNumber, filters],
+    
+    queryKey: [pageNumber, filters],
     queryFn: fetchProducts,
   });
 
   const handleApplyFilters = (newFilters) => {
-    setPageNumber(1); // Reset page number when applying new filters
+    setPageNumber(1); 
     setFilters({ ...filters, ...newFilters });
   };
 
   const handleClearFilters = () => {
-    setPageNumber(1); // Reset page number when clearing filters
+    setPageNumber(1); 
     setFilters({
       pageSize: 10,
       category: '',

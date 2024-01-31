@@ -1,1 +1,5 @@
-//Este archivo en redux se utiliza para guardar los textos (cases) del acctions.js en constantes para despues sean utilizados en reducersjs
+const GET_PRODUCTS_BY_NAME="GET_PRODUCTS_BY_NAME";
+
+export{
+    GET_PRODUCTS_BY_NAME
+}

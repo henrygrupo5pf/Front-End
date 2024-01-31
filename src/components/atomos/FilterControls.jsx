@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-const FilterControls = ({ applyFilters, clearFilters }) => {
+export const FilterControls = ({ applyFilters, clearFilters }) => {
   const [category, setCategory] = useState('');
   const [costRange, setCostRange] = useState('');
   const [country, setCountry] = useState('');
@@ -94,5 +94,3 @@ const Button = styled.button`
   cursor: pointer;
   margin: 2px;
 `;
-
-export default FilterControls;

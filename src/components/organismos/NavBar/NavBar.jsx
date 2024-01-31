@@ -1,18 +1,25 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getProductsFromServer } from "../../../Redux/acctions";
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import {setSearchText} from "../../../Redux/acctions";
 
 function Navbar() {
+  const dispatch = useDispatch();
+  const [searchValue, setSearchValue] = useState('');
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dispatch(setSearchText(searchValue));
+  };
 
   return (
     <div className="search-box">
-      <form /* onSubmit={handleFormSubmit} */>
+      <form onSubmit={handleSubmit}>
         <input
           className="search-bar"
           placeholder="Search"
           type="search"
-          /* value={searchText} */
+          value={searchValue}
+          onChange={(event) => setSearchValue(event.target.value)}
         />
         <button type="submit">Search</button>
       </form>

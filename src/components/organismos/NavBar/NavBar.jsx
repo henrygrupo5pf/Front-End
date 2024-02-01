@@ -1,19 +1,14 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import {setSearchText} from "../../../Redux/acctions";
+
+
 
 function Navbar() {
-  const dispatch = useDispatch();
+  
   const [searchValue, setSearchValue] = useState('');
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    dispatch(setSearchText(searchValue));
-  };
 
   return (
     <div className="search-box">
-      <form onSubmit={handleSubmit}>
+      <form >
         <input
           className="search-bar"
           placeholder="Search"
@@ -21,7 +16,7 @@ function Navbar() {
           value={searchValue}
           onChange={(event) => setSearchValue(event.target.value)}
         />
-        <button type="submit">Search</button>
+        <button >Search</button>
       </form>
     </div>
   );

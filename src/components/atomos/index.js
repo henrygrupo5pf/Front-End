@@ -1,2 +1,3 @@
 export * from './Icono';
-export * from "./Card";
+export * from "./FilterControls";
+export * from "./Pagination";

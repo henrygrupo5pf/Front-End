@@ -1,1 +1,0 @@
-//Este archivo en redux se utiliza para guardar los textos (cases) del acctions.js en constantes para despues sean utilizados en reducersjs

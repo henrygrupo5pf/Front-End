@@ -3,29 +3,34 @@ import { useState } from "react";
 import styled from "styled-components";
 import { FilterControls, Pagination } from "../../atomos/index";
 import { ProductCard } from "../../moleculas/index";
+import { useNavBarStore } from '../../../Store/NavBarStore';
+
 
 const fetchProducts = ({ queryKey }) => {
-  const [numberPage, filters] = queryKey;
+  const [numberPage, filters, searchText] = queryKey;
+    
 
   const params = new URLSearchParams();
   params.append("page", numberPage);
   params.append("pageSize", filters.pageSize);
 
+  if (searchText != "") params.append("name", searchText)
+  
   if (filters.category) params.append("category", filters.category);
   if (filters.costRange) params.append("costRange", filters.costRange);
   if (filters.country) params.append("country", filters.country);
   if (filters.location) params.append("location", filters.location);
 
-  console.log(filters);
-
-  const url = filters
-    ? `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
-    : `https://pf-server-93lj.onrender.com/product`;
+  console.log(params.toString());
+  const url = searchText != ""
+  ? `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
+  : `https://pf-server-93lj.onrender.com/product`;/* /name?name=${searchText} */ 
+  
 
   return fetch(url)
     .then((response) => {
       if (response.status !== 200) {
-        throw new Error(`Something went wrong. Try again.`);
+        throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
       }
 
       return response.json();
@@ -39,6 +44,8 @@ const fetchProducts = ({ queryKey }) => {
 };
 
 const Products = () => {
+  const searchText=useNavBarStore((state)=>state.searchText)
+ 
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState({
     pageSize: 10,
@@ -49,7 +56,7 @@ const Products = () => {
   });
 
   const query = useQuery({
-    queryKey: [pageNumber, filters],
+    queryKey: [pageNumber, filters, searchText],
     queryFn: fetchProducts,
   });
 

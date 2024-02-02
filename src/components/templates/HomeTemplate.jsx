@@ -2,6 +2,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Products from '../organismos/Products/Products';
+import Navbar from "../organismos/NavBar/NavBar";
 //import { Header } from "../organismos/Header";
 
 export const HomeTemplate = () => {
@@ -14,7 +15,9 @@ export const HomeTemplate = () => {
   />*/}
       </header>
       <section className="area1"></section>
-      <section className="area2"></section>
+      <section className="area2">
+        <Navbar/>
+      </section>
       <section className="main">
         <Products />
       </section>

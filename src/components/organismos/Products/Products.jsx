@@ -6,6 +6,7 @@ import { ProductCard } from "../../moleculas/index";
 import { useNavBarStore } from '../../../Store/NavBarStore';
 
 
+
 const fetchProducts = ({ queryKey }) => {
   const [numberPage, filters, searchText] = queryKey;
     
@@ -22,10 +23,12 @@ const fetchProducts = ({ queryKey }) => {
   if (filters.location) params.append("location", filters.location);
 
   console.log(params.toString());
+  
   const url = searchText != ""
   ? `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
-  : `https://pf-server-93lj.onrender.com/product`;/* /name?name=${searchText} */ 
+  : `https://pf-server-93lj.onrender.com/product`; 
   
+
 
   return fetch(url)
     .then((response) => {
@@ -35,9 +38,10 @@ const fetchProducts = ({ queryKey }) => {
 
       return response.json();
     })
-    .then((data) => {
-
+    .then((data, ) => {
+    
       console.log(data);
+      
       
       return data;
     });
@@ -45,6 +49,7 @@ const fetchProducts = ({ queryKey }) => {
 
 const Products = () => {
   const searchText=useNavBarStore((state)=>state.searchText)
+  const setSearchText=useNavBarStore((state)=>state.setSearchText)
  
   const [pageNumber, setPageNumber] = useState(1);
   const [filters, setFilters] = useState({
@@ -56,7 +61,7 @@ const Products = () => {
   });
 
   const query = useQuery({
-    queryKey: [pageNumber, filters, searchText],
+    queryKey: [pageNumber, filters, searchText, setSearchText],
     queryFn: fetchProducts,
   });
 

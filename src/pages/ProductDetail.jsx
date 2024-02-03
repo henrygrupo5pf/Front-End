@@ -36,7 +36,7 @@ export const ProductDetail = () => {
 
             <div className="mainContainer">
                 <div className="imageContainer">
-                        <img className="imageProduct" src={"https://img.freepik.com/psd-gratis/maqueta-portatil-aislada_1310-1458.jpg?w=740&t=st=1706673296~exp=1706673896~hmac=75bc7fc0d23f943929013417afa65e4b5c50bdad80b0f36dc61b67b62bfd5ac3"} alt="" />
+                        <img className="imageProduct" src={product.photo} alt="" />
 
                         {/* ARREGLAR IMAGEN CUANDO LOS PRODUCTOS LA TENGAN */}
                     </div>
@@ -49,15 +49,16 @@ export const ProductDetail = () => {
 
                         <div className="productInfo">
                             <div className="nameCost">
-                                Name
+                                Nombre
                                 <h3>{product.name}</h3>
-                                Cost
-                                <h1>{product.cost} $</h1>
+                                Costo
+                                <h1>${product.cost} Por Dia</h1>
                             </div>
                             Description:
                             <div className="descriptionContainer">
                                 {product.description}
-                            </div>   
+                            </div>
+                            <Button> Reservar </Button>
                         </div>
                         
                     </div>
@@ -76,7 +77,7 @@ const Container = styled.div`
     
 
     .mainContainer{
-        height: 70%;
+        height: 500px;
         box-shadow: 5px 10px 17px black;
         display: flex;
         justify-content: center;
@@ -88,6 +89,7 @@ const Container = styled.div`
     
     .imageContainer{
         width: 500px;
+        height: inherit;
         border-radius: 10px;
         overflow: hidden;
         display: flex;
@@ -96,7 +98,7 @@ const Container = styled.div`
     }
 
     .imageProduct{
-        width:inherit;
+        width:80%;
     }
 
     .info{
@@ -107,6 +109,7 @@ const Container = styled.div`
         flex-direction: column;
         border-radius: 10px;
         border: 2px solid grey;
+        padding: 5px;
     }
 
     .userInfo{
@@ -120,9 +123,9 @@ const Container = styled.div`
     .productInfo{
         width: 85%;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         flex-direction: column;
-        height: 300px;
+        height: 370px;
         
     }
 
@@ -130,6 +133,7 @@ const Container = styled.div`
         border: 1px solid grey;
         padding: 2px;
         border-radius: 10px;
+        text-align:  center;
     }
 
     .imageUser{
@@ -147,5 +151,15 @@ const Container = styled.div`
 
     }
 
-    
 `
+
+const Button = styled.button`
+background-color: #4caf50;
+color: white;
+padding: 10px 15px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+font-size: 25px;
+margin: 2px;
+`;

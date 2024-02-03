@@ -1,22 +1,34 @@
 import { useState } from 'react';
-
+import { useNavBarStore } from '../../../Store/NavBarStore';
 
 
 function Navbar() {
+  const setSearchText= useNavBarStore((state)=> state.setSearchText)
   
   const [searchValue, setSearchValue] = useState('');
 
+  const onChange=(event) => {
+    setSearchValue(event.target.value)
+  
+  console.log(event.target.value)};
+  
+  const onSubmit=(event)=>{
+    event.preventDefault();
+    setSearchText(searchValue) 
+  };
+  
+
   return (
     <div className="search-box">
-      <form >
+      <form onSubmit={onSubmit}>
         <input
           className="search-bar"
           placeholder="Search"
           type="search"
           value={searchValue}
-          onChange={(event) => setSearchValue(event.target.value)}
+          onChange={onChange}
         />
-        <button >Search</button>
+        <button>Search</button>
       </form>
     </div>
   );

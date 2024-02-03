@@ -32,7 +32,6 @@ const Container = styled.div`
   color: ${({ theme }) => theme.text};
 
   display: grid;
-  padding: 16px;
   grid-template:
     "header" 100px
     "area1" 100px
@@ -62,5 +61,6 @@ const Container = styled.div`
     background-color: rgba(13, 9, 24, 0.14);
     display: flex;
     align-items: center;
+    justify-content: center;
   }
 `;

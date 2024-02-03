@@ -120,6 +120,7 @@ const ContainerProducts = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: column-reverse;
+  width: 80%;
 `;
 
 export default Products;

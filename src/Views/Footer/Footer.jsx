@@ -2,7 +2,7 @@ import React from 'react'
 
 const Fooooter = () => {
   return (
-    <div>Fooooter</div>
+    <div>Pie</div>
   )
 }
 

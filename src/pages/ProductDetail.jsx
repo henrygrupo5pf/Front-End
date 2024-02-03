@@ -36,7 +36,7 @@ export const ProductDetail = () => {
 
             <div className="mainContainer">
                 <div className="imageContainer">
-                        <img className="imageProduct" src={"https://img.freepik.com/psd-gratis/maqueta-portatil-aislada_1310-1458.jpg?w=740&t=st=1706673296~exp=1706673896~hmac=75bc7fc0d23f943929013417afa65e4b5c50bdad80b0f36dc61b67b62bfd5ac3"} alt="" />
+                        <img className="imageProduct" src={product.photo} alt="" />
 
                         {/* ARREGLAR IMAGEN CUANDO LOS PRODUCTOS LA TENGAN */}
                     </div>
@@ -76,7 +76,7 @@ const Container = styled.div`
     
 
     .mainContainer{
-        height: 70%;
+        height: 500px;
         box-shadow: 5px 10px 17px black;
         display: flex;
         justify-content: center;
@@ -88,6 +88,7 @@ const Container = styled.div`
     
     .imageContainer{
         width: 500px;
+        height: inherit;
         border-radius: 10px;
         overflow: hidden;
         display: flex;
@@ -96,7 +97,7 @@ const Container = styled.div`
     }
 
     .imageProduct{
-        width:inherit;
+        width:80%;
     }
 
     .info{
@@ -147,5 +148,4 @@ const Container = styled.div`
 
     }
 
-    
 `

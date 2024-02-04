@@ -17,9 +17,10 @@ export const ProductForm = ({ onSubmit }) => {
     try {
       let cloudinaryURL = '';
   
-      console.log(selectedFile);
       if (selectedFile) {
         cloudinaryURL = await uploadToCloudinary(selectedFile);
+        //llama a la funcion que envia el archivo a cloudinary pasandole el archivo del estado como parametro
+        //cloudinaryURL pasa a ser la URL de la imagen
       }
   
       data = {
@@ -27,8 +28,10 @@ export const ProductForm = ({ onSubmit }) => {
         photo: cloudinaryURL,
         cost: parseFloat(data.cost)
       };
+      //Añade la URL de la imagen al objeto data
+      //Parsea el cost de string a float
 
-      console.log(data);
+      // console.log(data);
 
       const response = await fetch(`${BASE_URL}/product`, {
         method: 'POST',
@@ -37,6 +40,7 @@ export const ProductForm = ({ onSubmit }) => {
         },
         body: JSON.stringify(data),
       });
+      //Envia el data como body al servidor
   
   
       // console.log(response);
@@ -46,11 +50,12 @@ export const ProductForm = ({ onSubmit }) => {
   };
 
   const handleFileChange = (event) => {
+    //Selecciona el Archivo subido en el input y lo guarda en el estado
     setSelectedFile(event.target.files[0]);
   };
 
   const uploadToCloudinary = async (file) => {
-
+    //Toma file, el cual es un archivo y lo envia a cloudinary
     const cloudinaryForm = new FormData()
     cloudinaryForm.append("file", file)
     cloudinaryForm.append("upload_preset", "images")

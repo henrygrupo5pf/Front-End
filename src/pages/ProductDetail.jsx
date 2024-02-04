@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom"
 import {useState, useEffect} from "react"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
 export const ProductDetail = () => {
     const BASE_URL = "https://pf-server-93lj.onrender.com"
@@ -59,6 +60,9 @@ export const ProductDetail = () => {
                                 {product.description}
                             </div>
                             <Button> Reservar </Button>
+                            <Link to='/'>
+                                <Button style={{width:'100%'}}> Salir </Button>
+                            </Link>
                         </div>
                         
                     </div>

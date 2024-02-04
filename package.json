@@ -23,6 +23,9 @@
     "react-spinners": "0.13.8",
     "redux-thunk": "^2.3.0",
     "styled-components": "6.1.6",
+    "react-toastify": "^7.0.4",
+    "sweetalert2": "^11.10.4",
+    "toastify-js": "^1.12.0",
     "zustand": "^4.5.0"
   },
   "devDependencies": {

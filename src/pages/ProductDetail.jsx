@@ -1,6 +1,8 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import {useState, useEffect} from "react"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
+import { useCartStore } from "../Store/CartStore";
 
 export const ProductDetail = () => {
     const BASE_URL = "https://pf-server-93lj.onrender.com"
@@ -12,31 +14,67 @@ export const ProductDetail = () => {
     const[user, setUser] = useState({
         image:"https://static.vecteezy.com/system/resources/previews/008/844/895/non_2x/user-icon-design-free-png.png"
     })
+    const { addToCart } = useCartStore(); 
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const getData = async() =>{
-            if (Object.keys(product).length === 0) {
-                const responseProduct = await fetch(`${BASE_URL}/product/${id}`)
-                if (!responseProduct.ok) {
-                    throw new Error(`Error de red - Código de estado: ${response.status}`);
-                }
+    // useEffect(() => {
+    //     const getData = async() =>{
+    //         if (Object.keys(product).length === 0) {
+    //             const responseProduct = await fetch(`${BASE_URL}/product/${id}`)
+    //             if (!responseProduct.ok) {
+    //                 throw new Error(`Error de red - Código de estado: ${response.status}`);
+    //             }
 
-                const data = await responseProduct.json();
+    //             const data = await responseProduct.json();
 
-                setProduct(data)
-                setUser({...user, ...data.User})
+    //             setProduct(data)
+    //             setUser({...user, ...data.User})
                 
-            }
-        }
+    //         }
+    //     }
 
-        getData()
-    })
+    //     getData()
+    // })
+    useEffect(() => {
+        const getData = async () => {
+            const responseProduct = await fetch(`${BASE_URL}/product/${id}`);
+            if (!responseProduct.ok) {
+                throw new Error(`Error de red - Código de estado: ${responseProduct.status}`);
+            }
+    
+            const data = await responseProduct.json();
+    
+            setProduct(data);
+            setUser((currentUser) => ({ ...currentUser, ...data.User }));
+        };
+    
+        if (Object.keys(product).length === 0) {
+            getData();
+        }
+    }, [id, product]); // Ahora incluye `product` en el array de dependencias
+    
+    
+    
+
+    const handleAddToCart = () => {
+        // Añade el producto al carrito
+        addToCart({
+            ...product,
+            id: product.id, // Asegúrate de que el producto tenga una propiedad 'id'
+            name: product.name,
+            cost: product.cost,
+            quantity: 1 // Esto puede ser opcional dependiendo de cómo manejas la cantidad en addToCart
+        });
+        console.log(`Producto añadido al carrito: ${product.name}`);
+        navigate('/cart');
+
+    };
 
     return(<Container>
 
             <div className="mainContainer">
                 <div className="imageContainer">
-                        <img className="imageProduct" src={"https://img.freepik.com/psd-gratis/maqueta-portatil-aislada_1310-1458.jpg?w=740&t=st=1706673296~exp=1706673896~hmac=75bc7fc0d23f943929013417afa65e4b5c50bdad80b0f36dc61b67b62bfd5ac3"} alt="" />
+                        <img className="imageProduct" src={product.photo} alt="" />
 
                         {/* ARREGLAR IMAGEN CUANDO LOS PRODUCTOS LA TENGAN */}
                     </div>
@@ -49,15 +87,19 @@ export const ProductDetail = () => {
 
                         <div className="productInfo">
                             <div className="nameCost">
-                                Name
+                                Nombre
                                 <h3>{product.name}</h3>
-                                Cost
-                                <h1>{product.cost} $</h1>
+                                Costo
+                                <h1>${product.cost} Por Dia</h1>
                             </div>
                             Description:
                             <div className="descriptionContainer">
                                 {product.description}
-                            </div>   
+                            </div>
+                            <Button onClick={handleAddToCart}> Reservar </Button>
+                            <Link to='/'>
+                                <Button style={{width:'100%'}}> Salir </Button>
+                            </Link>
                         </div>
                         
                     </div>
@@ -76,7 +118,7 @@ const Container = styled.div`
     
 
     .mainContainer{
-        height: 70%;
+        height: 500px;
         box-shadow: 5px 10px 17px black;
         display: flex;
         justify-content: center;
@@ -88,6 +130,7 @@ const Container = styled.div`
     
     .imageContainer{
         width: 500px;
+        height: inherit;
         border-radius: 10px;
         overflow: hidden;
         display: flex;
@@ -96,7 +139,7 @@ const Container = styled.div`
     }
 
     .imageProduct{
-        width:inherit;
+        width:80%;
     }
 
     .info{
@@ -107,6 +150,7 @@ const Container = styled.div`
         flex-direction: column;
         border-radius: 10px;
         border: 2px solid grey;
+        padding: 5px;
     }
 
     .userInfo{
@@ -120,9 +164,9 @@ const Container = styled.div`
     .productInfo{
         width: 85%;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         flex-direction: column;
-        height: 300px;
+        height: 370px;
         
     }
 
@@ -130,6 +174,7 @@ const Container = styled.div`
         border: 1px solid grey;
         padding: 2px;
         border-radius: 10px;
+        text-align:  center;
     }
 
     .imageUser{
@@ -147,5 +192,15 @@ const Container = styled.div`
 
     }
 
-    
 `
+
+const Button = styled.button`
+background-color: #4caf50;
+color: white;
+padding: 10px 15px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+font-size: 25px;
+margin: 2px;
+`;

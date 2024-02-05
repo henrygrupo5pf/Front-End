@@ -1,6 +1,7 @@
 import {
     AiOutlineHome,
     AiOutlineSetting,
+    AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { v } from "../styles/variables";
 
@@ -36,7 +37,12 @@ export const LinksArray = [
     icon: <v.iconoreportes />,
     to: "/productForm",
   },
- 
+  { 
+    label: "Carrito",
+    icon: <AiOutlineShoppingCart />,
+    to: "/cart",
+  },
+ //AGREGAR ICONO PARA EL CARRITO DE COMPRAS
 ];
 export const SecondarylinksArray = [
   {

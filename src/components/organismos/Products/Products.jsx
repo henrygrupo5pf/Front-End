@@ -12,8 +12,8 @@ const fetchProducts = ({ queryKey }) => {
     
 
   const params = new URLSearchParams();
-  params.append("page", numberPage);
-  params.append("pageSize", filters.pageSize);
+  if(numberPage != 0 ) params.append("page", numberPage);
+ /*  params.append("pageSize", filters.pageSize); */
 
   if (searchText != "") params.append("name", searchText)
   
@@ -22,13 +22,12 @@ const fetchProducts = ({ queryKey }) => {
   if (filters.country) params.append("country", filters.country);
   if (filters.location) params.append("location", filters.location);
 
-  console.log(params.toString());
   
-  const url = searchText != ""
-  ? `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
-  : `https://pf-server-93lj.onrender.com/product`; 
+  const url =  params.toString() === ""
+  ? `https://pf-server-93lj.onrender.com/product` 
+  : `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
   
-
+  console.log(url);
 
   return fetch(url)
     .then((response) => {
@@ -38,7 +37,7 @@ const fetchProducts = ({ queryKey }) => {
 
       return response.json();
     })
-    .then((data, ) => {
+    .then((data ) => {
     
       console.log(data);
       
@@ -51,9 +50,9 @@ const Products = () => {
   const searchText=useNavBarStore((state)=>state.searchText)
   const setSearchText=useNavBarStore((state)=>state.setSearchText)
  
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(0);
   const [filters, setFilters] = useState({
-    pageSize: 10,
+    pageSize: "",
     category: "",
     costRange: "",
     country: "",
@@ -73,7 +72,6 @@ const Products = () => {
   const handleClearFilters = () => {
     setPageNumber(1);
     setFilters({
-      pageSize: 10,
       category: "",
       costRange: "",
       country: "",

@@ -22,7 +22,6 @@
     "react-lottie": "^1.2.3",
     "react-router-dom": "^6.21.1",
     "react-spinners": "0.13.8",
-    "react-toastify": "^7.0.4",
     "redux-thunk": "^2.3.0",
     "styled-components": "6.1.6",
     "sweetalert2": "^11.10.5",

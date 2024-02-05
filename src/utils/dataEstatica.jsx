@@ -42,7 +42,6 @@ export const LinksArray = [
     icon: <AiOutlineShoppingCart />,
     to: "/cart",
   },
- //AGREGAR ICONO PARA EL CARRITO DE COMPRAS
 ];
 export const SecondarylinksArray = [
   {

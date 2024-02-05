@@ -13,7 +13,7 @@ const fetchProducts = ({ queryKey }) => {
 
   const params = new URLSearchParams();
   if(numberPage != 0 ) params.append("page", numberPage);
- /*  params.append("pageSize", filters.pageSize); */
+
 
   if (searchText != "") params.append("name", searchText)
   
@@ -27,24 +27,25 @@ const fetchProducts = ({ queryKey }) => {
   ? `https://pf-server-93lj.onrender.com/product` 
   : `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
   
-  console.log(url);
+
 
   return fetch(url)
-    .then((response) => {
-      if (response.status !== 200) {
-        throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
-      }
+  .then((response) => {
+    if (response.status !== 200) {
+      throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
+    }
 
-      return response.json();
-    })
-    .then((data ) => {
-    
-      console.log(data);
-      
-      
-      return data;
-    });
+    return response.json();
+  })
+  .then((data) => {
+    if (!data || (Array.isArray(data) && data.length === 0)) {
+      throw new Error("No se encontraron productos. Por favor vuelva a buscar otro nombre distinto o cambie los parametros de la busqueda");
+    }
+    return data;
+  });
 };
+
+
 
 const Products = () => {
   const searchText=useNavBarStore((state)=>state.searchText)

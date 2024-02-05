@@ -8,7 +8,12 @@ const Cart = () => {
   const handleGoHome = ()=>{
     navigate('/'); // Navegar a la página de inicio
 
-  }
+  };
+
+    //Por aca se esta yendo a la pasarela de pago
+  const handleCheckOut = ()=>{
+    navigate("/checkOut");
+  };
 
   console.log(cartItems)
 
@@ -23,6 +28,7 @@ const Cart = () => {
             <button onClick={() => decrementQuantity(item.id)}>-</button>
             <button onClick={() => removeFromCart(item.id)}>Remove</button>
             <button onClick={handleGoHome}>Regresar a comprar</button>
+            <button onClick={handleCheckOut}>Continuar con la compra</button>
           </div>
         ))
       ) : (

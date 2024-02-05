@@ -7,6 +7,9 @@ import { Sidebar } from "./components/organismos/sidebar/sidebar";
 import MyRoutes from "./routes/routes";
 import { Device } from "./styles/breakpoints";
 import { MenuHambur } from "./components/organismos/MenuHambur";
+import PaymentButton from "./components/atomos/PaymentButton";
+import { Elements } from "@stripe/react-stripe-js";
+import stripePromise from "./stripe";
 
 
 export const ThemeContext = createContext(null);
@@ -16,22 +19,29 @@ function App() {
   const themeStyle = theme === "light" ? Light : Dark;
   const [sidebar, setSidebar] = useState(false);
   const { pathname } = useLocation();
+
+  const isCheckoutRoute = pathname === "/checkOut";
   return (
-   
+
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <ThemeProvider theme={themeStyle}>
-            <Container className={sidebar ? "active" : ""}>
-              <section className="ContentSideBar">
-                <Sidebar state={sidebar} setState={setSidebar} />
-              </section>
-              <section className="ContentMenuHamburguer">
-                <MenuHambur state={sidebar} setState={setSidebar} />
-              </section>
-              <section className="ContentRoutes">
-                <MyRoutes />
-              </section>
-            </Container>
-          <ReactQueryDevtools initialIsOpen={false} />
+        <Container className={sidebar ? "active" : ""}>
+          <section className="ContentSideBar">
+            <Sidebar state={sidebar} setState={setSidebar} />
+          </section>
+          <section className="ContentMenuHamburguer">
+            <MenuHambur state={sidebar} setState={setSidebar} />
+          </section>
+          <section className="ContentRoutes">
+            {isCheckoutRoute && (
+              <Elements stripe={stripePromise}>
+                <PaymentButton />
+              </Elements>
+            )}
+            <MyRoutes />
+          </section>
+        </Container>
+        <ReactQueryDevtools initialIsOpen={false} />
       </ThemeProvider>
     </ThemeContext.Provider>
 

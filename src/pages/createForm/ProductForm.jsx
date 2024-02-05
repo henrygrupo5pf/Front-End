@@ -111,13 +111,14 @@ export const ProductForm = ({ onSubmit }) => {
   return (
     <Container>
      <ToastContainer /> 
-    <form className="form" onSubmit={handleSubmit(submitForm)}>
+     <form className="form" onSubmit={handleSubmit(submitForm)}>
 
-        <h1 className="h1">Publicar Producto.</h1>
+        {/* <h1 className="h1">Publicar Producto.</h1>
         <div className="input_container">
           <label className="label" htmlFor="userId">User ID</label>
           <input className="input" id="userId" {...register("userId", { required: true })} placeholder="User ID" />
           {errors.userId && userId()}
+        </div> */}
 
         <h1 className="h1">Publicar Producto</h1>
         <div className="input_container">
@@ -131,7 +132,7 @@ export const ProductForm = ({ onSubmit }) => {
           <label className="label" htmlFor="name">Nombre</label>
           <input className="input" id="name" {...register("name", { required: true, minLength: 2, maxLength: 20 })} placeholder="Nombre del producto" />
 
-          {errors.name && nombreProducto()}
+          {/* {errors.name && nombreProducto()} */}
 
           {errors.name && toast.error("Nombre es requerido.")}
 
@@ -146,7 +147,6 @@ export const ProductForm = ({ onSubmit }) => {
             <option value="Lab Equipment">Lab Equipment</option>
             <option value="Stationery">Stationery</option>
           </select>
-          {errors.category && categoriaProducto()}
 
           {errors.category && toast.error("La Categoría es requerida.")}
         </div>
@@ -183,7 +183,7 @@ export const ProductForm = ({ onSubmit }) => {
           <Button type="submit"> Salir </Button>
         </Link>
         
-    </form>
+      </form>
     </Container>
   );
 };

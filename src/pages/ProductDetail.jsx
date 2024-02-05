@@ -1,7 +1,8 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import {useState, useEffect} from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
+import { useCartStore } from "../Store/CartStore";
 
 export const ProductDetail = () => {
     const BASE_URL = "https://pf-server-93lj.onrender.com"
@@ -13,25 +14,61 @@ export const ProductDetail = () => {
     const[user, setUser] = useState({
         image:"https://static.vecteezy.com/system/resources/previews/008/844/895/non_2x/user-icon-design-free-png.png"
     })
+    const { addToCart } = useCartStore(); 
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const getData = async() =>{
-            if (Object.keys(product).length === 0) {
-                const responseProduct = await fetch(`${BASE_URL}/product/${id}`)
-                if (!responseProduct.ok) {
-                    throw new Error(`Error de red - Código de estado: ${response.status}`);
-                }
+    // useEffect(() => {
+    //     const getData = async() =>{
+    //         if (Object.keys(product).length === 0) {
+    //             const responseProduct = await fetch(`${BASE_URL}/product/${id}`)
+    //             if (!responseProduct.ok) {
+    //                 throw new Error(`Error de red - Código de estado: ${response.status}`);
+    //             }
 
-                const data = await responseProduct.json();
+    //             const data = await responseProduct.json();
 
-                setProduct(data)
-                setUser({...user, ...data.User})
+    //             setProduct(data)
+    //             setUser({...user, ...data.User})
                 
-            }
-        }
+    //         }
+    //     }
 
-        getData()
-    })
+    //     getData()
+    // })
+    useEffect(() => {
+        const getData = async () => {
+            const responseProduct = await fetch(`${BASE_URL}/product/${id}`);
+            if (!responseProduct.ok) {
+                throw new Error(`Error de red - Código de estado: ${responseProduct.status}`);
+            }
+    
+            const data = await responseProduct.json();
+    
+            setProduct(data);
+            setUser((currentUser) => ({ ...currentUser, ...data.User }));
+        };
+    
+        if (Object.keys(product).length === 0) {
+            getData();
+        }
+    }, [id, product]); // Ahora incluye `product` en el array de dependencias
+    
+    
+    
+
+    const handleAddToCart = () => {
+        // Añade el producto al carrito
+        addToCart({
+            ...product,
+            id: product.id, // Asegúrate de que el producto tenga una propiedad 'id'
+            name: product.name,
+            cost: product.cost,
+            quantity: 1 // Esto puede ser opcional dependiendo de cómo manejas la cantidad en addToCart
+        });
+        console.log(`Producto añadido al carrito: ${product.name}`);
+        navigate('/cart');
+
+    };
 
     return(<Container>
 
@@ -59,7 +96,7 @@ export const ProductDetail = () => {
                             <div className="descriptionContainer">
                                 {product.description}
                             </div>
-                            <Button> Reservar </Button>
+                            <Button onClick={handleAddToCart}> Reservar </Button>
                             <Link to='/'>
                                 <Button style={{width:'100%'}}> Salir </Button>
                             </Link>

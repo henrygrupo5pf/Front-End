@@ -105,7 +105,7 @@ export const ProductForm = ({ onSubmit }) => {
     <Container>
      <ToastContainer /> 
     <form className="form" onSubmit={handleSubmit(submitForm)}>
-        <h1 className="h1">Publicar Producto</h1>
+        <h1 className="h1">Publicar Producto.</h1>
         <div className="input_container">
           <label className="label" htmlFor="userId">User ID</label>
           <input className="input" id="userId" {...register("userId", { required: true })} placeholder="User ID" />

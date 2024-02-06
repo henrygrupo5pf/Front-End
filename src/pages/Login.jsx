@@ -10,43 +10,66 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [registrando, setRegistrando] = useState(false); // Nuevo estado para manejar el estado de registro/inicio de sesión
-  const [usuarioAutenticado, setUsuarioAutenticado] = useState(false); // Estado para indicar si el usuario está autenticado
-  
+  const [registrando, setRegistrando] = useState(false);
+  const [usuarioAutenticado, setUsuarioAutenticado] = useState(false);
+  const [loading, setLoading] = useState(false); // Nuevo estado para indicar carga
+  //método que mantiene la sesión iniciada 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (usuario) => {
       if (usuario) {
-        // El usuario está autenticado
         setUsuarioAutenticado(true);
       } else {
-        // El usuario no está autenticado
         setUsuarioAutenticado(false);
       }
     });
     
-    // Limpiar suscripción al desmontar el componente
     return () => unsubscribe();
   }, []);
 
-  // Método para manejar el inicio de sesión
   const handleLogin = async () => {
+    setLoading(true); // Mostrar indicador de carga al iniciar sesión
     try {
+      // Validación de entrada
+      if (!email || !password) {
+        setError("Por favor, ingresa un correo electrónico y una contraseña.");
+        return;
+      }
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      setError(error.message);
+      // Manejo de errores más detallado
+      if (error.code === "auth/invalid-email") {
+        setError("Correo electrónico no válido.");
+      } else if (error.code === "auth/wrong-password") {
+        setError("Contraseña incorrecta.");
+      } else {
+        setError("Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.");
+      }
     }
+    setLoading(false); // Ocultar indicador de carga después de finalizar la autenticación
   };
   
-  // Método para manejar el registro de usuarios
   const handleRegister = async () => {
+    setLoading(true); // Mostrar indicador de carga al registrarse
     try {
+      // Validación de entrada
+      if (!email || !password) {
+        setError("Por favor, ingresa un correo electrónico y una contraseña.");
+        return;
+      }
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      setError(error.message);
+      // Manejo de errores más detallado
+      if (error.code === "auth/email-already-in-use") {
+        setError("El correo electrónico ya está en uso. Por favor, utiliza otro correo electrónico.");
+      } else if (error.code === "auth/weak-password") {
+        setError("La contraseña es demasiado débil. Debe tener al menos 6 caracteres.");
+      } else {
+        setError("Error al registrarse. Por favor, inténtalo de nuevo más tarde.");
+      }
     }
+    setLoading(false); // Ocultar indicador de carga después de finalizar el registro
   };
 
-  // Método para manejar el cierre de sesión
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -81,10 +104,14 @@ export const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               {error && <Error>{error}</Error>}
-              <ContainerBtn>
-                <RegisterButton onClick={registrando ? handleRegister : handleLogin}>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</RegisterButton>
-                <SwitchButton onClick={() => setRegistrando(!registrando)}>{registrando ? 'Ya tienes cuenta?' : 'No tienes cuenta?'}</SwitchButton>
-              </ContainerBtn>
+              {loading ? ( // Feedback visual durante la autenticación
+                <LoadingIndicator>Cargando...</LoadingIndicator>
+              ) : (
+                <ContainerBtn>
+                  <RegisterButton onClick={registrando ? handleRegister : handleLogin}>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</RegisterButton>
+                  <SwitchButton onClick={() => setRegistrando(!registrando)}>{registrando ? 'Ya tienes cuenta?' : 'No tienes cuenta?'}</SwitchButton>
+                </ContainerBtn>
+              )}
             </>
           )}
         </div>
@@ -96,11 +123,11 @@ export const Login = () => {
 export default Login;
 
 const Container = styled.div`
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   .h1 {
     margin-bottom: 30px;
@@ -116,33 +143,43 @@ const ContainerBtn = styled.div`
 `;
 
 const Button = styled.button`
-padding: 10px 15px;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-font-size: 21px;
-margin: 2px;
-transition: background-color 0.3s ease;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 21px;
+  margin: 2px;
+  transition: background-color 0.3s ease;
 
-&:hover {
-  background-color: #45a049;
-}
+  &:hover {
+    background-color: #45a049;
+  }
 `;
 
 const RegisterButton = styled(Button)`
-background-color: #4caf50;
+  background-color: #4caf50;
   color: white;
 `;
 
 const SwitchButton = styled(Button)`
-background-color: #1e90ff;
-color: white;
+  background-color: #1e90ff;
+  color: white;
 `;
 
 const Error = styled.p`
-  /* Estilos del Error omitidos para brevedad */
+  color: red;
+  font-size: 16px;
+  margin-top: 8px;
 `;
 
 const LoggedInMessage = styled.p`
-  /* Estilos del mensaje para usuario autenticado omitidos para brevedad */
+  color: green;
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const LoadingIndicator = styled.div`
+  color: #1e90ff;
+  font-size: 18px;
+  margin-top: 10px;
 `;

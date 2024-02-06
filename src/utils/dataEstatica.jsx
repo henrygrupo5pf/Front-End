@@ -39,17 +39,17 @@ export const LinksArray = [
     to: "/productForm",
   },
   {
+    label: "Carrito",
+    icon: <AiOutlineShoppingCart />,
+    to: "/cart",
+  },
+  {
     label: "Login",
     icon: <AiOutlineLogin />,
     to: "/login",
   },
 
 
-  {
-    label: "Carrito",
-    icon: <AiOutlineShoppingCart />,
-    to: "/cart",
-  },
 ];
 export const SecondarylinksArray = [
   {

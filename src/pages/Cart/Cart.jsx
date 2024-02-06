@@ -1,20 +1,20 @@
 import React from 'react';
-import {useCartStore} from "../../Store/CartStore"
+import { useCartStore } from "../../Store/CartStore"
 import { useNavigate } from "react-router-dom"
 
 const Cart = () => {
   const { cartItems, addToCart, removeFromCart, incrementQuantity, decrementQuantity, clearCart } = useCartStore();
   const navigate = useNavigate();
-  const handleGoHome = ()=>{
+  const handleGoHome = () => {
     navigate('/'); // Navegar a la página de inicio
 
   };
 
-    //Por aca se esta yendo a la pasarela de pago
-  const handleCheckOut = ()=>{
+  //Por aca se esta yendo a la pasarela de pago
+  const handleCheckOut = () => {
+   
     navigate("/checkOut");
   };
-
 
   return (
     <div>
@@ -36,7 +36,7 @@ const Cart = () => {
       <button onClick={clearCart}>Clear Cart</button>
     </div>
   );
-  
+
 };
 
 export default Cart;

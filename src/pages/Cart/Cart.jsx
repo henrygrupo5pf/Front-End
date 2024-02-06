@@ -15,7 +15,6 @@ const Cart = () => {
     navigate("/checkOut");
   };
 
-  console.log(cartItems)
 
   return (
     <div>

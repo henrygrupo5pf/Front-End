@@ -10,6 +10,7 @@ const MyRoutes = () => {
       <Route path="/productForm" element={<ProductForm />} />
       <Route path="/productDetail/:id" element={<ProductDetail/>} />
       <Route path="/cart" element={<Cart/>} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 };

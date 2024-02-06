@@ -2,13 +2,27 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import appFirebase from '../credenciales';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+
 
 const auth = getAuth(appFirebase);
+const db = getFirestore(appFirebase);
+const BASE_URL = "https://pf-server-93lj.onrender.com"
+
 
 export const Login = () => {
   // Definir estado para el campo del formulario y posibles errores
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [name, setName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  const[user, setUser] = useState({
+    name: "",
+    email: "",
+    password:"",
+    country: "",
+    location: "",
+    phoneNumber: "",
+  })
   const [error, setError] = useState(null);
   const [registrando, setRegistrando] = useState(false); // Nuevo estado para manejar el estado de registro/inicio de sesión
   const [usuarioAutenticado, setUsuarioAutenticado] = useState(false); // Estado para indicar si el usuario está autenticado
@@ -31,7 +45,7 @@ export const Login = () => {
   // Método para manejar el inicio de sesión
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, user.email, user.password);
     } catch (error) {
       setError(error.message);
     }
@@ -40,7 +54,17 @@ export const Login = () => {
   // Método para manejar el registro de usuarios
   const handleRegister = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+       
+      await createUserWithEmailAndPassword(auth, user.email, user.password);
+      
+      const response = await fetch(`${BASE_URL}/user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      });
+
     } catch (error) {
       setError(error.message);
     }
@@ -54,6 +78,78 @@ export const Login = () => {
       console.error('Error al cerrar sesión:', error);
     }
   };
+
+  const isRegistering = () => {
+    if(registrando){
+      return (
+      <div>
+
+      <Input
+        type="text"
+        placeholder="Nombre"
+        value={user.name}
+        onChange={(e) => setUser({...user, name: e.target.value})}
+      />
+
+      <Input
+        type="email"
+        placeholder="Correo Electrónico"
+        value={user.email}
+        onChange={(e) => setUser({...user, email: e.target.value})}
+      />
+
+      <Input
+        type="password"
+        placeholder="Contraseña"
+        value={user.password}
+        onChange={(e) => setUser({...user, password: e.target.value})}
+      />
+
+      <Input
+        type="text"
+        placeholder="Pais"
+        value={user.country}
+        onChange={(e) => setUser({...user, country: e.target.value})}
+      />
+
+      <Input
+        type="text"
+        placeholder="Localidad"
+        value={user.location}
+        onChange={(e) => setUser({...user, location: e.target.value})}
+      />
+
+      <Input
+        type="text"
+        placeholder="Telefono"
+        value={user.phoneNumber}
+        onChange={(e) => setUser({...user, phoneNumber: e.target.value})}
+      />
+
+      
+    </div>
+    )
+
+    }else{
+      return(
+      <ContainerInput>
+        <Input
+        type="email"
+        placeholder="Correo Electrónico"
+        value={user.email}
+        onChange={(e) => setUser({...user, email: e.target.value})}
+      />
+
+      <Input
+        type="password"
+        placeholder="Contraseña"
+        value={user.password}
+        onChange={(e) => setUser({...user, password: e.target.value})}
+      />
+    </ContainerInput>
+      )
+    }
+  }
   
   return (
     <Container>
@@ -68,18 +164,8 @@ export const Login = () => {
           ) : (
             <>
               <Titulo>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</Titulo>
-              <Input
-                type="email"
-                placeholder="Correo Electrónico"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Input
-                type="password"
-                placeholder="Contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              
+              {isRegistering()}
               {error && <Error>{error}</Error>}
               <ContainerBtn>
                 <RegisterButton onClick={registrando ? handleRegister : handleLogin}>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</RegisterButton>
@@ -108,6 +194,8 @@ const Container = styled.div`
 `;
 
 const Titulo = styled.span``;
+
+const ContainerInput = styled.span``;
 
 const Input = styled.input``;
 

@@ -1,7 +1,9 @@
 import {
   AiOutlineHome,
   AiOutlineSetting,
-  AiOutlineLogin
+  AiOutlineLogin,
+  AiOutlineShoppingCart
+
 } from "react-icons/ai";
 import { v } from "../styles/variables";
 
@@ -21,8 +23,12 @@ export const DesplegableUser = [
   icono: <v.iconoCerrarSesion/>,
   tipo: "cerrarsesion",
 },
+{
+  text: "Carrito",
+  icono: <AiOutlineShoppingCart/>,
+  tipo: "carrito",
+},
 ];
-
 
 
 //data SIDEBAR
@@ -41,6 +47,12 @@ export const LinksArray = [
   label: "Login",
   icon: <AiOutlineLogin  />,
   to: "/login",
+},
+
+{
+  text: "Cerrar sesión",
+  icono: <AiOutlineShoppingCart/>,
+  to: "/cart",
 },
 
 ];

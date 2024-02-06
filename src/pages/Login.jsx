@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import appFirebase from '../credenciales';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { useUserStore } from '../Store/UserStore';
 
 
 const auth = getAuth(appFirebase);
@@ -11,10 +12,9 @@ const BASE_URL = "https://pf-server-93lj.onrender.com"
 
 
 export const Login = () => {
-  // Definir estado para el campo del formulario y posibles errores
-  // const [name, setName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+ 
+  const {setUserAuth, userAuth} = useUserStore()
+
   const[user, setUser] = useState({
     name: "",
     email: "",
@@ -30,10 +30,10 @@ export const Login = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (usuario) => {
       if (usuario) {
-        // El usuario está autenticado
+        
         setUsuarioAutenticado(true);
       } else {
-        // El usuario no está autenticado
+        setUserAuth(null)
         setUsuarioAutenticado(false);
       }
     });
@@ -46,6 +46,24 @@ export const Login = () => {
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, user.email, user.password);
+
+      const userData = {
+        email: user.email,
+        password: user.password
+      }
+
+      const response = await fetch(`${BASE_URL}/user/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const userApi = await response.json()
+
+      setUserAuth(userApi);
+      
     } catch (error) {
       setError(error.message);
     }

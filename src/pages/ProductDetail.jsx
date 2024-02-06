@@ -203,4 +203,8 @@ border-radius: 4px;
 cursor: pointer;
 font-size: 25px;
 margin: 2px;
+/* Estilo para cuando el elemento está siendo presionado */
+&:active {
+  background-color: #dbdbdb; /* Este color se aplica cuando se hace clic */
+}
 `;

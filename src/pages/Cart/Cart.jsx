@@ -100,6 +100,14 @@ const Options = styled.div`
 display: flex;
 align-items: center;
 justify-content: center;
+&:hover {
+  background-color: #ececec; /* Este color se aplica con el hover */
+}
+
+/* Estilo para cuando el elemento está siendo presionado */
+&:active {
+  background-color: #dbdbdb; /* Este color se aplica cuando se hace clic */
+}
 `
 
 const ButtonOption = styled.button`
@@ -111,6 +119,12 @@ border-radius: 4px;
 cursor: pointer;
 font-size: 18px;
 margin: 2px;
+
+
+/* Estilo para cuando el elemento está siendo presionado */
+&:active {
+  background-color: #dbdbdb; /* Este color se aplica cuando se hace clic */
+}
 `;
 
 const Button = styled.button`
@@ -122,6 +136,10 @@ border-radius: 4px;
 cursor: pointer;
 font-size: 21px;
 margin: 2px;
+/* Estilo para cuando el elemento está siendo presionado */
+&:active {
+  background-color: #dbdbdb; /* Este color se aplica cuando se hace clic */
+}
 `;
 
 const FinalContainer = styled.div`

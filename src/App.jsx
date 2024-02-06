@@ -29,7 +29,6 @@ function App() {
           <section className="ContentMenuHamburguer">
             <MenuHambur state={sidebar} setState={setSidebar} />
           </section>
-
           <section className="ContentRoutes">
               <MyRoutes />
           </section>

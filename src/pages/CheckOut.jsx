@@ -1,35 +1,49 @@
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import styled from 'styled-components';
 import { useCartStore } from "../Store/CartStore";
 
+
 const CheckOut = () => {
   const cartInfo = useCartStore((store) => store.cartItems)
-  console.log(cartInfo);
-/*   const BASE_URL = "https://pf-server-93lj.onrender.com"
+  console.log("CART INFO:    ", cartInfo);
+  const BASE_URL = "https://pf-server-93lj.onrender.com"
+  const BASE_URL2 = "http://localhost:3001"
+  const STRIPE_PUBLIC_KEY = "pk_test_51OgYb1GL3gYQY1hZLqzIM3qBpw2fF1wiZmJJtsazSvdrDkPGyouIeYU5tYKzJB2WQkTQe7iDSg7OBdKH17SpA2vc00rEF6YS4x"
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     const requestBody = {
       cartItems: cartInfo,
     };
-    const response = await fetch(`${BASE_URL}/checkOut`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    if (response.ok) {
-      console.log('Solicitud POST exitosa');
-    } else {
-      console.error('Error en la solicitud POST:', response.statusText);
+  
+    try {
+      const response = await fetch(`${BASE_URL2}/checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${STRIPE_PUBLIC_KEY}`
+        },
+        body: JSON.stringify(requestBody),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+  
+      const responseData = await response.json();
+      if(responseData.url){
+        window.location.href =responseData.url
+      }
+      
+  
+    } catch (error) {
+      console.error('Error en la solicitud POST:', error.message);
     }
-  } */
-    
+  }
+
 
 
   return (
-    <FormContainer /* onSubmit={handleSubmit} */>
+    <FormContainer onSubmit={handleSubmit}>
       Resumen de tu compra
       {cartInfo.map((item) => (
         <CardElementContainer key={item.id}>

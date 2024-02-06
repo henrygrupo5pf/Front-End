@@ -7,23 +7,27 @@ import {
 import { v } from "../styles/variables";
 
 export const DesplegableUser = [
-  {
-    text: "Mi perfil",
-    icono: <v.iconoUser />,
-    tipo: "miperfil",
-  },
-  {
-    text: "Configuracion",
-    icono: <v.iconoSettings />,
-    tipo: "configuracion",
-  },
-  {
-    text: "Cerrar sesión",
-    icono: <v.iconoCerrarSesion />,
-    tipo: "cerrarsesion",
-  },
+{
+  text: "Mi perfil",
+  icono: <v.iconoUser/>,
+  tipo: "miperfil",
+},
+{
+  text: "Configuracion",
+  icono: <v.iconoSettings/>,
+  tipo: "configuracion",
+},
+{
+  text: "Cerrar sesión",
+  icono: <v.iconoCerrarSesion/>,
+  tipo: "cerrarsesion",
+},
+{
+  text: "Carrito",
+  icono: <AiOutlineShoppingCart/>,
+  tipo: "carrito",
+},
 ];
-
 
 
 //data SIDEBAR
@@ -49,6 +53,12 @@ export const LinksArray = [
     to: "/login",
   },
 
+
+{
+  text: "Cerrar sesión",
+  icono: <AiOutlineShoppingCart/>,
+  to: "/cart",
+},
 
 ];
 export const SecondarylinksArray = [

@@ -66,7 +66,7 @@ export const ProductDetail = () => {
             quantity: 1 // Esto puede ser opcional dependiendo de cómo manejas la cantidad en addToCart
         });
         console.log(`Producto añadido al carrito: ${product.name}`);
-        navigate('/cart');
+        // navigate('/cart');
 
     };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useCartStore} from "../../Store/CartStore"
+import { useCartStore } from "../../Store/CartStore"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 
@@ -8,18 +8,16 @@ const Cart = () => {
   const total = cartItems.reduce((acc, item) => acc + (Number(item.cost) || 0) * item.quantity, 0);
 
   const navigate = useNavigate();
-  const handleGoHome = ()=>{
+  const handleGoHome = () => {
     navigate('/'); // Navegar a la página de inicio
 
   };
 
-    //Por aca se esta yendo a la pasarela de pago
-  const handleCheckOut = ()=>{
+  //Por aca se esta yendo a la pasarela de pago
+  const handleCheckOut = () => {
+   
     navigate("/checkOut");
   };
-
-
-  console.log(cartItems)
 
   return (
     <Container>
@@ -60,7 +58,7 @@ const Cart = () => {
       
     </Container>
   );
-  
+
 };
 
 export default Cart;

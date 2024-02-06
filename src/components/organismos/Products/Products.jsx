@@ -31,15 +31,17 @@ const fetchProducts = ({ queryKey }) => {
 
   return fetch(url)
   .then((response) => {
-    if (response.status !== 200) {
+    if (!response.ok) {
       throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
     }
 
     return response.json();
+    
   })
   .then((data) => {
-    if (!data || (Array.isArray(data) && data.length === 0)) {
-      throw new Error("No se encontraron productos. Por favor vuelva a buscar otro nombre distinto o cambie los parametros de la busqueda");
+    if (data.products.length === 0) {
+    
+      throw new Error("No products found. Please try searching with a different name or change the search parameters.");
     }
     return data;
   });
@@ -49,7 +51,7 @@ const fetchProducts = ({ queryKey }) => {
 
 const Products = () => {
   const searchText=useNavBarStore((state)=>state.searchText)
-  const setSearchText=useNavBarStore((state)=>state.setSearchText)
+
  
   const [pageNumber, setPageNumber] = useState(0);
   const [filters, setFilters] = useState({
@@ -61,7 +63,7 @@ const Products = () => {
   });
 
   const query = useQuery({
-    queryKey: [pageNumber, filters, searchText, setSearchText],
+    queryKey: [pageNumber, filters, searchText],
     queryFn: fetchProducts,
   });
 
@@ -80,7 +82,9 @@ const Products = () => {
     });
   };
 
-  if (query.isError) return <p>{query.error.message}</p>;
+
+
+  if (query.isError) return <p>{query.error.message}</p>; 
 
   return (
     <Container>

@@ -16,7 +16,7 @@ export const HomeTemplate = () => {
       </header>
       <section className="area1"></section>
       <section className="area2">
-        <Navbar/>
+        <Navbar />
       </section>
       <section className="main">
         <Products />
@@ -55,6 +55,7 @@ const Container = styled.div`
     background-color: rgba(77, 237, 106, 0.14);
     display: flex;
     align-items: center;
+    justify-content: center;  
   }
   .main {
     grid-area: main;

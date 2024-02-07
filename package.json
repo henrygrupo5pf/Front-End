@@ -22,6 +22,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.49.2",
     "react-icons": "4.12.0",
+    "react-loader-spinner": "^6.1.6",
     "react-lottie": "^1.2.3",
     "react-router-dom": "^6.21.1",
     "react-spinners": "0.13.8",

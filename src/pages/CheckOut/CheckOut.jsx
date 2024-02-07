@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { useCartStore } from "../Store/CartStore";
+import { useCartStore } from "../../Store/CartStore"
 
 
 const CheckOut = () => {
   const cartInfo = useCartStore((store) => store.cartItems)
-  console.log("CART INFO:    ", cartInfo);
+
   const BASE_URL = "https://pf-server-93lj.onrender.com"
-  const BASE_URL2 = "http://localhost:3001"
+  const TEST_URL = "http://localhost:3001"
   const STRIPE_PUBLIC_KEY = "pk_test_51OgYb1GL3gYQY1hZLqzIM3qBpw2fF1wiZmJJtsazSvdrDkPGyouIeYU5tYKzJB2WQkTQe7iDSg7OBdKH17SpA2vc00rEF6YS4x"
 
   const handleSubmit = async (event) => {
@@ -14,9 +14,9 @@ const CheckOut = () => {
     const requestBody = {
       cartItems: cartInfo,
     };
-  
+
     try {
-      const response = await fetch(`${BASE_URL2}/checkout`, {
+      const response = await fetch(`${TEST_URL}/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,17 +24,17 @@ const CheckOut = () => {
         },
         body: JSON.stringify(requestBody),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-  
+
       const responseData = await response.json();
-      if(responseData.url){
-        window.location.href =responseData.url
+      if (responseData.url) {
+        window.location.href = responseData.url
       }
-      
-  
+
+
     } catch (error) {
       console.error('Error en la solicitud POST:', error.message);
     }
@@ -43,24 +43,36 @@ const CheckOut = () => {
 
 
   return (
-    <FormContainer onSubmit={handleSubmit}>
-      Resumen de tu compra
-      {cartInfo.map((item) => (
-        <CardElementContainer key={item.id}>
-          <StyledImage src={item.photo} alt={item.name} />
-          <h3>{item.name}</h3>
-          <p>Quantity: {item.quantity}</p>
-        </CardElementContainer>
-      ))}
-      <SubmitButton>
-        Continuar
-      </SubmitButton>
-    </FormContainer>
+    <Container>
+      <FormContainer onSubmit={handleSubmit}>
+        Resumen de tu compra
+        {cartInfo.map((item) => (
+          <CardElementContainer key={item.id}>
+            <StyledImage src={item.photo} alt={item.name} />
+            <TextContainer>
+              <h3>{item.name}</h3>
+              <p>Quantity: {item.quantity}</p>
+            </TextContainer>
+          </CardElementContainer>
+        ))}
+        <SubmitButton>
+          Continuar
+        </SubmitButton>
+      </FormContainer>
+    </Container>
 
   );
 
 };
 export default CheckOut;
+
+const Container = styled.div`
+width: 100%;
+height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+`;
 
 const FormContainer = styled.form`
   width: 400px;
@@ -75,7 +87,7 @@ const FormContainer = styled.form`
 `;
 
 const CardElementContainer = styled.div`
-  display: flex
+  display: flex;
   align-items: center;
   width: 100%;
   padding: 8px;
@@ -85,10 +97,14 @@ const CardElementContainer = styled.div`
   margin-bottom: 8px;
 `;
 
+const TextContainer = styled.div`
+  margin-left: 30%;
+`;
+
 const StyledImage = styled.img`
-  width: 50px; /* Ajusta el tamaño de la imagen al 100% del contenedor */
-  max-height: 50px; /* Establece una altura máxima para evitar que la imagen sea demasiado grande */
-  object-fit: cover; /* Ajusta el contenido de la imagen para cubrir el contenedor */
+  width: 70px; 
+  max-height: 70px; 
+  object-fit: cover; 
 `;
 
 const SubmitButton = styled.button`
@@ -100,8 +116,13 @@ const SubmitButton = styled.button`
   cursor: pointer;
   font-size: 21px;
   margin: 2px;
+  transition: background-color 0.3s; 
   &:disabled {
     background-color: #a0a0a0;
     cursor: not-allowed;
   }
+  &:hover {
+    background-color: #45a049; 
+  }
 `;
+

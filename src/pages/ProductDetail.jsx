@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom"
 import {useState, useEffect} from "react"
+import Swal from 'sweetalert2'
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 import { useCartStore } from "../Store/CartStore";
@@ -66,6 +67,13 @@ export const ProductDetail = () => {
             quantity: 1 // Esto puede ser opcional dependiendo de cómo manejas la cantidad en addToCart
         });
         console.log(`Producto añadido al carrito: ${product.name}`);
+        Swal.fire({
+            position: "top",
+            icon: "success",
+            title: `Producto añadido al carrito: ${product.name}`,
+            showConfirmButton: false,
+            timer: 1500
+          });
         // navigate('/cart');
 
     };
@@ -203,4 +211,8 @@ border-radius: 4px;
 cursor: pointer;
 font-size: 25px;
 margin: 2px;
+/* Estilo para cuando el elemento está siendo presionado */
+&:active {
+  background-color: #dbdbdb; /* Este color se aplica cuando se hace clic */
+}
 `;

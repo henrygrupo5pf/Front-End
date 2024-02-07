@@ -24,13 +24,13 @@ export const Login = () => {
     phoneNumber: "",
   })
   const [error, setError] = useState(null);
-  const [registrando, setRegistrando] = useState(false); // Nuevo estado para manejar el estado de registro/inicio de sesión
+  const [registrando, setRegistrando] = useState(false); // Estado para manejar el estado de registro/inicio de sesión
   const [usuarioAutenticado, setUsuarioAutenticado] = useState(false); // Estado para indicar si el usuario está autenticado
-  
+  const [isLoading, setIsLoading] = useState(false); // Estado para indicar si la autenticación/registro está en progreso
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (usuario) => {
       if (usuario) {
-        
         setUsuarioAutenticado(true);
       } else {
         setUserAuth(null)
@@ -40,13 +40,20 @@ export const Login = () => {
     
     // Limpiar suscripción al desmontar el componente
     return () => unsubscribe();
-  }, []);
+  }, [setUserAuth]);
 
   // Método para manejar el inicio de sesión
   const handleLogin = async () => {
     try {
+      if (!user.email || !user.password) {
+        setError("Por favor, complete todos los campos.");
+        return;
+      }
+      setIsLoading(true); // Iniciar el indicador de carga
       await signInWithEmailAndPassword(auth, user.email, user.password);
-
+      // Limpiar los campos de correo electrónico y contraseña después de iniciar sesión
+      setUser({ ...user, email: "", password: "" });
+      setError(null);
       const userData = {
         email: user.email,
         password: user.password
@@ -61,20 +68,31 @@ export const Login = () => {
       });
 
       const userApi = await response.json()
-
       setUserAuth(userApi);
       
     } catch (error) {
       setError(error.message);
+    } finally {
+      setIsLoading(false); // Detener el indicador de carga
     }
   };
   
   // Método para manejar el registro de usuarios
   const handleRegister = async () => {
     try {
-       
+      if (!user.email || !user.password) {
+        setError("Por favor, complete todos los campos.");
+        return;
+      }
+      if (user.password.length < 6) {
+        setError("La contraseña debe tener al menos 6 caracteres.");
+        return;
+      }
+      setIsLoading(true);
       await createUserWithEmailAndPassword(auth, user.email, user.password);
-      
+      // Limpiar los campos de correo electrónico y contraseña después de registrarse
+      setUser({ ...user, email: "", password: "" });
+      setError(null);
       const response = await fetch(`${BASE_URL}/user`, {
         method: 'POST',
         headers: {
@@ -85,6 +103,8 @@ export const Login = () => {
 
     } catch (error) {
       setError(error.message);
+    } finally {
+      setIsLoading(false); // Detener el indicador de carga
     }
   };
 
@@ -92,6 +112,9 @@ export const Login = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      // Limpiar los campos de correo electrónico y contraseña
+      setUser({ ...user, email: "", password: "" });
+      setError(null);
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }
@@ -108,19 +131,24 @@ export const Login = () => {
         value={user.name}
         onChange={(e) => setUser({...user, name: e.target.value})}
       />
-
+      
+      {/* Validación de entrada para el correo electrónico */}
       <Input
         type="email"
         placeholder="Correo Electrónico"
         value={user.email}
         onChange={(e) => setUser({...user, email: e.target.value})}
+        required
       />
 
+      {/* Validación de entrada para la contraseña */}
       <Input
         type="password"
         placeholder="Contraseña"
         value={user.password}
         onChange={(e) => setUser({...user, password: e.target.value})}
+        minLength="6"
+        required
       />
 
       <Input
@@ -151,18 +179,23 @@ export const Login = () => {
     }else{
       return(
       <ContainerInput>
+        {/* Validación de entrada para el correo electrónico */}
         <Input
         type="email"
         placeholder="Correo Electrónico"
         value={user.email}
         onChange={(e) => setUser({...user, email: e.target.value})}
+        required
       />
 
+      {/* Validación de entrada para la contraseña */}
       <Input
         type="password"
         placeholder="Contraseña"
         value={user.password}
         onChange={(e) => setUser({...user, password: e.target.value})}
+        minLength="6"
+        required
       />
     </ContainerInput>
       )
@@ -173,7 +206,7 @@ export const Login = () => {
     <Container>
       <div className="contentCard">
         <div className="card">
-        <h1 className="h1">Welcome</h1>
+          <h1 className="h1">Welcome</h1>
           {usuarioAutenticado ? (
             <>
               <LoggedInMessage>Bienvenido! Usuario autenticado.</LoggedInMessage>
@@ -185,10 +218,14 @@ export const Login = () => {
               
               {isRegistering()}
               {error && <Error>{error}</Error>}
-              <ContainerBtn>
-                <RegisterButton onClick={registrando ? handleRegister : handleLogin}>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</RegisterButton>
-                <SwitchButton onClick={() => setRegistrando(!registrando)}>{registrando ? 'Ya tienes cuenta?' : 'No tienes cuenta?'}</SwitchButton>
-              </ContainerBtn>
+              {isLoading ? (
+                <LoadingIndicator>Loading...</LoadingIndicator>
+              ) : (
+                <ContainerBtn>
+                  <RegisterButton onClick={registrando ? handleRegister : handleLogin}>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</RegisterButton>
+                  <SwitchButton onClick={() => setRegistrando(!registrando)}>{registrando ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?'}</SwitchButton>
+                </ContainerBtn>
+              )}
             </>
           )}
         </div>
@@ -244,11 +281,20 @@ const SwitchButton = styled(Button)`
 background-color: #1e90ff;
 color: white;
 `;
+const LoadingIndicator = styled.div`
+color: #1e90ff;
+font-size: 18px;
+margin-top: 10px;
+`;
 
 const Error = styled.p`
-  /* Estilos del Error omitidos para brevedad */
+color: red;
+font-size: 16px;
+margin-top: 8px;
 `;
 
 const LoggedInMessage = styled.p`
-  /* Estilos del mensaje para usuario autenticado omitidos para brevedad */
+color: green;
+font-size: 18px;
+font-weight: bold;
 `;

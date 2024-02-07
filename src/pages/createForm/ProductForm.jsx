@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components"
 import Swal from 'sweetalert2'
 import { useForm } from "react-hook-form";
@@ -8,12 +7,30 @@ import { Link } from "react-router-dom";
 import { ShowMessage } from "../../components/templates/messagesTemplate";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useUserStore } from '../../Store/UserStore';
 
 export const ProductForm = ({ onSubmit }) => {
+  const {userAuth} = useUserStore()
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const { userId, nombreProducto, categoriaProducto, costoProducto, descripcionProducto } = ShowMessage(); 
+  const { userId, nombreProducto, categoriaProducto, costoProducto, descripcionProducto } = ShowMessage();
+
+
+  const isLogged = () => {
+    if(!userAuth){
+      return(
+        <div className="login-center">
+          <h3>Inicia sesion para publicar un producto</h3>
+          <Link to='/login'>
+            <Button type="submit"> Iniciar Sesion </Button>
+          </Link>
+        </div>
+      )
+    }else{
+      return(<Button type="submit"> Publicar Producto </Button>)
+    }
+  }
 
   const submitForm = async (data) => {
     
@@ -33,6 +50,7 @@ export const ProductForm = ({ onSubmit }) => {
   
       data = {
         ...data,
+        userId: userAuth.id,
         photo: cloudinaryURL,
         cost: parseFloat(data.cost)
       };
@@ -108,16 +126,16 @@ export const ProductForm = ({ onSubmit }) => {
     <form className="form" onSubmit={handleSubmit(submitForm)}>
 
         <h1 className="h1">Publicar Producto.</h1>
-        <div className="input_container">
+        {/* <div className="input_container">
           <label className="label" htmlFor="userId">User ID</label>
-          <input className="input" id="userId" {...register("userId", { required: true })} placeholder="User ID" />
+          <input className={userAuth ? "input" : "inputDisabled"} id="userId" {...register("userId", { required: true })} placeholder="User ID" />
           {errors.userId && userId()}
 
-        </div>
+        </div> */}
 
         <div className="input_container">
           <label className="label" htmlFor="name">Nombre</label>
-          <input className="input" id="name" {...register("name", { required: true, minLength: 2, maxLength: 20 })} placeholder="Nombre del producto" />
+          <input className={userAuth ? "input" : "inputDisabled"} id="name" {...register("name", { required: true, minLength: 2, maxLength: 20 })} placeholder="Nombre del producto" />
 
           {errors.name && nombreProducto()}
 
@@ -125,7 +143,7 @@ export const ProductForm = ({ onSubmit }) => {
 
         <div className="input_container">
           <label className="label" htmlFor="category">Categoría</label>
-          <select className="select" id="category" {...register("category", { required: "La categoría es requerida.", validate: validateCategory })} placeholder="Categoría">
+          <select className={userAuth ? "select" : "selectDisabled"} id="category" {...register("category", { required: "La categoría es requerida.", validate: validateCategory })} placeholder="Categoría">
             <option value="">Selecciona una categoría</option>
             <option value="Books">Books</option>
             <option value="Electronic Devices">Electronic Devices</option>
@@ -137,19 +155,19 @@ export const ProductForm = ({ onSubmit }) => {
 
         <div className="input_container">
           <label className="label" htmlFor="cost">Costo</label>
-          <input className="input" type="number" id="cost" {...register("cost", { required: true, min: { value: 0.01, message: "El costo debe ser mayor a cero." } })} placeholder="Costo" />
+          <input className={userAuth ? "input" : "inputDisabled"} type="number" id="cost" {...register("cost", { required: true, min: { value: 0.01, message: "El costo debe ser mayor a cero." } })} placeholder="Costo" />
           {errors.cost && costoProducto() }
         </div>
 
         <div className="input_container">
           <label className="label" htmlFor="description">Descripción</label>
-          <textarea className="textarea" id="description" {...register("description", { required: true })} placeholder="Descripción" />
+          <textarea className={userAuth ? "textarea" : "textareaDisabled"} id="description" {...register("description", { required: true })} placeholder="Descripción" />
           {errors.description && descripcionProducto()}
         </div>
 
         <div className="input_container"> 
           <label className="label" htmlFor="photo">Imagen</label>
-          <input className="file-input"
+          <input className={userAuth ? "file-input" : "file-inputDisabled"}
             id="photo"
             type="file"
             accept="image/*"
@@ -157,7 +175,7 @@ export const ProductForm = ({ onSubmit }) => {
           />
         </div>
 
-        <Button type="submit"> Crear Producto </Button>
+        {isLogged()}
 
         <Link to='/'>
           <Button type="submit"> Salir </Button>
@@ -204,7 +222,7 @@ const Container = styled.div`
     min-width: 120px
   }
   
-  .input, .textarea {
+  .input, .textarea, .inputDisabled, .textareaDisabled {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -213,7 +231,7 @@ const Container = styled.div`
     min-width: 300px;
   }
 
-  .textarea{
+  .textarea, .textareaDisabled{
     resize: none;
     max-width: 300px;
   }
@@ -259,7 +277,18 @@ const Container = styled.div`
   .file-input:hover {
     border-color: #66afe9; /* Cambiar color del borde al hacer hover */
   }
-  
+
+  .inputDisabled, .file-inputDisabled, .selectDisabled, .textareaDisabled{
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .login-center{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `
 
 const Button = styled.button`

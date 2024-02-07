@@ -7,9 +7,7 @@ import { Sidebar } from "./components/organismos/sidebar/sidebar";
 import MyRoutes from "./routes/routes";
 import { Device } from "./styles/breakpoints";
 import { MenuHambur } from "./components/organismos/MenuHambur";
-import PaymentButton from "./components/atomos/PaymentButton";
-import { Elements } from "@stripe/react-stripe-js";
-import stripePromise from "./stripe";
+
 
 
 export const ThemeContext = createContext(null);
@@ -20,7 +18,6 @@ function App() {
   const [sidebar, setSidebar] = useState(false);
   const { pathname } = useLocation();
 
-  const isCheckoutRoute = pathname === "/checkOut";
   return (
 
     <ThemeContext.Provider value={{ theme, setTheme }}>
@@ -32,13 +29,9 @@ function App() {
           <section className="ContentMenuHamburguer">
             <MenuHambur state={sidebar} setState={setSidebar} />
           </section>
+
           <section className="ContentRoutes">
-            {isCheckoutRoute && (
-              <Elements stripe={stripePromise}>
-                <PaymentButton />
-              </Elements>
-            )}
-            <MyRoutes />
+              <MyRoutes />
           </section>
         </Container>
         <ReactQueryDevtools initialIsOpen={false} />

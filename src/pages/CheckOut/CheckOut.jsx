@@ -4,7 +4,7 @@ import { useCartStore } from "../../Store/CartStore"
 
 const CheckOut = () => {
   const cartInfo = useCartStore((store) => store.cartItems)
-
+  console.log(cartInfo);
   const BASE_URL = "https://pf-server-93lj.onrender.com"
   const TEST_URL = "http://localhost:3001"
   const STRIPE_PUBLIC_KEY = "pk_test_51OgYb1GL3gYQY1hZLqzIM3qBpw2fF1wiZmJJtsazSvdrDkPGyouIeYU5tYKzJB2WQkTQe7iDSg7OBdKH17SpA2vc00rEF6YS4x"

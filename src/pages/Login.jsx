@@ -83,6 +83,10 @@ export const Login = () => {
         body: JSON.stringify(user),
       });
 
+      const userApi = await response.json()
+
+      setUserAuth(userApi);
+
     } catch (error) {
       setError(error.message);
     }

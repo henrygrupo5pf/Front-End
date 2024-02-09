@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 import { Dark, Light } from "../src/styles/themes";
-import { Sidebar } from "./components/organismos/sidebar/sidebar";
+import { Sidebar } from "./components/organismos/sidebar/Sidebar";
 import MyRoutes from "./routes/routes";
 import { Device } from "./styles/breakpoints";
 import { MenuHambur } from "./components/organismos/MenuHambur";

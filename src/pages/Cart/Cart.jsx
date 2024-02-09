@@ -2,8 +2,11 @@ import React from 'react';
 import { useCartStore } from "../../Store/CartStore";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useUserStore } from '../../Store/UserStore';
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
+  const {userAuth} = useUserStore()
   const { cartItems, removeFromCart, clearCart } = useCartStore();
   const navigate = useNavigate();
 
@@ -30,6 +33,24 @@ const Cart = () => {
     return acc + (Number(item.cost) * diffDays);
   }, 0);
 
+  const isLogged = () => {
+    if (userAuth) {
+      return(
+        <Button onClick={handleCheckOut}>Continuar con la compra</Button>
+      )
+    }
+
+    return(
+      <LoginContainer>
+        
+        <Link to='/login'>
+            <ButtonLogin type="submit"> Iniciar Sesion </ButtonLogin>
+        </Link>
+        <h5>Debes iniciar sesion primero</h5>
+      </LoginContainer>
+    )
+  }
+
   return (
     <Container>
       {cartItems.length > 0 ? (
@@ -39,17 +60,21 @@ const Cart = () => {
               <ButtonOption onClick={() => removeFromCart(item.id)}>Eliminar producto</ButtonOption>
             </Options>
             <MiniCard>
-              <h5>{item.name}</h5>
-              <img className={"img"} src={item.photo} alt={item.name} />
+              <ProductInfo>
+                <h5>{item.name}</h5>
+                <img className={"img"} src={item.photo} alt={item.name} />
+                <h2>${Number(item.cost).toFixed(2)}/ Dia</h2>
+              </ProductInfo>
               
-              <div>
-                <h3>Fecha de inicio: {new Date(item.startDate).toLocaleDateString()}</h3>
-                <h3>Fecha de entrega: {new Date(item.endDate).toLocaleDateString()}</h3>
-                <h3>Días reservados: {calculateDays(new Date(item.startDate), new Date(item.endDate))}</h3>
-                <h3>Costo por día: ${Number(item.cost).toFixed(2)}</h3>
-                <h3>Subtotal: ${(Number(item.cost) * calculateDays(new Date(item.startDate), new Date(item.endDate))).toFixed(2)}</h3>
-              </div>
+              <ReservationInfo>
+                <h4>Inicio: {new Date(item.startDate).toLocaleDateString()}</h4>
+                <h4>Entrega: {new Date(item.endDate).toLocaleDateString()}</h4>
+                <h4>Días reservados: {calculateDays(new Date(item.startDate), new Date(item.endDate))}</h4>
+                <h4>Subtotal: ${(Number(item.cost) * calculateDays(new Date(item.startDate), new Date(item.endDate))).toFixed(2)}</h4>
+              </ReservationInfo>
+              
             </MiniCard>
+              
           </CardContainer>
         ))
       ) : (
@@ -59,18 +84,13 @@ const Cart = () => {
       <FinalContainer>
         <Button onClick={clearCart}>Limpiar carrito</Button>
         <Button onClick={handleGoHome}>Regresar a comprar</Button>
-        <Button onClick={handleCheckOut}>Continuar con la compra</Button>
+        {isLogged()}
       </FinalContainer>
     </Container>
   );
 };
 
 export default Cart;
-
-
-
-
-
 
 
 
@@ -83,35 +103,53 @@ const Container = styled.div`
   justify-content: center;
   `
 
-
 const MiniCard = styled.div`
-  width: 220px; /* Mantén el ancho o ajústalo según sea necesario */
+  width: 600px; /* Mantén el ancho o ajústalo según sea necesario */
   min-height: 100px; /* Usa min-height en lugar de height para permitir que crezca */
   padding: 10px; /* Añade padding para no pegar el contenido a los bordes */
   display: flex;
-  flex-direction: column;
+
   align-items: center;
   justify-content: flex-start; /* Cambiado de center a flex-start para alinear el contenido al principio */
   background-color: white;
   border-radius: 5px;
   box-shadow: 5px 10px 17px black;
   overflow: auto; /* Cambiado de hidden a auto para permitir desplazamiento si es necesario */
-  .img{
-    width: 70px;
-    height: auto; /* Asegura que la imagen mantenga su proporción */
-    margin-bottom: 10px; /* Añade un margen debajo de la imagen */
-  }
 `;
 
+const ProductInfo = styled.div`
+width: 320px;
+height: inherit;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: flex-start; /* Cambiado de center a flex-start para alinear el contenido al principio */
+overflow: auto; /* Cambiado de hidden a auto para permitir desplazamiento si es necesario */
+.img{
+  width: 70px;
+  height: auto; /* Asegura que la imagen mantenga su proporción */
+  margin-bottom: 10px; /* Añade un margen debajo de la imagen */
+}
+`
+
+const ReservationInfo = styled.div`
+  width: 260px;
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  padding-left: 50px;
+
+`
 
 const CardContainer = styled.div`
 display: flex;
 align-items: center;
-justify-content: space-between;
-width: 800px;
+justify-content: space-around;
+width: 70%;
 margin: 20px;
 `
 const Options = styled.div`
+text-align: center;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -150,11 +188,39 @@ border: none;
 border-radius: 4px;
 cursor: pointer;
 font-size: 21px;
-margin: 2px;
+margin: 30px;
 /* Estilo para cuando el elemento está siendo presionado */
 &:active {
   background-color: #dbdbdb; /* Este color se aplica cuando se hace clic */
 }
+`;
+
+const LoginContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+`
+
+const ButtonLogin = styled.button`
+background-color: #4caf50;
+color: white;
+padding: 10px 15px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+font-size: 21px;
+margin: 30px 30px 5px 30px;
+/* Estilo para cuando el elemento está siendo presionado */
+&:active {
+  background-color: #dbdbdb; /* Este color se aplica cuando se hace clic */
+}
+
+h5{
+  margin: 10px;
+}
+ 
 `;
 
 const FinalContainer = styled.div`

@@ -104,7 +104,7 @@ export const Login = () => {
   const isRegistering = () => {
     if(registrando){
       return (
-      <div>
+      <ContainerInput>
 
       <Input
         type="text"
@@ -149,7 +149,7 @@ export const Login = () => {
       />
 
       
-    </div>
+    </ContainerInput>
     )
 
     }else{
@@ -185,14 +185,18 @@ export const Login = () => {
             </>
           ) : (
             <>
-              <Titulo>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</Titulo>
+              <ContainerForm>
+                <Titulo>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</Titulo>
+                {isRegistering()}
+
+                {error && <Error>{error}</Error>}
+                <ContainerBtn>
+                  <RegisterButton onClick={registrando ? handleRegister : handleLogin}>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</RegisterButton>
+                  <SwitchButton onClick={() => setRegistrando(!registrando)}>{registrando ? 'Ya tienes cuenta?' : 'No tienes cuenta?'}</SwitchButton>
+                </ContainerBtn>
+              </ContainerForm>
               
-              {isRegistering()}
-              {error && <Error>{error}</Error>}
-              <ContainerBtn>
-                <RegisterButton onClick={registrando ? handleRegister : handleLogin}>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</RegisterButton>
-                <SwitchButton onClick={() => setRegistrando(!registrando)}>{registrando ? 'Ya tienes cuenta?' : 'No tienes cuenta?'}</SwitchButton>
-              </ContainerBtn>
+              
             </>
           )}
         </div>
@@ -217,9 +221,39 @@ const Container = styled.div`
 
 const Titulo = styled.span``;
 
-const ContainerInput = styled.span``;
+const ContainerForm = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 450px;
+  height: 100%;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 5px 10px 17px black;
+  padding: 50px 0 20px 0;
+`;
 
-const Input = styled.input``;
+const ContainerInput = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+`;
+
+const Input = styled.input`
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 4px;
+box-sizing: border-box;
+margin-bottom: 10px;
+min-width: 330px;
+
+&:focus{
+  border-color: #66afe9;
+}
+`;
 
 const ContainerBtn = styled.div`
   text-align: center;

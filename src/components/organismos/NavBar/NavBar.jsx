@@ -3,6 +3,39 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useNavBarStore } from '../../../Store/NavBarStore';
 
+
+function Navbar() {
+  const setSearchText = useNavBarStore((state) => state.setSearchText);
+  const [searchValue, setSearchValue] = useState('');
+  
+  const onChange = (event) => {
+    setSearchValue(event.target.value);
+  };
+  
+  const onSubmit = (event) => {
+    event.preventDefault();
+    setSearchText(searchValue);
+  };
+  
+  return (
+    <SearchBox>
+      <form onSubmit={onSubmit}>
+        <SearchBar
+          className="search-bar"
+          placeholder="Search for something..."
+          type="search"
+          value={searchValue}
+          onChange={onChange}
+          />
+        <SearchButton type="submit">Search</SearchButton>
+      </form>
+    </SearchBox>
+  );
+}
+
+export default Navbar;
+
+
 // Styled components
 const SearchBox = styled.div`
   display: flex;
@@ -39,36 +72,3 @@ transition: background-color 0.3s ease;
   background-color: #45a049; 
   }
 `;
-
-function Navbar() {
-  const setSearchText = useNavBarStore((state) => state.setSearchText);
-  const [searchValue, setSearchValue] = useState('');
-
-  const onChange = (event) => {
-    setSearchValue(event.target.value);
-  };
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-    setSearchText(searchValue);
-  };
-
-  return (
-    <SearchBox>
-      <form onSubmit={onSubmit}>
-        <SearchBar
-          className="search-bar"
-          placeholder="Search for something..."
-          type="search"
-          value={searchValue}
-          onChange={onChange}
-        />
-        <SearchButton type="submit">Search</SearchButton>
-      </form>
-    </SearchBox>
-  );
-}
-
-export default Navbar;
-
-

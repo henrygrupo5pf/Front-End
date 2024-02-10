@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 import { useCartStore } from "../../Store/CartStore"
+import { useUserStore } from '../../Store/UserStore';
 
 
 const CheckOut = () => {
   const cartInfo = useCartStore((store) => store.cartItems)
+  const userInfo = useUserStore((store)=> store.userAuth)
+
   console.log(cartInfo);
+  console.log(userInfo);
+
   const BASE_URL = "https://pf-server-93lj.onrender.com"
   const TEST_URL = "http://localhost:3001"
   const STRIPE_PUBLIC_KEY = "pk_test_51OgYb1GL3gYQY1hZLqzIM3qBpw2fF1wiZmJJtsazSvdrDkPGyouIeYU5tYKzJB2WQkTQe7iDSg7OBdKH17SpA2vc00rEF6YS4x"
@@ -13,7 +18,10 @@ const CheckOut = () => {
     event.preventDefault();
     const requestBody = {
       cartItems: cartInfo,
+      userId: userInfo
     };
+
+    console.log(requestBody);
 
     try {
       const response = await fetch(`${TEST_URL}/checkout`, {
@@ -38,7 +46,7 @@ const CheckOut = () => {
     } catch (error) {
       console.error('Error en la solicitud POST:', error.message);
     }
-  }
+  } 
 
 
 

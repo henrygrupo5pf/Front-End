@@ -1,122 +1,200 @@
-import { useParams, useNavigate } from "react-router-dom"
-import {useState, useEffect} from "react"
-import Swal from 'sweetalert2'
-import styled from "styled-components"
-import { Link } from "react-router-dom"
+// import { useParams, useNavigate } from "react-router-dom"
+// import {useState, useEffect} from "react"
+// import Swal from 'sweetalert2'
+// import styled from "styled-components"
+// import { Link } from "react-router-dom"
+// import { useCartStore } from "../Store/CartStore";
+
+// export const ProductDetail = () => {
+//     const BASE_URL = "https://pf-server-93lj.onrender.com"
+
+//     const {id} = useParams()
+
+//     const[product, setProduct] = useState({})
+
+//     const[user, setUser] = useState({
+//         image:"https://static.vecteezy.com/system/resources/previews/008/844/895/non_2x/user-icon-design-free-png.png"
+//     })
+//     const { addToCart } = useCartStore(); 
+//     const navigate = useNavigate();
+
+
+//     useEffect(() => {
+//         const getData = async () => {
+//             const responseProduct = await fetch(`${BASE_URL}/product/${id}`);
+//             if (!responseProduct.ok) {
+//                 throw new Error(`Error de red - Código de estado: ${responseProduct.status}`);
+//             }
+    
+//             const data = await responseProduct.json();
+    
+//             setProduct(data);
+//             setUser((currentUser) => ({ ...currentUser, ...data.User }));
+//         };
+    
+//         if (Object.keys(product).length === 0) {
+//             getData();
+//         }
+//     }, [id, product]); // Ahora incluye `product` en el array de dependencias
+    
+    
+    
+
+//     const handleAddToCart = () => {
+//         // Añade el producto al carrito
+//         addToCart({
+//             ...product,
+//             id: product.id, // Asegúrate de que el producto tenga una propiedad 'id'
+//             name: product.name,
+//             cost: product.cost,
+//             quantity: 1 // Esto puede ser opcional dependiendo de cómo manejas la cantidad en addToCart
+//         });
+//         console.log(`Producto añadido al carrito: ${product.name}`);
+//         Swal.fire({
+//             position: "top",
+//             icon: "success",
+//             title: `Producto añadido al carrito: ${product.name}`,
+//             showConfirmButton: false,
+//             timer: 1500
+//           });
+//         // navigate('/cart');
+
+//     };
+
+//     return(<Container>
+
+//             <div className="mainContainer">
+//                 <div className="imageContainer">
+//                         <img className="imageProduct" src={product.photo} alt="" />
+
+//                         {/* ARREGLAR IMAGEN CUANDO LOS PRODUCTOS LA TENGAN */}
+//                     </div>
+
+//                     <div className="info">
+//                         <div className="userInfo">
+//                             <img className="imageUser" src={user.image} alt="" />
+//                             <h5>{user.name}</h5>
+//                         </div>
+
+//                         <div className="productInfo">
+//                             <div className="nameCost">
+//                                 Nombre
+//                                 <h3>{product.name}</h3>
+//                                 Costo
+//                                 <h1>${product.cost} Por Dia</h1>
+//                             </div>
+//                             Description:
+//                             <div className="descriptionContainer">
+//                                 {product.description}
+//                             </div>
+//                             <Button onClick={handleAddToCart}> Reservar </Button>
+//                             <Link to='/'>
+//                                 <Button style={{width:'100%'}}> Salir </Button>
+//                             </Link>
+//                         </div>
+                        
+//                     </div>
+//             </div>
+
+//         </Container>
+//     )
+// }
+// export default ProductDetail;
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link } from "react-router-dom";
+import Swal from 'sweetalert2';
+import styled from "styled-components";
 import { useCartStore } from "../Store/CartStore";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export const ProductDetail = () => {
-    const BASE_URL = "https://pf-server-93lj.onrender.com"
-
-    const {id} = useParams()
-
-    const[product, setProduct] = useState({})
-
-    const[user, setUser] = useState({
-        image:"https://static.vecteezy.com/system/resources/previews/008/844/895/non_2x/user-icon-design-free-png.png"
-    })
-    const { addToCart } = useCartStore(); 
+    const BASE_URL = "https://pf-server-93lj.onrender.com";
+    const { id } = useParams();
+    const [product, setProduct] = useState({});
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [user, setUser] = useState({
+        image: "https://static.vecteezy.com/system/resources/previews/008/844/895/non_2x/user-icon-design-free-png.png"
+    });
+    const { addToCart } = useCartStore();
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     const getData = async() =>{
-    //         if (Object.keys(product).length === 0) {
-    //             const responseProduct = await fetch(`${BASE_URL}/product/${id}`)
-    //             if (!responseProduct.ok) {
-    //                 throw new Error(`Error de red - Código de estado: ${response.status}`);
-    //             }
-
-    //             const data = await responseProduct.json();
-
-    //             setProduct(data)
-    //             setUser({...user, ...data.User})
-                
-    //         }
-    //     }
-
-    //     getData()
-    // })
     useEffect(() => {
         const getData = async () => {
             const responseProduct = await fetch(`${BASE_URL}/product/${id}`);
             if (!responseProduct.ok) {
                 throw new Error(`Error de red - Código de estado: ${responseProduct.status}`);
             }
-    
+
             const data = await responseProduct.json();
-    
             setProduct(data);
             setUser((currentUser) => ({ ...currentUser, ...data.User }));
         };
-    
+
         if (Object.keys(product).length === 0) {
             getData();
         }
-    }, [id, product]); // Ahora incluye `product` en el array de dependencias
-    
-    
-    
+    }, [id, product]);
 
     const handleAddToCart = () => {
-        // Añade el producto al carrito
+        // Añade el producto al carrito incluyendo las fechas de reserva
         addToCart({
             ...product,
             id: product.id, // Asegúrate de que el producto tenga una propiedad 'id'
             name: product.name,
             cost: product.cost,
-            quantity: 1 // Esto puede ser opcional dependiendo de cómo manejas la cantidad en addToCart
-        });
-        console.log(`Producto añadido al carrito: ${product.name}`);
+            quantity: 1, // Esto puede ser opcional dependiendo de cómo manejas la cantidad en addToCart
+        }, startDate, endDate);
+
         Swal.fire({
             position: "top",
             icon: "success",
             title: `Producto añadido al carrito: ${product.name}`,
             showConfirmButton: false,
             timer: 1500
-          });
-        // navigate('/cart');
+        });
 
+        // Opcional: navegar al carrito después de añadir el producto
+        // navigate('/cart');
     };
 
-    return(<Container>
-
+    return (
+        <Container>
             <div className="mainContainer">
                 <div className="imageContainer">
-                        <img className="imageProduct" src={product.photo} alt="" />
+                    <img className="imageProduct" src={product.photo} alt={product.name} />
+                </div>
 
-                        {/* ARREGLAR IMAGEN CUANDO LOS PRODUCTOS LA TENGAN */}
+                <div className="info">
+                    <div className="userInfo">
+                        <img className="imageUser" src={user.image} alt={user.name} />
+                        <h5>{user.name}</h5>
                     </div>
 
-                    <div className="info">
-                        <div className="userInfo">
-                            <img className="imageUser" src={user.image} alt="" />
-                            <h5>{user.name}</h5>
+                    <div className="productInfo">
+                        <div className="nameCost">
+                            <h3>{product.name}</h3>
+                            <h1>${product.cost} Por Dia</h1>
                         </div>
-
-                        <div className="productInfo">
-                            <div className="nameCost">
-                                Nombre
-                                <h3>{product.name}</h3>
-                                Costo
-                                <h1>${product.cost} Por Dia</h1>
-                            </div>
-                            Description:
-                            <div className="descriptionContainer">
-                                {product.description}
-                            </div>
-                            <Button onClick={handleAddToCart}> Reservar </Button>
-                            <Link to='/'>
-                                <Button style={{width:'100%'}}> Salir </Button>
-                            </Link>
-                        </div>
-                        
+                        <div>Description: {product.description}</div>
+                        <label htmlFor="startDate">Fecha de inicio:</label>
+                        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+                        <label htmlFor="startDate">Fecha de entrega:</label>
+                        <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
+                        <Button onClick={handleAddToCart}> Reservar </Button>
+                        <Link to='/'>
+                            <Button style={{width:'100%'}}> Salir </Button>
+                        </Link>
                     </div>
+                </div>
             </div>
-
         </Container>
-    )
-}
+    );
+};
+
 export default ProductDetail;
+
 
 const Container = styled.div`
     display: flex;

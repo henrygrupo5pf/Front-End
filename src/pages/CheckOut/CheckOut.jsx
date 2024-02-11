@@ -20,8 +20,8 @@ const CheckOut = () => {
       cartItems: cartInfo,
       userId: userInfo
     };
-
     console.log(requestBody);
+
 
     try {
       const response = await fetch(`${BASE_URL}/checkout`, {

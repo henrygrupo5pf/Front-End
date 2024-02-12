@@ -54,6 +54,8 @@ export const ProductForm = ({ onSubmit }) => {
         photo: cloudinaryURL,
         cost: parseFloat(data.cost)
       };
+
+      console.log(userAuth);
       //Añade la URL de la imagen al objeto data
       //Parsea el cost de string a float
 

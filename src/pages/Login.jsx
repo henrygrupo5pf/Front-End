@@ -34,20 +34,18 @@ export const Login = () => {
     return password.length >= 6;
   };
 
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (usuario) => {
-  //     if (usuario) {
-  //       setUsuarioAutenticado(true);
-  //       setUser(prevUser => ({ ...prevUser, name: usuario.displayName }));
-  //       setUserAuth(usuario);
-  //     } else {
-  //       setUserAuth(null);
-  //       setUsuarioAutenticado(false);
-  //     }
-  //   });
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (usuario) => {
+      if (usuario) {
+        setUsuarioAutenticado(true);
+        setUser(prevUser => ({ ...prevUser, name: usuario.displayName }));
+      } else {
+        setUsuarioAutenticado(false);
+      }
+    });
     
-  //   return () => unsubscribe();
-  // }, [setUserAuth]);
+    return () => unsubscribe();
+  }, [setUserAuth]);
 
   // const handleAuthentication = async (authFunction, userData) => {
   //   try {
@@ -77,17 +75,25 @@ export const Login = () => {
       return;
     }
 
-    const response = await fetch(`${BASE_URL}/user/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({email: user.email, password: user.password}),
-    });
-    const userData = await response.json()
-    console.log(userData);
-    signInWithEmailAndPassword(auth, user.email, user.password);
-    setUserAuth(userData)
+    try {
+
+      const response = await fetch(`${BASE_URL}/user/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({email: user.email, password: user.password}),
+      });
+      const userData = await response.json()
+      console.log(userData);
+      signInWithEmailAndPassword(auth, user.email, user.password);
+      setUserAuth(userData)
+      
+    } catch (error) {
+      console.log(error);
+    }
+
+    
   };
   // Método para manejar el registro de usuarios
   const handleRegister = async () => {
@@ -99,18 +105,26 @@ export const Login = () => {
       setError("La contraseña debe tener al menos 6 caracteres");
       return;
     }
-    const response = await fetch(`${BASE_URL}/user`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    });
 
-    const userData = await response.json()
-    console.log(userData);
-    createUserWithEmailAndPassword(auth, user.email, user.password);
-    setUserAuth(userData)
+    try {
+
+      const response = await fetch(`${BASE_URL}/user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      });
+  
+      const userData = await response.json()
+  
+      createUserWithEmailAndPassword(auth, user.email, user.password);
+      setUserAuth(userData)
+      
+    } catch (error) {
+      console.log(error);
+    }
+    
   };
 
   const handleGoogleLogin = async () => {

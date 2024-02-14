@@ -52,6 +52,7 @@ export const Login = () => {
   const handleAuthentication = async (authFunction, userData) => {
     try {
       await authFunction;
+      console.log('Autenticación exitosa');
       const response = await fetch(`${BASE_URL}/user/login`, {
         method: 'POST',
         headers: {
@@ -60,11 +61,13 @@ export const Login = () => {
         body: JSON.stringify(userData),
       });
       const userApi = await response.json();
+      console.log('Respuesta de la API:', userApi);
       setUserAuth(userApi);
     } catch (error) {
       setError(error.message);
     }
   };
+
   // Método para manejar el inicio de sesión
   const handleLogin = async () => {
     if (!validateEmail(user.email)) {
@@ -75,8 +78,10 @@ export const Login = () => {
       setError("La contraseña debe tener al menos 6 caracteres");
       return;
     }
+    console.log('Iniciando sesión con correo electrónico:', user.email);
     handleAuthentication(signInWithEmailAndPassword(auth, user.email, user.password), { email: user.email, password: user.password });
   };
+
   // Método para manejar el registro de usuarios
   const handleRegister = async () => {
     if (!validateEmail(user.email)) {
@@ -87,6 +92,7 @@ export const Login = () => {
       setError("La contraseña debe tener al menos 6 caracteres");
       return;
     }
+    console.log('Registrando usuario con correo electrónico:', user.email);
     handleAuthentication(createUserWithEmailAndPassword(auth, user.email, user.password), user);
   };
 

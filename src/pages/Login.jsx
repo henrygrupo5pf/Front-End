@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 const auth = getAuth(appFirebase);
 const db = getFirestore(appFirebase);
 const BASE_URL = "https://pf-server-93lj.onrender.com"
+const TEST_URL = "http://localhost:3001"
 
 
 export const Login = () => {
@@ -52,7 +53,7 @@ export const Login = () => {
   const handleAuthentication = async (authFunction, userData) => {
     try {
       await authFunction;
-      const response = await fetch(`${BASE_URL}/user/login`, {
+      const response = await fetch(`${TEST_URL}/user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,6 +88,8 @@ export const Login = () => {
       setError("La contraseña debe tener al menos 6 caracteres");
       return;
     }
+    
+
     handleAuthentication(createUserWithEmailAndPassword(auth, user.email, user.password), user);
   };
 

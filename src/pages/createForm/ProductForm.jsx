@@ -39,6 +39,7 @@ export const ProductForm = ({ onSubmit }) => {
     }
 
     const BASE_URL = "https://pf-server-93lj.onrender.com"
+    const TEST_URL = "http://localhost:3001"
     try {
       let cloudinaryURL = '';
   
@@ -59,7 +60,7 @@ export const ProductForm = ({ onSubmit }) => {
 
       // console.log(data);
 
-      const response = await fetch(`${BASE_URL}/product`, {
+      const response = await fetch(`${TEST_URL}/product`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

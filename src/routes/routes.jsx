@@ -16,8 +16,9 @@ const MyRoutes = () => {
       <Route path="/cart" element={<Cart/>} />
       <Route path="/login" element={<Login />}/>
       <Route path="/checkout" element={<CheckOut />} />
-      <Route path="/success" element={<Success />} />
-      <Route path="/cancel" element={<Cancel />} />
+      <Route path="/checkout/success" element={<Success />} />
+      <Route path="/checkout/cancel" element={<Cancel />} />
+      
     </Routes>
   );
 };

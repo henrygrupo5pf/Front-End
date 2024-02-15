@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { Home, ProductForm, ProductDetail, Login} from "../pages/index";
+import { Home, ProductForm, ProductDetail, Login, DashBoard} from "../pages/index";
 import Cart from "../pages/Cart/Cart"
 import CheckOut from "../pages/CheckOut/CheckOut";
 import Success from "../pages/CheckOut/Success";
@@ -18,6 +18,7 @@ const MyRoutes = () => {
       <Route path="/checkout" element={<CheckOut />} />
       <Route path="/checkout/success" element={<Success />} />
       <Route path="/checkout/cancel" element={<Cancel />} />
+      <Route path="/dashboard" element={<DashBoard />} />
     </Routes>
   );
 };

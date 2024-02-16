@@ -17,6 +17,7 @@ export const DashBoard = () => {
       ? `http://localhost:3001/user`
       : `http://localhost:3001/user/${queryUser}`;
 
+
     return fetch(url)
       .then((response) => {
         if (!response.ok) {
@@ -30,13 +31,13 @@ export const DashBoard = () => {
 
         if (Array.isArray(data.Users) && data.Users.length === 0) {
 
-          throw new Error("No users found. Please try searching with different parameters");
+          setError("No users found. Please try searching with different parameters");
         }
         return data;
       })
       .catch((error) => {
-        setError("Algo ha pasado. Inténtalo de nuevo.");
-        throw new Error("Algo ha pasado. Inténtalo de nuevo.");
+        setError("You have entered a wrong parameter. Remember that ID must be a number ");
+        return 0
       });
   };
 
@@ -49,7 +50,6 @@ export const DashBoard = () => {
     event.preventDefault();
     setQueryUser(searchUsers);
     setQueryType(searchType);
-    query.refetch();
     setError(null);
   };
 
@@ -58,6 +58,7 @@ export const DashBoard = () => {
   };
 
   //FALTAN LOS BOTONES DE CREAR USUARIO Y MODIFICAR USUARIO
+  //FALTA LA PARTE DE PRODUCTO 
 
   return (
     <Container>
@@ -98,6 +99,45 @@ export const DashBoard = () => {
           <Button> Modificar Usuario</Button>
         </ButtonsContainer>
       </InfoContainer>
+
+
+   {/*    <InfoContainer>
+        <SearchBox>
+          <form onSubmit={onSubmit}>
+            <SearchBar
+              className="search-bar"
+              placeholder="Search for something..."
+              type="search"
+              value={searchUsers}
+              onChange={onChange}
+            />
+            <select
+              value={searchType}
+              onChange={(event) => setSearchType(event.target.value)}
+            >
+              <option value="ALL">ALL</option>
+              <option value="ID">ID</option>
+            </select>
+            <SearchButton type="submit">Search</SearchButton>
+          </form>
+        </SearchBox>
+
+        <UsersContainer>
+          {error ? (
+            <>{error}</>
+          ) : query.isLoading || query.isFetching ?
+            ("Loading..."
+            ) : (Array.isArray(query?.data.Users)) ?
+              (query?.data.Users.map(user => <UserBox><UsersInfo key={user.id} info={user} /></UserBox>)
+              ) : (<UserBox><UsersInfo info={query?.data} /></UserBox>)
+          }
+        </UsersContainer>
+
+        <ButtonsContainer>
+          <Button> Crear Usuario</Button>
+          <Button> Modificar Usuario</Button>
+        </ButtonsContainer>
+      </InfoContainer> */}
     </Container>
   );
 };

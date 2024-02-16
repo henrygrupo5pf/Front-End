@@ -1,11 +1,11 @@
 
-export const UsersInfo = () => {
+export const UsersInfo = ({ info }) => {
 
   return (
     <div>
-        <div className="id"> ID</div>
-        <div className="title">Nombre</div>
-        <div className="email">Email</div>
+      <div className="id"> {info.id}  </div>
+      <div className="name"> {info.name} </div>
+      <div className="email"> {info.email} </div>
     </div>
   );
 };

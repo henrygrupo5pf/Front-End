@@ -6,11 +6,11 @@ import { InfinitySpin } from 'react-loader-spinner';
 
 const Cancel = () => {
   useEffect(() => {
-    let countdown = 7;
+    let countdown = 5;
 
     const countdownInterval = setInterval(() => {
       if (countdown === 0) {
-        window.location.href = 'http://localhost:5173';
+        window.location.href = 'https://pf-front-end.onrender.com/#/checkout/success';
       }
       countdown -= 1;
     }, 1000); 

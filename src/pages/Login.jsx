@@ -9,15 +9,16 @@ import { Link } from 'react-router-dom';
 const auth = getAuth(appFirebase);
 const db = getFirestore(appFirebase);
 const BASE_URL = "https://pf-server-93lj.onrender.com"
+const TEST_URL = "http://localhost:3001"
 
 
 export const Login = () => {
-  const {setUserAuth} = useUserStore()
+  const { setUserAuth } = useUserStore()
 
-  const[user, setUser] = useState({
+  const [user, setUser] = useState({
     name: "",
     email: "",
-    password:"",
+    password: "",
     country: "",
     location: "",
     phoneNumber: "",
@@ -25,7 +26,7 @@ export const Login = () => {
   const [error, setError] = useState(null);
   const [registrando, setRegistrando] = useState(false); // Estado para manejar el estado de registro/inicio de sesión
   const [usuarioAutenticado, setUsuarioAutenticado] = useState(false); // Estado para indicar si el usuario está autenticado
-  
+
   const validateEmail = (email) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
@@ -43,20 +44,20 @@ export const Login = () => {
         setUsuarioAutenticado(false);
       }
     });
-    
+
     return () => unsubscribe();
   }, [setUserAuth]);
 
   // const handleAuthentication = async (authFunction, userData) => {
   //   try {
   //     await authFunction;
-    //     const response = await fetch(`${BASE_URL}/user/login`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({email: user.email, password: user.password}),
-    // });
+  //     const response = await fetch(`${BASE_URL}/user/login`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({email: user.email, password: user.password}),
+  // });
   //     const userApi = await response.json();
   //     setUserAuth(userApi);
   //     console.log(userApi);
@@ -82,18 +83,18 @@ export const Login = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({email: user.email, password: user.password}),
+        body: JSON.stringify({ email: user.email, password: user.password }),
       });
       const userData = await response.json()
       console.log(userData);
       signInWithEmailAndPassword(auth, user.email, user.password);
       setUserAuth(userData)
-      
+
     } catch (error) {
       console.log(error);
     }
 
-    
+
   };
   // Método para manejar el registro de usuarios
   const handleRegister = async () => {
@@ -115,16 +116,16 @@ export const Login = () => {
         },
         body: JSON.stringify(user),
       });
-  
+
       const userData = await response.json()
-  
+
       createUserWithEmailAndPassword(auth, user.email, user.password);
       setUserAuth(userData)
-      
+
     } catch (error) {
       console.log(error);
     }
-    
+
   };
 
   const handleGoogleLogin = async () => {
@@ -148,122 +149,132 @@ export const Login = () => {
     }
   };
   // Método para manejar la recuperación de contraseña
-const handleForgotPassword = async () => {
-  if (!validateEmail(user.email)) {
-    setError("Por favor, ingresa un correo electrónico válido para restablecer tu contraseña.");
-    return;
-  }
-  try {
-    await sendPasswordResetEmail(auth, user.email);
-    setError(null);
-    setError("Se ha enviado un correo electrónico con instrucciones para restablecer tu contraseña.");
-  } catch (error) {
-    setError("Ha ocurrido un error al intentar restablecer tu contraseña. Por favor, inténtalo de nuevo más tarde.");
-  }
-};
+  const handleForgotPassword = async () => {
+    if (!validateEmail(user.email)) {
+      setError("Por favor, ingresa un correo electrónico válido para restablecer tu contraseña.");
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, user.email);
+      setError(null);
+      setError("Se ha enviado un correo electrónico con instrucciones para restablecer tu contraseña.");
+    } catch (error) {
+      setError("Ha ocurrido un error al intentar restablecer tu contraseña. Por favor, inténtalo de nuevo más tarde.");
+    }
+  };
   const isRegistering = () => {
     if (registrando) {
       return (
-      <div>
-        <Input
-        type="text"
-        placeholder="Nombre"
-        value={user.name}
-        onChange={(e) => setUser({...user, name: e.target.value})}
-      />
+        <BackGround>
+          <div>
+            <Input
+              type="text"
+              placeholder="Nombre"
+              value={user.name}
+              onChange={(e) => setUser({ ...user, name: e.target.value })}
+            />
 
-      <Input
-        type="email"
-        placeholder="Correo Electrónico"
-        value={user.email}
-        onChange={(e) => setUser({...user, email: e.target.value})}
-      />
+            <Input
+              type="email"
+              placeholder="Correo Electrónico"
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
+            />
 
-      <Input
-        type="password"
-        placeholder="Contraseña"
-        value={user.password}
-        onChange={(e) => setUser({...user, password: e.target.value})}
-      />
+            <Input
+              type="password"
+              placeholder="Contraseña"
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+            />
 
-      <Input
-        type="text"
-        placeholder="Pais"
-        value={user.country}
-        onChange={(e) => setUser({...user, country: e.target.value})}
-      />
+            <Input
+              type="text"
+              placeholder="Pais"
+              value={user.country}
+              onChange={(e) => setUser({ ...user, country: e.target.value })}
+            />
 
-      <Input
-        type="text"
-        placeholder="Localidad"
-        value={user.location}
-        onChange={(e) => setUser({...user, location: e.target.value})}
-      />
+            <Input
+              type="text"
+              placeholder="Localidad"
+              value={user.location}
+              onChange={(e) => setUser({ ...user, location: e.target.value })}
+            />
 
-      <Input
-        type="text"
-        placeholder="Telefono"
-        value={user.phoneNumber}
-        onChange={(e) => setUser({...user, phoneNumber: e.target.value})}
-      />
-    </div>
-    );
-  } else {
-  return(
-      <ContainerInput>
-        <Input
-        type="email"
-        placeholder="Correo Electrónico"
-        value={user.email}
-        onChange={(e) => setUser({...user, email: e.target.value})}
-      />
+            <Input
+              type="text"
+              placeholder="Telefono"
+              value={user.phoneNumber}
+              onChange={(e) => setUser({ ...user, phoneNumber: e.target.value })}
+            />
+          </div>
+        </BackGround>
+      );
+    } else {
+      return (
+          <ContainerInput>
+            <Input
+              type="email"
+              placeholder="Correo Electrónico"
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
+            />
 
-      <Input
-        type="password"
-        placeholder="Contraseña"
-        value={user.password}
-        onChange={(e) => setUser({...user, password: e.target.value})}
-      />
-    </ContainerInput>
+            <Input
+              type="password"
+              placeholder="Contraseña"
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+            />
+          </ContainerInput>
       )
     }
   }
 
   return (
-    <Container>
-      <div className="contentCard">
-        <div className="card">
-          <WelcomeTitle className="h1">Welcome</WelcomeTitle>
-          {usuarioAutenticado ? (
-            <>
-              <LoggedInMessage>¡Hola! {user.name}</LoggedInMessage>
-              <Link to="/" style={{ textDecoration: 'none' }}>
-                <ReservarButton>Reserva un producto</ReservarButton>
-              </Link>
-              <Link to="/productForm" style={{ textDecoration: 'none' }}>
-                <PublicarButton>Publica un producto</PublicarButton>
-              </Link><LogoutButton onClick={handleLogout}>Cerrar Sesión</LogoutButton>
-            </>
-          ) : (
-            <>
-              <Titulo>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</Titulo>
-              {isRegistering()}
-              {error && <Error>{error}</Error>}
-              <ContainerBtn>
-                <RegisterButton onClick={registrando ? handleRegister : handleLogin}>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</RegisterButton>
-                <Button onClick={handleForgotPassword}>¿Olvidaste tu contraseña?</Button>
-                <GoogleLoginButton onClick={handleGoogleLogin}>Iniciar sesión con Google</GoogleLoginButton>
-                <SwitchButton onClick={() => setRegistrando(!registrando)}>{registrando ? '¿Ya tienes cuenta?' : 'Crear cuenta nueva'}</SwitchButton>
-              </ContainerBtn>
-            </>
-          )}
+    <BackGround>
+      <Container>
+        <div className="contentCard">
+          <div className="card">
+            <WelcomeTitle className="h1">Welcome</WelcomeTitle>
+            {usuarioAutenticado ? (
+              <>
+                <LoggedInMessage>¡Hola! {user.name}</LoggedInMessage>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                  <ReservarButton>Reserva un producto</ReservarButton>
+                </Link>
+                <Link to="/productForm" style={{ textDecoration: 'none' }}>
+                  <PublicarButton>Publica un producto</PublicarButton>
+                </Link><LogoutButton onClick={handleLogout}>Cerrar Sesión</LogoutButton>
+              </>
+            ) : (
+              <>
+                <Titulo>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</Titulo>
+                {isRegistering()}
+                {error && <Error>{error}</Error>}
+                <ContainerBtn>
+                  <RegisterButton onClick={registrando ? handleRegister : handleLogin}>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</RegisterButton>
+                  <Button onClick={handleForgotPassword}>¿Olvidaste tu contraseña?</Button>
+                  <GoogleLoginButton onClick={handleGoogleLogin}>Iniciar sesión con Google</GoogleLoginButton>
+                  <SwitchButton onClick={() => setRegistrando(!registrando)}>{registrando ? '¿Ya tienes cuenta?' : 'Crear cuenta nueva'}</SwitchButton>
+                </ContainerBtn>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </BackGround>
+
   );
 };
 
 export default Login;
+
+const BackGround=styled.div`
+height: 100vh;
+
+`;
 
 const Container = styled.div`
 display: flex;
@@ -280,6 +291,7 @@ max-width: 396px;
 width: 90%; 
 justify-content: center;
 text-align: center;
+
 `;
 
 const Titulo = styled.h2`
@@ -294,7 +306,8 @@ const ContainerInput = styled.span`
   margin-bottom: 15px;
   
   
-`;   
+  
+`;
 const Input = styled.input`
   width: 85%;
   border: none;
@@ -307,7 +320,7 @@ const Input = styled.input`
   
   
 
-`;   
+`;
 const ContainerBtn = styled.div`
   text-align: center;
 `;

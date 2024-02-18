@@ -118,9 +118,12 @@ export const Login = () => {
       });
 
       const userData = await response.json()
-
+      if (!userData.created) {
+        throw 'Usuario ya registrado';
+      }
+      
       createUserWithEmailAndPassword(auth, user.email, user.password);
-      setUserAuth(userData)
+      setUserAuth(userData.user)
 
     } catch (error) {
       console.log(error);
@@ -132,8 +135,19 @@ export const Login = () => {
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      setUser({ ...user, name: result.user.displayName }); // Actualiza el nombre del usuario en el estado user
-      setUserAuth(result.user);
+      setUser({ ...user, name: result.user.displayName, email: result.user.email });
+
+      const response = await fetch(`${BASE_URL}/user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...user, name: result.user.displayName, email: result.user.email }),
+      });
+
+      const userData = await response.json()
+
+      setUserAuth(userData.user);
     } catch (error) {
       setError(error.message);
     }

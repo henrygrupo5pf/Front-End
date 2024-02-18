@@ -13,8 +13,8 @@ const ProductManagement = () => {
 
   const handleToggleProductStatus = async (productId) => {
     try {
-      const response = await fetch(`${TEST_URL}/product/${productId}/toggle`, {
-        method: 'PUT',
+      const response = await fetch(`${BASE_URL}/product/${productId}/toggle`, {
+        method: 'PATCH',
       });
       if (!response.ok) {
         throw new Error('Error al cambiar el estado del producto');

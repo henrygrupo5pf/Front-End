@@ -78,7 +78,7 @@ export const Login = () => {
 
     try {
 
-      const response = await fetch(`${TEST_URL}/user/login`, {
+      const response = await fetch(`${BASE_URL}/user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export const Login = () => {
 
     try {
 
-      const response = await fetch(`${TEST_URL}/user`, {
+      const response = await fetch(`${BASE_URL}/user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ export const Login = () => {
       const result = await signInWithPopup(auth, provider);
       setUser({ ...user, name: result.user.displayName, email: result.user.email });
 
-      const response = await fetch(`${TEST_URL}/user`, {
+      const response = await fetch(`${BASE_URL}/user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

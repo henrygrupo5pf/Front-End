@@ -4,6 +4,7 @@ import Cart from "../pages/Cart/Cart"
 import CheckOut from "../pages/CheckOut/CheckOut";
 import Success from "../pages/CheckOut/Success";
 import Cancel from "../pages/CheckOut/Cancel";
+import ProductManagement from "../pages/DashBoard/ProductManagement";
 
 // /src/pages/index.js
 
@@ -19,6 +20,7 @@ const MyRoutes = () => {
       <Route path="/checkout/success" element={<Success />} />
       <Route path="/checkout/cancel" element={<Cancel />} />
       <Route path="/dashboard" element={<DashBoard />} />
+      <Route path="/dashboard/productManagement" element={<ProductManagement/>} />
     </Routes>
   );
 };

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { UsersInfo } from "../../components/moleculas/UserInfo/UserInfo";
+import { Link } from 'react-router-dom';
 
 export const DashBoard = () => {
   const [searchUsers, setSearchUsers] = useState('');
@@ -97,6 +98,9 @@ export const DashBoard = () => {
         <ButtonsContainer>
           <Button> Crear Usuario</Button>
           <Button> Modificar Usuario</Button>
+          <Link to="/dashboard/productManagement">
+            <ProductManagementButton>Gestionar Productos</ProductManagementButton>
+          </Link>
         </ButtonsContainer>
       </InfoContainer>
 
@@ -204,6 +208,20 @@ transition: background-color 0.3s ease;
   }
 `;
 
+const ProductManagementButton = styled.button`
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+`;
 const ButtonsContainer = styled.div`
 padding: 10px 15px;
 border: 1px solid #ccc;

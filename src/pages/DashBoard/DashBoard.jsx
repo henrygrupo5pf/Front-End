@@ -10,11 +10,8 @@ export const DashBoard = () => {
   const [queryUser, setQueryUser] = useState("");
   const [queryType, setQueryType] = useState("");
   const [error, setError] = useState(null);
+  
   const [selectedUserId, setSelectedUserId] = useState(null);
-
-  const handleUserSelection = (userId) => {
-    setSelectedUserId(userId);
-  };
 
   const fetchUsers = ({ queryKey }) => {
     const [queryUser, queryType] = queryKey;
@@ -63,6 +60,22 @@ export const DashBoard = () => {
     setSearchUsers(event.target.value);
   };
 
+  const loadProductsByUserId = () => {
+    fetch(`http://localhost:3001/products?userId=${selectedUserId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(() => {
+        setUserId(selectedUserId);
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+  };
+
   //FALTAN LOS BOTONES DE CREAR USUARIO Y MODIFICAR USUARIO
   //FALTA LA PARTE DE PRODUCTO 
 
@@ -95,8 +108,7 @@ export const DashBoard = () => {
           ) : query.isLoading || query.isFetching ?
             ("Loading..."
             ) : (Array.isArray(query?.data.Users)) ?
-              /*(query?.data.Users.map(user => <UserBox><UsersInfo key={user.id} info={user} /></UserBox>)*/
-              (query?.data.Users.map(user => <UsersInfo key={user.id} info={user} />)
+              (query?.data.Users.map(user => <UserBox><UsersInfo key={user.id} info={user} /></UserBox>)
               ) : (<UserBox><UsersInfo info={query?.data} /></UserBox>)
           }
         </UsersContainer>
@@ -104,9 +116,9 @@ export const DashBoard = () => {
         <ButtonsContainer>
           <Button> Crear Usuario</Button>
           <Button> Modificar Usuario</Button>
-          <Link to={`/dashboard/productManagement?userId=${selectedUserId}`}>
+          <Link to={`/dashboard/productManagement?userId=${selectedUserId}`} onClick={loadProductsByUserId}>
             <ProductManagementButton>Gestionar Productos</ProductManagementButton>
-          </Link>
+          </Link> 
         </ButtonsContainer>
       </InfoContainer>
 

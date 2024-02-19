@@ -1,18 +1,14 @@
 import React, { useEffect } from 'react';
 import { useProductManagementStore } from "../../Store/ProductManagementStore";
-import { useLocation } from 'react-router-dom';
 
 function ProductManagement() {
-  const { products, loading, error, loadUserProducts } = useProductManagementStore();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const selectedUserId = queryParams.get('userId');
-
+  const { userId, products, loading, error, loadUserProducts } = useProductManagementStore();
+ 
   useEffect(() => {
-    if (selectedUserId) {
-      loadUserProducts(selectedUserId);
+    if (userId) {
+      loadUserProducts(userId);
     }
-  }, [selectedUserId, loadUserProducts]);
+  }, [userId, loadUserProducts]);
 
   const toggleProductStatus = async (productId) => {
     try {

@@ -68,6 +68,7 @@ export const Updateuser = () => {
 
   return (
     <div>
+      <>Modificacion de usuarios</>
       {!userData ? (
         "Loading"
       ) : (<><Link to="/dashboard">

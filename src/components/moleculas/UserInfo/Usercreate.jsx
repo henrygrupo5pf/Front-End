@@ -16,7 +16,7 @@ export const Usercreate = () => {
     }
   )
 
-  
+
   /////////////////////////////////////
   /////////////////////////////////////
   /////////////////////////////////////
@@ -50,7 +50,7 @@ export const Usercreate = () => {
 
 
   return (<>
-
+<>Creacion de usuarios</>
     <Link to="/dashboard">
       <button> Back</button>
     </Link>

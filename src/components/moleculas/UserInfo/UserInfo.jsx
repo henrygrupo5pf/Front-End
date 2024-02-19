@@ -1,12 +1,16 @@
+import { Link } from 'react-router-dom';
 
 export const UsersInfo = ({ info }) => {
 
+
   return (
-    <div>
-      <div className="id"> {info.id}  </div>
-      <div className="name"> {info.name} </div>
-      <div className="email"> {info.email} </div>
-    </div>
+    <Link to={`/dashboard/updateuser/${info.id}`}>
+      <div>
+        <p>ID: {info.id} </p>
+        <p>Name: {info.name}</p>
+        <p>Email: {info.email}</p>
+      </div>
+    </Link>
   );
 };
 

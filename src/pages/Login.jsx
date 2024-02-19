@@ -304,9 +304,7 @@ const ContainerInput = styled.span`
   color: #1d2129;
   border-radius: 5px;
   margin-bottom: 15px;
-  
-  
-  
+
 `;
 const Input = styled.input`
   width: 85%;

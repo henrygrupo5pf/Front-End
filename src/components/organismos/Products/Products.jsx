@@ -23,8 +23,8 @@ const fetchProducts = ({ queryKey }) => {
 
 
   const url = params.toString() === ""
-    ? `http://localhost:3001/product`
-    : `http://localhost:3001/product/filter?${params.toString()}`
+    ? `https://pf-server-93lj.onrender.com/product`
+    : `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
 
   /* ? `https://pf-server-93lj.onrender.com/product` 
   : `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}` */

@@ -14,8 +14,8 @@ export const DashBoard = () => {
     const [queryUser, queryType] = queryKey;
 
     const url = queryType === "ALL"
-      ? `http://localhost:3001/user`
-      : `http://localhost:3001/user/${queryUser}`;
+      ? `https://pf-server-93lj.onrender.com`
+      : `https://pf-server-93lj.onrender.com/user/${queryUser}`;
 
 
     return fetch(url)
@@ -150,21 +150,32 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    width: 100%;
 `
 const UsersContainer = styled.div`
-  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  height: 500px;
+  overflow-y: scroll;
   padding: 10px`;
 
 const UserBox = styled.div`
-border: 1px solid black;
-padding: 5px`;
+  border-radius: 5px;
+  border: 1px solid black;
+  width: 80%;
+  background-color: white;
+  margin: 3px;
+  height: 100px;
+  `;
 
 const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
 `
 
 const SearchBox = styled.div`
@@ -205,14 +216,26 @@ transition: background-color 0.3s ease;
 `;
 
 const ButtonsContainer = styled.div`
-padding: 10px 15px;
-border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
   border-radius: 5px;
+  width: 80%;
 `;
 const Button = styled.div`
-padding: 10px 15px;
-border: 1px solid #ccc;
+
+  font-size: 16px;
+  background-color: #4caf50; 
+  color: #fff;
+  border: none;
   border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  width: 350px;
 `;
 
 

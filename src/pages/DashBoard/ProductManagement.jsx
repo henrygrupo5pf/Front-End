@@ -1,29 +1,40 @@
-import { useEffect } from 'react';
-import { useProductManagementStore } from '../../Store/ProductManagementStore';
+import React, { useEffect } from 'react';
+import { useProductManagementStore } from "../../Store/ProductManagementStore";
+import { useLocation } from 'react-router-dom';
 
-const BASE_URL = "https://pf-server-93lj.onrender.com";
-const TEST_URL = "http://localhost:3001";
-
-const ProductManagement = () => {
-  const { products, toggleProductStatus } = useProductManagementStore(); 
+function ProductManagement() {
+  const { products, loading, error, loadUserProducts } = useProductManagementStore();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const selectedUserId = queryParams.get('userId');
 
   useEffect(() => {
-    // Aquí podrías realizar cualquier carga inicial de datos, si es necesario
-  }, []);
+    if (selectedUserId) {
+      loadUserProducts(selectedUserId);
+    }
+  }, [selectedUserId, loadUserProducts]);
 
-  const handleToggleProductStatus = async (productId) => {
+  const toggleProductStatus = async (productId) => {
     try {
-      const response = await fetch(`${BASE_URL}/product/${productId}/toggle`, {
-        method: 'PATCH',
-      });
+      // Llamar al backend para cambiar el estado del producto
+      const response = await fetch(`/api/products/${productId}/toggle-status`, { method: 'PATCH' });
       if (!response.ok) {
         throw new Error('Error al cambiar el estado del producto');
       }
-      toggleProductStatus(productId); // Usa toggleProductStatus del store para actualizar el estado localmente
+      // Recargar los productos después de cambiar el estado
+      loadUserProducts(selectedUserId);
     } catch (error) {
       console.error('Error:', error);
     }
   };
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div>
@@ -31,8 +42,8 @@ const ProductManagement = () => {
       <ul>
         {products.map((product) => (
           <li key={product.id}>
-            {product.name} - 
-            <button onClick={() => handleToggleProductStatus(product.id)}>
+            {product.name} - Estado: {product.activeStatus ? 'Activo' : 'Inactivo'}
+            <button onClick={() => toggleProductStatus(product.id)}>
               {product.activeStatus ? 'Desactivar' : 'Activar'}
             </button>
           </li>
@@ -40,6 +51,6 @@ const ProductManagement = () => {
       </ul>
     </div>
   );
-};
+}
 
 export default ProductManagement;

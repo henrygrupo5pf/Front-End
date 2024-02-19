@@ -10,6 +10,11 @@ export const DashBoard = () => {
   const [queryUser, setQueryUser] = useState("");
   const [queryType, setQueryType] = useState("");
   const [error, setError] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
+  const handleUserSelection = (userId) => {
+    setSelectedUserId(userId);
+  };
 
   const fetchUsers = ({ queryKey }) => {
     const [queryUser, queryType] = queryKey;
@@ -90,7 +95,8 @@ export const DashBoard = () => {
           ) : query.isLoading || query.isFetching ?
             ("Loading..."
             ) : (Array.isArray(query?.data.Users)) ?
-              (query?.data.Users.map(user => <UserBox><UsersInfo key={user.id} info={user} /></UserBox>)
+              /*(query?.data.Users.map(user => <UserBox><UsersInfo key={user.id} info={user} /></UserBox>)*/
+              (query?.data.Users.map(user => <UsersInfo key={user.id} info={user} />)
               ) : (<UserBox><UsersInfo info={query?.data} /></UserBox>)
           }
         </UsersContainer>
@@ -98,7 +104,7 @@ export const DashBoard = () => {
         <ButtonsContainer>
           <Button> Crear Usuario</Button>
           <Button> Modificar Usuario</Button>
-          <Link to="/dashboard/productManagement">
+          <Link to={`/dashboard/productManagement?userId=${selectedUserId}`}>
             <ProductManagementButton>Gestionar Productos</ProductManagementButton>
           </Link>
         </ButtonsContainer>
@@ -232,6 +238,3 @@ padding: 10px 15px;
 border: 1px solid #ccc;
   border-radius: 5px;
 `;
-
-
-

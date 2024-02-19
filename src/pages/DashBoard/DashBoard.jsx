@@ -59,7 +59,6 @@ export const DashBoard = () => {
   };
 
 
-  //FALTAN LOS BOTONES DE CREAR USUARIO Y MODIFICAR USUARIO
   //FALTA LA PARTE DE PRODUCTO 
 
   return (

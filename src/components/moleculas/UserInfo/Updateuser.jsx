@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 export const Updateuser = () => {
   const TEST_URL = "http://localhost:3001/user";
+  const BASE_URL = "https://pf-server-93lj.onrender.com"
   const { id } = useParams();
   const [userData, setUserData] = useState(null);
   const [userSubmited, setUserSubmited] = useState(false)
@@ -24,7 +25,7 @@ export const Updateuser = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`${TEST_URL}/${id}`);
+        const response = await fetch(`${BASE_URL}/user/${id}`);
         if (!response.ok) {
           throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
         }

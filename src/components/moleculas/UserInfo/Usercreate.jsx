@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Usercreate = () => {
   const TEST_URL = "http://localhost:3001/user"
+  const BASE_URL = "https://pf-server-93lj.onrender.com"
   const [userForFetch, setUserForFetch] = useState(
     {
       name: "",
@@ -39,7 +40,7 @@ export const Usercreate = () => {
 
   const handleOnSubmit = async () => {
     e.preventDefault();
-    const userFetched = await fetch(`${TEST_URL}`, {
+    const userFetched = await fetch(`${BASE_URL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -156,15 +156,15 @@ const UsersContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80%;
+  width: 98%;
   height: 500px;
   overflow-y: scroll;
-  padding: 10px`;
+  padding: 5px`;
 
 const UserBox = styled.div`
   border-radius: 5px;
   border: 1px solid black;
-  width: 80%;
+  width: 95%;
   background-color: white;
   margin: 3px;
   height: 100px;

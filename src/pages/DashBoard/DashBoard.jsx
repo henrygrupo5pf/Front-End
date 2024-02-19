@@ -167,7 +167,6 @@ const UserBox = styled.div`
   width: 95%;
   background-color: white;
   margin: 3px;
-  height: 100px;
   `;
 
 const InfoContainer = styled.div`

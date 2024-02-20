@@ -1,5 +1,5 @@
-import { Route, Routes, Navigate } from "react-router-dom";
-import { Home, ProductDetail, Login, DashBoard } from "../pages/index";
+import { Route, Routes } from "react-router-dom";
+import { Home, ProductDetail, Login, DashBoard, ProductForm } from "../pages/index";
 import Cart from "../pages/Cart/Cart"
 import CheckOut from "../pages/CheckOut/CheckOut";
 import Success from "../pages/CheckOut/Success";
@@ -7,16 +7,13 @@ import Cancel from "../pages/CheckOut/Cancel";
 import { useUserStore } from "../Store/UserStore";
 import { Updateuser } from "../components/moleculas";
 import { Usercreate } from "../components/moleculas";
-import { ProductCreate } from "../components/moleculas";
-import { UpdateProduct } from "../components/moleculas";
+import { UpdateProduct } from "../components/moleculas/ProductInfo/UpdateProduct";
 
 
 const MyRoutes = () => {
-  const userInfo = useUserStore((store) => store.userAuth)
-
-  let isAdmin = userInfo ? (userInfo.admin === true ? true : false) : (false)
-
-
+  const {userAuth} = useUserStore()
+  const isAdmin = userAuth && userAuth.admin === true;
+ 
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -32,9 +29,7 @@ const MyRoutes = () => {
           <Route path="/dashboard/updateuser/:id" element={<Updateuser />} />
           <Route path="/dashboard/usercreate" element={<Usercreate />} />
           <Route path="/dashboard/updateproduct/:id" element={<UpdateProduct />} />
-          <Route path="/dashboard/productcreate" element={<ProductCreate />} />
-        
-
+          <Route path="/dashboard/productForm" element={<ProductForm />} />
         </>
       )}
     </Routes>

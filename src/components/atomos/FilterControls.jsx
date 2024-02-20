@@ -54,7 +54,7 @@ export const FilterControls = ({ applyFilters, clearFilters }) => {
           <option value="500-1000">$500 - $1000</option>
         </Select>
 
-        <Input
+        {/* <Input
           type="text"
           placeholder="Enter Country"
           value={country}
@@ -68,7 +68,7 @@ export const FilterControls = ({ applyFilters, clearFilters }) => {
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           className="inputClass"
-        />
+        /> */}
       </div>
       <div className="containerBtn">
         <Button onClick={handleApplyFilters}>Apply Filters</Button>

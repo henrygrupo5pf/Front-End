@@ -115,7 +115,7 @@ export const UserDash = () => {
         </PaginationContainer>
 
         <ButtonsContainer>
-          <Link to="/dashboard/usercreate">
+          <Link className='Link' to="/dashboard/usercreate">
             <Button > Crear Usuario</Button>
           </Link>
         </ButtonsContainer>
@@ -202,6 +202,9 @@ const ButtonsContainer = styled.div`
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 80%;
+  .Link{
+    text-decoration: none;
+  }
 `;
 const Button = styled.div`
 
@@ -215,6 +218,7 @@ const Button = styled.div`
   padding: 10px 15px;
   border: 1px solid #ccc;
   width: 350px;
+  
 `;
 
 const PaginationContainer = styled.div`

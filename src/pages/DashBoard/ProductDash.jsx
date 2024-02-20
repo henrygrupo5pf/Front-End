@@ -132,7 +132,7 @@ export const ProducDash = () => {
         </PaginationContainer>
 
         <ButtonsContainer>
-          <Link to="/dashboard/Productcreate">
+          <Link to="/dashboard/ProductForm">
             <Button > Crear Producto</Button>
           </Link>
         </ButtonsContainer>

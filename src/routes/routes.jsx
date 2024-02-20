@@ -7,6 +7,7 @@ import Cancel from "../pages/CheckOut/Cancel";
 import { Updateuser } from "../components/moleculas";
 import { Usercreate } from "../components/moleculas";
 import { useUserStore } from "../Store/UserStore";
+import { UpdateProduct } from "../components/moleculas/ProductInfo/UpdateProduct";
 
 
 const MyRoutes = () => {
@@ -16,7 +17,7 @@ const MyRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/productForm" element={<ProductForm />} />
+      
       <Route path="/productDetail/:id" element={<ProductDetail />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/login" element={<Login />} />
@@ -28,6 +29,8 @@ const MyRoutes = () => {
           <Route path="/dashboard" element={<DashBoard />} />
           <Route path="/dashboard/updateuser/:id" element={<Updateuser />} />
           <Route path="/dashboard/usercreate" element={<Usercreate />} />
+          <Route path="/dashboard/updateproduct/:id" element={<UpdateProduct />} />
+          <Route path="/dashboard/productForm" element={<ProductForm />} />
         </>
       )}
     </Routes>

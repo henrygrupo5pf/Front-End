@@ -35,11 +35,11 @@ export const LinksArray = [
     icon: <AiOutlineHome />,
     to: "/",
   },
-  {
-    label: "Nuevo Producto",
-    icon: <v.iconoreportes />,
-    to: "/productForm",
-  },
+  // {
+  //   label: "Nuevo Producto",
+  //   icon: <v.iconoreportes />,
+  //   to: "/productForm",
+  // },
   {
     label: "Carrito",
     icon: <AiOutlineShoppingCart />,

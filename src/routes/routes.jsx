@@ -7,6 +7,8 @@ import Cancel from "../pages/CheckOut/Cancel";
 import { Updateuser } from "../components/moleculas";
 import { Usercreate } from "../components/moleculas";
 import { useUserStore } from "../Store/UserStore";
+import { ProductCreate } from "../components/moleculas";
+import { UpdateProduct } from "../components/moleculas";
 
 
 const MyRoutes = () => {
@@ -30,6 +32,10 @@ const MyRoutes = () => {
           <Route path="/dashboard" element={<DashBoard />} />
           <Route path="/dashboard/updateuser/:id" element={<Updateuser />} />
           <Route path="/dashboard/usercreate" element={<Usercreate />} />
+          <Route path="/dashboard/updateproduct/:id" element={<UpdateProduct />} />
+          <Route path="/dashboard/productcreate" element={<ProductCreate />} />
+        
+
         </>
       )}
     </Routes>
@@ -39,10 +45,4 @@ const MyRoutes = () => {
 export default MyRoutes;
 
 
-/* {isAdmin && (
-  <>
-    <Route path="/dashboard" element={<DashBoard />} />
-    <Route path="/dashboard/updateuser/:id" element={<Updateuser />} />
-    <Route path="/dashboard/usercreate" element={<Usercreate />} />
-  </>
-) */
+

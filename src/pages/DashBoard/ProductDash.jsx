@@ -1,77 +1,106 @@
 import styled from 'styled-components';
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { UsersInfo } from "../../components/moleculas/UserInfo/UserInfo";
+import { useState, useEffect } from "react";
+import { ProductInfo } from "../../components/moleculas/ProductInfo/ProductInfo";
 import { Link } from 'react-router-dom';
 
 
-//FALTA ACTUALIZAR LOS DATOS PARA HACERLO DE PROCUTO. AHORA ES UNA COPIA DE USER
+//FALTA ACTUALIZAR LOS DATOS PARA HACERLO DE PROCUTO. AHORA ES UNA COPIA DE Product
 
 export const ProducDash = () => {
-    const [searchUsers, setSearchUsers] = useState('');
-    const [searchType, setSearchType] = useState('ALL');
-    const [queryUser, setQueryUser] = useState("");
-    const [queryType, setQueryType] = useState("");
-    const [error, setError] = useState(null);
-  
-    const fetchUsers = ({ queryKey }) => {
-      const [queryUser, queryType] = queryKey;
-  
-      const url = queryType === "ALL"
-        ? `https://pf-server-93lj.onrender.com/product`
-        : `https://pf-server-93lj.onrender.com/product/${queryUser}`;
-  
+  const [searchProducts, setSearchProducts] = useState('');
+  const [searchType, setSearchType] = useState('ALL');
+  const [queryProduct, setQueryProduct] = useState("");
+  const [queryType, setQueryType] = useState("");
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
 
-      return fetch(url)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
-          }
-  
-          return response.json();
-  
-        })
-        .then((data) => {
-  
-          if (Array.isArray(data.Users) && data.Users.length === 0) {
-  
-            setError("No users found. Please try searching with different parameters");
-          }
-          return data;
-        })
-        .catch((error) => {
-          setError("You have entered a wrong parameter. Remember that ID must be a number ");
-          return 0
-        });
-    };
-  
-    const query = useQuery({
-      queryKey: [queryUser, queryType],
-      queryFn: fetchUsers,
-    });
-  
-    const onSubmit = (event) => {
-      event.preventDefault();
-      setQueryUser(searchUsers);
+  const fetchProducts = async ({ queryKey }) => {
+    const [queryProduct, queryType, page] = queryKey;
+
+    const url = queryType === "ALL"
+      ? `https://pf-server-93lj.onrender.com/product?page=${page}`
+      : `https://pf-server-93lj.onrender.com/product/${queryProduct}?page=${page}`;
+
+
+    return await fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
+        }
+
+        return response.json();
+
+      })
+      .then((data) => {
+
+        if (Array.isArray(data.Products) && data.Products.length === 0) {
+
+          setError("No Products found. Please try searching with different parameters");
+        }
+        return data;
+      })
+      .catch((error) => {
+        setError("You have entered a wrong parameter. Remember that ID must be a number ");
+        return 0
+      });
+  };
+
+  const query = useQuery({
+    queryKey: [queryProduct, queryType, page],
+    queryFn: fetchProducts,
+  });
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setQueryProduct(searchProducts);
       setQueryType(searchType);
       setError(null);
-    };
-  
-    const onChange = (event) => {
-      setSearchUsers(event.target.value);
-    };
-    console.log("ProductDash: ",searchUsers);
-    console.log("ProductDash: ",searchType);
-    return (
-        <Container> 
-             <InfoContainer>
+    }, 50);
+
+    return () => clearTimeout(timerId);
+
+  }, []);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    setQueryProduct(searchProducts);
+    setQueryType(searchType);
+    setError(null);
+    setPage(1);
+    query.refetch();
+  };
+
+  const onChange = (event) => {
+    setSearchProducts(event.target.value);
+  };
+
+  const handleMin = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleMax = () => {
+    if (query) {
+      if (page < query.data.totalPages) {
+
+        setPage(page + 1);
+      }
+    }
+
+  };
+
+  return (
+    <Container>
+      <InfoContainer>
         <SearchBox>
           <form onSubmit={onSubmit}>
             <SearchBar
               className="search-bar"
               placeholder="Search for something..."
               type="search"
-              value={searchUsers}
+              value={searchProducts}
               onChange={onChange}
             />
             <select
@@ -85,35 +114,41 @@ export const ProducDash = () => {
           </form>
         </SearchBox>
 
-        <UsersContainer>
+        <ProductsContainer>
           {error ? (
             <>{error}</>
           ) : query.isLoading || query.isFetching ?
             ("Loading..."
-            ) : (Array.isArray(query?.data.Users)) ?
-              (query?.data.Users.map(user => <UserBox><UsersInfo key={user.id} info={user} /></UserBox>)
-              ) : (<UserBox><UsersInfo info={query?.data} /></UserBox>)
+            ) : (Array.isArray(query?.data.products)) ?
+              (query?.data.products.map(product => <ProductBox><ProductInfo key={product.id} info={product} /></ProductBox>)
+              ) : (<ProductBox><ProductInfo info={query?.data} /></ProductBox>)
           }
-        </UsersContainer>
+        </ProductsContainer>
+
+        <PaginationContainer>
+          <PaginationButton onClick={handleMin}>Previous</PaginationButton>
+          <PaginationText>Page {page}</PaginationText>
+          <PaginationButton onClick={handleMax}>Next</PaginationButton>
+        </PaginationContainer>
 
         <ButtonsContainer>
-          <Link to="/dashboard/usercreate">
-            <Button > Crear Usuario</Button>
+          <Link to="/dashboard/ProductForm">
+            <Button > Crear Producto</Button>
           </Link>
         </ButtonsContainer>
       </InfoContainer>
-        </Container>
-        );
-      };
+    </Container>
+  );
+};
 
-      const Container = styled.div`
+const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
 `
-const UsersContainer = styled.div`
+const ProductsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -122,7 +157,7 @@ const UsersContainer = styled.div`
   overflow-y: scroll;
   padding: 10px`;
 
-const UserBox = styled.div`
+const ProductBox = styled.div`
   border-radius: 5px;
   border: 1px solid black;
   width: 80%;
@@ -198,6 +233,22 @@ const Button = styled.div`
   border: 1px solid #ccc;
   width: 350px;
 `;
+
+const PaginationContainer = styled.div`
+  border: 1px solid #ccc;
+`;
+
+const PaginationButton = styled.div`
+  border: 1px solid #ccc;
+`;
+
+const PaginationText = styled.div`
+  border: 1px solid #ccc;
+`;
+
+
+
+
 
 
 

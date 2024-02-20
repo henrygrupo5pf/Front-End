@@ -5,63 +5,78 @@ import { UsersInfo } from "../../components/moleculas/UserInfo/UserInfo";
 import { Link } from 'react-router-dom';
 
 export const UserDash = () => {
-    const [searchUsers, setSearchUsers] = useState('');
-    const [searchType, setSearchType] = useState('ALL');
-    const [queryUser, setQueryUser] = useState("");
-    const [queryType, setQueryType] = useState("");
-    const [error, setError] = useState(null);
-  
-    const fetchUsers = ({ queryKey }) => {
-      const [queryUser, queryType] = queryKey;
-  
-      const url = queryType === "ALL"
-        ? `https://pf-server-93lj.onrender.com/user`
-        : `https://pf-server-93lj.onrender.com/user/${queryUser}`;
-  
-  
-      return fetch(url)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
-          }
-  
-          return response.json();
-  
-        })
-        .then((data) => {
-  
-          if (Array.isArray(data.Users) && data.Users.length === 0) {
-  
-            setError("No users found. Please try searching with different parameters");
-          }
-          return data;
-        })
-        .catch((error) => {
-          setError("You have entered a wrong parameter. Remember that ID must be a number ");
-          return 0
-        });
-    };
-  
-    const query = useQuery({
-      queryKey: [queryUser, queryType],
-      queryFn: fetchUsers,
-    });
-  
-    const onSubmit = (event) => {
-      event.preventDefault();
-      setQueryUser(searchUsers);
-      setQueryType(searchType);
-      setError(null);
-    };
-  
-    const onChange = (event) => {
-      setSearchUsers(event.target.value);
-    };
-    console.log("UserDash: ",searchUsers);
-    console.log("UserDash: ",searchType);
-    return (
-        <Container> 
-             <InfoContainer>
+  const [searchUsers, setSearchUsers] = useState('');
+  const [searchType, setSearchType] = useState('ALL');
+  const [queryUser, setQueryUser] = useState("");
+  const [queryType, setQueryType] = useState("");
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+
+  const fetchUsers = async ({ queryKey }) => {
+    const [queryUser, queryType, page] = queryKey;
+
+    const url = queryType === "ALL"
+      ? `https://pf-server-93lj.onrender.com/user?page=${page}`
+      : `https://pf-server-93lj.onrender.com/user/${queryUser}?page=${page}`;
+
+
+    return await fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
+        }
+
+        return response.json();
+
+      })
+      .then((data) => {
+
+        if (Array.isArray(data.Users) && data.Users.length === 0) {
+
+          setError("No users found. Please try searching with different parameters");
+        }
+        return data;
+      })
+      .catch((error) => {
+        setError("You have entered a wrong parameter. Remember that ID must be a number ");
+        return 0
+      });
+  };
+
+  const query = useQuery({
+    queryKey: [queryUser, queryType, page],
+    queryFn: fetchUsers,
+  });
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    setQueryUser(searchUsers);
+    setQueryType(searchType);
+    setError(null);
+    setPage(1);
+  };
+
+  const onChange = (event) => {
+    setSearchUsers(event.target.value);
+  };
+
+  const handleMin = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleMax = () => {
+    if (page < query.data.totalPages) {
+
+      setPage(page + 1);
+    }
+
+  };
+
+  return (
+    <Container>
+      <InfoContainer>
         <SearchBox>
           <form onSubmit={onSubmit}>
             <SearchBar
@@ -93,15 +108,21 @@ export const UserDash = () => {
           }
         </UsersContainer>
 
+        <PaginationContainer>
+          <PaginationButton onClick={handleMin}>Previous</PaginationButton>
+          <PaginationText>Page {page}</PaginationText>
+          <PaginationButton onClick={handleMax}>Next</PaginationButton>
+        </PaginationContainer>
+
         <ButtonsContainer>
           <Link className='Link' to="/dashboard/usercreate">
             <Button > Crear Usuario</Button>
           </Link>
         </ButtonsContainer>
       </InfoContainer>
-        </Container>
-        );
-      };
+    </Container>
+  );
+};
 
 const Container = styled.div`
     display: flex;
@@ -200,5 +221,15 @@ const Button = styled.div`
   
 `;
 
+const PaginationContainer = styled.div`
+  border: 1px solid #ccc;
+`;
 
+const PaginationButton = styled.div`
+  border: 1px solid #ccc;
+`;
+
+const PaginationText = styled.div`
+  border: 1px solid #ccc;
+`;
 

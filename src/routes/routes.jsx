@@ -1,12 +1,12 @@
-import { Route, Routes, Navigate } from "react-router-dom";
-import { Home, ProductForm, ProductDetail, Login, DashBoard } from "../pages/index";
+import { Route, Routes } from "react-router-dom";
+import { Home, ProductDetail, Login, DashBoard, ProductForm } from "../pages/index";
 import Cart from "../pages/Cart/Cart"
 import CheckOut from "../pages/CheckOut/CheckOut";
 import Success from "../pages/CheckOut/Success";
 import Cancel from "../pages/CheckOut/Cancel";
+import { useUserStore } from "../Store/UserStore";
 import { Updateuser } from "../components/moleculas";
 import { Usercreate } from "../components/moleculas";
-import { useUserStore } from "../Store/UserStore";
 import { UpdateProduct } from "../components/moleculas/ProductInfo/UpdateProduct";
 
 
@@ -17,7 +17,6 @@ const MyRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      
       <Route path="/productDetail/:id" element={<ProductDetail />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/login" element={<Login />} />
@@ -40,10 +39,4 @@ const MyRoutes = () => {
 export default MyRoutes;
 
 
-/* {isAdmin && (
-  <>
-    <Route path="/dashboard" element={<DashBoard />} />
-    <Route path="/dashboard/updateuser/:id" element={<Updateuser />} />
-    <Route path="/dashboard/usercreate" element={<Usercreate />} />
-  </>
-) */
+

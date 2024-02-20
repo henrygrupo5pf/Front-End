@@ -1,15 +1,17 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import {
-    LinksArray,
-    SecondarylinksArray,
+  LinksArray,
+  SecondarylinksArray,
 } from "../../../index";
 import { v } from "../../../styles/variables";
 import { ToggleTema } from "../ToggleTema";
 import { SidebarCard } from "./SidebarCard";
-
+import { useUserStore } from "../../../Store/UserStore";
 // eslint-disable-next-line react/prop-types
 export function Sidebar({ state, setState }) {
+  const userInfo = useUserStore((store) => store.userAuth)
+  let isAdmin = userInfo ? (userInfo.admin === true ? true : false) : (false)
 
   return (
     <Main $isopen={state.toString()}>
@@ -23,25 +25,32 @@ export function Sidebar({ state, setState }) {
           </div>
           <h2>RentaÚTILES</h2>
         </div>
-        {LinksArray.map(({ icon, label, to }) => (
-          <div
-            className={state ? "LinkContainer active" : "LinkContainer"}
-            key={label}
-          >
-            <NavLink
-              to={to}
-              className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
+        {LinksArray.map(({ icon, label, to }) => {
+
+          if (label === "Dashboard" && isAdmin === false) {
+
+            return null
+          }
+
+          return (
+            <div
+              className={state ? "LinkContainer active" : "LinkContainer"}
+              key={label}
             >
-              <div className="Linkicon">{icon}</div>
-              <span className={state ? "label_ver" : "label_oculto"}>
-                {label}
-              </span>
-              
-            </NavLink>
-          </div>
-        ))}
+              <NavLink
+                to={to}
+                className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
+              >
+                <div className="Linkicon">{icon}</div>
+                <span className={state ? "label_ver" : "label_oculto"}>
+                  {label}
+                </span>
+              </NavLink>
+            </div>
+          );
+        })}
         <Divider />
-        <ToggleTema/>
+        <ToggleTema />
         <Divider />
       </Container>
     </Main>
@@ -63,7 +72,7 @@ const Container = styled.div`
     border-radius: 10px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: ${(props)=>props.theme.colorScroll};
+    background-color: ${(props) => props.theme.colorScroll};
     border-radius: 10px;
   }
 
@@ -82,7 +91,7 @@ const Container = styled.div`
       width: 30px;
       cursor: pointer;
       transition: 0.3s ease;
-      /* transform: ${({ $isopen }) => ($isopen==="true" ? `scale(0.7)` : `scale(1.5)`)}
+      /* transform: ${({ $isopen }) => ($isopen === "true" ? `scale(0.7)` : `scale(1.5)`)}
         rotate(${({ theme }) => theme.logorotate}); */
       img {
         width: 100%;
@@ -90,7 +99,7 @@ const Container = styled.div`
       }
     }
     h2 {
-      display: ${({ $isopen }) => ($isopen==="true" ? `block` : `none`)};
+      display: ${({ $isopen }) => ($isopen === "true" ? `block` : `none`)};
     }
     @keyframes flotar {
       0% {
@@ -170,7 +179,7 @@ const Main = styled.div`
     transition: all 0.2s;
     z-index: 2;
     transform: ${({ $isopen }) =>
-      $isopen==="true" ? `translateX(162px) rotate(3.142rad)` : `initial`};
+    $isopen === "true" ? `translateX(162px) rotate(3.142rad)` : `initial`};
     color: ${(props) => props.theme.text};
   }
 `;

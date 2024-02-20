@@ -6,53 +6,55 @@ import { ProductCard } from "../../moleculas/index";
 import { useNavBarStore } from '../../../Store/NavBarStore';
 
 
-
 const fetchProducts = ({ queryKey }) => {
   const [numberPage, filters, searchText] = queryKey;
-    
+
 
   const params = new URLSearchParams();
-  if(numberPage != 0 ) params.append("page", numberPage);
+  if (numberPage != 0) params.append("page", numberPage);
 
 
   if (searchText != "") params.append("name", searchText)
-  
+
   if (filters.category) params.append("category", filters.category);
   if (filters.costRange) params.append("costRange", filters.costRange);
   if (filters.country) params.append("country", filters.country);
   if (filters.location) params.append("location", filters.location);
 
-  
-  const url =  params.toString() === ""
-  ? `https://pf-server-93lj.onrender.com/product` 
-  : `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
-  
+
+  const url = params.toString() === ""
+    ? `https://pf-server-93lj.onrender.com/product`
+    : `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
+
+  /* ? `https://pf-server-93lj.onrender.com/product` 
+  : `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}` */
+
 
 
   return fetch(url)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
-    }
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
+      }
 
-    return response.json();
-    
-  })
-  .then((data) => {
-    if (data.products.length === 0) {
-    
-      throw new Error("No products found. Please try searching with a different name or change the search parameters.");
-    }
-    return data;
-  });
+      return response.json();
+
+    })
+    .then((data) => {
+      if (data.products.length === 0) {
+
+        throw new Error("No products found. Please try searching with a different name or change the search parameters.");
+      }
+      return data;
+    });
 };
 
 
 
 const Products = () => {
-  const searchText=useNavBarStore((state)=>state.searchText)
+  const searchText = useNavBarStore((state) => state.searchText)
 
- 
+
   const [pageNumber, setPageNumber] = useState(0);
   const [filters, setFilters] = useState({
     pageSize: "",
@@ -84,7 +86,7 @@ const Products = () => {
 
 
 
-  if (query.isError) return <p>{query.error.message}</p>; 
+  if (query.isError) return <p>{query.error.message}</p>;
 
   return (
     <Container>

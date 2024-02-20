@@ -110,6 +110,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export const ProductDetail = () => {
     const BASE_URL = "https://pf-server-93lj.onrender.com";
+    const TEST_URL = "http://localhost:3001"
+
     const { id } = useParams();
     const [product, setProduct] = useState({});
     const [startDate, setStartDate] = useState(new Date());
@@ -122,7 +124,7 @@ export const ProductDetail = () => {
 
     useEffect(() => {
         const getData = async () => {
-            const responseProduct = await fetch(`${BASE_URL}/product/${id}`);
+            const responseProduct = await fetch(`${TEST_URL}/product/${id}`);
             if (!responseProduct.ok) {
                 throw new Error(`Error de red - Código de estado: ${responseProduct.status}`);
             }

@@ -2,35 +2,33 @@ import {
   AiOutlineHome,
   AiOutlineSetting,
   AiOutlineLogin,
-  AiOutlineShoppingCart
+  AiOutlineShoppingCart,
+  AiFillAppstore  
 } from "react-icons/ai";
+import { useUserStore } from "../Store/UserStore";
 import { v } from "../styles/variables";
 
+
 export const DesplegableUser = [
-{
-  text: "Mi perfil",
-  icono: <v.iconoUser/>,
-  tipo: "miperfil",
-},
-{
-  text: "Configuracion",
-  icono: <v.iconoSettings/>,
-  tipo: "configuracion",
-},
-{
-  text: "Cerrar sesión",
-  icono: <v.iconoCerrarSesion/>,
-  tipo: "cerrarsesion",
-},
-{
-  text: "Carrito",
-  icono: <AiOutlineShoppingCart/>,
-  tipo: "carrito",
-},
+  {
+    text: "Mi perfil",
+    icono: <v.iconoUser />,
+    tipo: "miperfil",
+  },
+  {
+    text: "Configuracion",
+    icono: <v.iconoSettings />,
+    tipo: "configuracion",
+  },
+  {
+    text: "Cerrar sesión",
+    icono: <v.iconoCerrarSesion />,
+    tipo: "cerrarsesion",
+  },
+  
+  
 ];
 
-
-//data SIDEBAR
 export const LinksArray = [
   {
     label: "Home",
@@ -52,13 +50,11 @@ export const LinksArray = [
     icon: <AiOutlineLogin />,
     to: "/login",
   },
-
-
-{
-  text: "Cerrar sesión",
-  icono: <AiOutlineShoppingCart/>,
-  to: "/cart",
-},
+  {
+    label: "Dashboard",
+    icon: < AiFillAppstore/>,
+    to: "/dashboard",
+  },
 
 ];
 export const SecondarylinksArray = [

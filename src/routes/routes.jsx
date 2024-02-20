@@ -1,6 +1,6 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { Home, ProductDetail, Login, DashBoard, ProductForm } from "../pages/index";
-import Cart from "../pages/Cart/Cart"
+import Cart from "../pages/Cart/Cart";
 import CheckOut from "../pages/CheckOut/CheckOut";
 import Success from "../pages/CheckOut/Success";
 import Cancel from "../pages/CheckOut/Cancel";
@@ -9,13 +9,10 @@ import { Updateuser } from "../components/moleculas";
 import { Usercreate } from "../components/moleculas";
 import { UpdateProduct } from "../components/moleculas/ProductInfo/UpdateProduct";
 
-
 const MyRoutes = () => {
-  
-  const userInfo = useUserStore((store) => store.userAuth)
-  console.log(userInfo)
-  let isAdmin = userInfo ? (userInfo.admin === true ? true : false) : (false)
-  console.log(isAdmin)
+  const userInfo = useUserStore((store) => store.userAuth);
+  const isAdmin = userInfo ? userInfo.admin === true : false;
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -25,20 +22,31 @@ const MyRoutes = () => {
       <Route path="/checkout" element={<CheckOut />} />
       <Route path="/checkout/success" element={<Success />} />
       <Route path="/checkout/cancel" element={<Cancel />} />
-      {isAdmin && (
-        <>
-          <Route path="/dashboard" element={<DashBoard />} />
-          <Route path="/dashboard/updateuser/:id" element={<Updateuser />} />
-          <Route path="/dashboard/usercreate" element={<Usercreate />} />
-          <Route path="/dashboard/updateproduct/:id" element={<UpdateProduct />} />
-          <Route path="/dashboard/productForm" element={<ProductForm />} />
-        </>
-      )}
+
+      <Route
+        path="/dashboard"
+        element={isAdmin ? <DashBoard /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/dashboard/updateuser/:id"
+        element={isAdmin ? <Updateuser /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/dashboard/usercreate"
+        element={isAdmin ? <Usercreate /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/dashboard/updateproduct/:id"
+        element={isAdmin ? <UpdateProduct /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/dashboard/productForm"
+        element={isAdmin ? <ProductForm /> : <Navigate to="/" />}
+      />
     </Routes>
   );
 };
 
 export default MyRoutes;
-
 
 

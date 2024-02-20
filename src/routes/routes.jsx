@@ -1,14 +1,18 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { Home, ProductForm, ProductDetail, Login, DashBoard} from "../pages/index";
 import Cart from "../pages/Cart/Cart"
 import CheckOut from "../pages/CheckOut/CheckOut";
 import Success from "../pages/CheckOut/Success";
 import Cancel from "../pages/CheckOut/Cancel";
-import ProductManagement from "../pages/DashBoard/ProductManagement";
+import { Updateuser } from "../components/moleculas";
+import { Usercreate } from "../components/moleculas";
+import { useUserStore } from "../Store/UserStore";
 
-// /src/pages/index.js
 
 const MyRoutes = () => {
+  const userInfo = useUserStore((store)=> store.userAuth)
+  const isAdmin = userInfo && userInfo.user.admin === true;
+ 
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -19,8 +23,13 @@ const MyRoutes = () => {
       <Route path="/checkout" element={<CheckOut />} />
       <Route path="/checkout/success" element={<Success />} />
       <Route path="/checkout/cancel" element={<Cancel />} />
-      <Route path="/dashboard" element={<DashBoard />} />
-      <Route path="/dashboard/productManagement" element={<ProductManagement/>} />
+      {isAdmin && (
+        <>
+          <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/dashboard/updateuser/:id" element={<Updateuser />} />
+          <Route path="/dashboard/usercreate" element={<Usercreate />} />
+        </>
+      )}
     </Routes>
   );
 };

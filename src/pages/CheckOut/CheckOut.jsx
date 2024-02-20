@@ -6,8 +6,6 @@ import { useUserStore } from '../../Store/UserStore';
 const CheckOut = () => {
   const cartInfo = useCartStore((store) => store.cartItems)
   const userInfo = useUserStore((store)=> store.userAuth)
-
-  console.log(cartInfo);
   console.log(userInfo);
 
   const BASE_URL = "https://pf-server-93lj.onrender.com"

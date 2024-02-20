@@ -10,15 +10,13 @@ export const DashBoard = () => {
   const [queryUser, setQueryUser] = useState("");
   const [queryType, setQueryType] = useState("");
   const [error, setError] = useState(null);
-  
-  const [selectedUserId, setSelectedUserId] = useState(null);
 
   const fetchUsers = ({ queryKey }) => {
     const [queryUser, queryType] = queryKey;
 
     const url = queryType === "ALL"
-      ? `http://localhost:3001/user`
-      : `http://localhost:3001/user/${queryUser}`;
+      ? `https://pf-server-93lj.onrender.com`
+      : `https://pf-server-93lj.onrender.com/user/${queryUser}`;
 
 
     return fetch(url)
@@ -60,23 +58,7 @@ export const DashBoard = () => {
     setSearchUsers(event.target.value);
   };
 
-  const loadProductsByUserId = () => {
-    fetch(`http://localhost:3001/products?userId=${selectedUserId}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(() => {
-        setUserId(selectedUserId);
-      })
-      .catch(error => {
-        console.error("Error:", error);
-      });
-  };
 
-  //FALTAN LOS BOTONES DE CREAR USUARIO Y MODIFICAR USUARIO
   //FALTA LA PARTE DE PRODUCTO 
 
   return (
@@ -114,16 +96,14 @@ export const DashBoard = () => {
         </UsersContainer>
 
         <ButtonsContainer>
-          <Button> Crear Usuario</Button>
-          <Button> Modificar Usuario</Button>
-          <Link to={`/dashboard/productManagement?userId=${selectedUserId}`} onClick={loadProductsByUserId}>
-            <ProductManagementButton>Gestionar Productos</ProductManagementButton>
-          </Link> 
+          <Link to="/dashboard/usercreate">
+            <Button > Crear Usuario</Button>
+          </Link>
         </ButtonsContainer>
       </InfoContainer>
 
 
-   {/*    <InfoContainer>
+      {/*    <InfoContainer>
         <SearchBox>
           <form onSubmit={onSubmit}>
             <SearchBar
@@ -172,21 +152,32 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    width: 100%;
 `
 const UsersContainer = styled.div`
-  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  height: 500px;
+  overflow-y: scroll;
   padding: 10px`;
 
 const UserBox = styled.div`
-border: 1px solid black;
-padding: 5px`;
+  border-radius: 5px;
+  border: 1px solid black;
+  width: 80%;
+  background-color: white;
+  margin: 3px;
+  height: 100px;
+  `;
 
 const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
 `
 
 const SearchBox = styled.div`
@@ -226,27 +217,27 @@ transition: background-color 0.3s ease;
   }
 `;
 
-const ProductManagementButton = styled.button`
+const ButtonsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 80%;
+`;
+const Button = styled.div`
+
   font-size: 16px;
-  background-color: #3498db;
+  background-color: #4caf50; 
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  width: 350px;
+`;
 
-  &:hover {
-    background-color: #2980b9;
-  }
-`;
-const ButtonsContainer = styled.div`
-padding: 10px 15px;
-border: 1px solid #ccc;
-  border-radius: 5px;
-`;
-const Button = styled.div`
-padding: 10px 15px;
-border: 1px solid #ccc;
-  border-radius: 5px;
-`;
+

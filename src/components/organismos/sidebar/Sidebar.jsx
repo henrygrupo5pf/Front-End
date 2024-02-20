@@ -10,8 +10,8 @@ import { SidebarCard } from "./SidebarCard";
 import { useUserStore } from "../../../Store/UserStore";
 // eslint-disable-next-line react/prop-types
 export function Sidebar({ state, setState }) {
-  const {userAuth} = useUserStore()
-  const isAdmin = userAuth && userAuth.admin === true;
+  const userInfo = useUserStore((store) => store.userAuth)
+  let isAdmin = userInfo ? (userInfo.admin === true ? true : false) : (false)
 
   return (
     <Main $isopen={state.toString()}>
@@ -34,7 +34,7 @@ export function Sidebar({ state, setState }) {
             return (
               <div></div>
             )
-          }else{
+          } else {
             return (
               <div
                 className={state ? "LinkContainer active" : "LinkContainer"}
@@ -53,7 +53,7 @@ export function Sidebar({ state, setState }) {
             );
           }
 
-          
+
         })}
         <Divider />
         <ToggleTema />

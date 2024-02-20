@@ -1,5 +1,5 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import { Home, ProductForm, ProductDetail, Login, DashBoard} from "../pages/index";
+import { Home, ProductForm, ProductDetail, Login, DashBoard } from "../pages/index";
 import Cart from "../pages/Cart/Cart"
 import CheckOut from "../pages/CheckOut/CheckOut";
 import Success from "../pages/CheckOut/Success";
@@ -17,9 +17,9 @@ const MyRoutes = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/productForm" element={<ProductForm />} />
-      <Route path="/productDetail/:id" element={<ProductDetail/>} />
-      <Route path="/cart" element={<Cart/>} />
-      <Route path="/login" element={<Login />}/>
+      <Route path="/productDetail/:id" element={<ProductDetail />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/checkout" element={<CheckOut />} />
       <Route path="/checkout/success" element={<Success />} />
       <Route path="/checkout/cancel" element={<Cancel />} />
@@ -35,3 +35,12 @@ const MyRoutes = () => {
 };
 
 export default MyRoutes;
+
+
+/* {isAdmin && (
+  <>
+    <Route path="/dashboard" element={<DashBoard />} />
+    <Route path="/dashboard/updateuser/:id" element={<Updateuser />} />
+    <Route path="/dashboard/usercreate" element={<Usercreate />} />
+  </>
+) */

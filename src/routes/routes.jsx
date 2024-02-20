@@ -1,12 +1,12 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import { Home, ProductForm, ProductDetail, Login, DashBoard } from "../pages/index";
+import { Home, ProductDetail, Login, DashBoard } from "../pages/index";
 import Cart from "../pages/Cart/Cart"
 import CheckOut from "../pages/CheckOut/CheckOut";
 import Success from "../pages/CheckOut/Success";
 import Cancel from "../pages/CheckOut/Cancel";
+import { useUserStore } from "../Store/UserStore";
 import { Updateuser } from "../components/moleculas";
 import { Usercreate } from "../components/moleculas";
-import { useUserStore } from "../Store/UserStore";
 import { ProductCreate } from "../components/moleculas";
 import { UpdateProduct } from "../components/moleculas";
 
@@ -20,7 +20,6 @@ const MyRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/productForm" element={<ProductForm />} />
       <Route path="/productDetail/:id" element={<ProductDetail />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/login" element={<Login />} />

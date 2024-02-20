@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { UsersInfo } from "../../components/moleculas/UserInfo/UserInfo";
+import { Link } from 'react-router-dom';
 
 export const DashBoard = () => {
   const [searchUsers, setSearchUsers] = useState('');
@@ -57,7 +58,7 @@ export const DashBoard = () => {
     setSearchUsers(event.target.value);
   };
 
-  //FALTAN LOS BOTONES DE CREAR USUARIO Y MODIFICAR USUARIO
+
   //FALTA LA PARTE DE PRODUCTO 
 
   return (
@@ -95,13 +96,14 @@ export const DashBoard = () => {
         </UsersContainer>
 
         <ButtonsContainer>
-          <Button> Crear Usuario</Button>
-          <Button> Modificar Usuario</Button>
+          <Link to="/dashboard/usercreate">
+            <Button > Crear Usuario</Button>
+          </Link>
         </ButtonsContainer>
       </InfoContainer>
 
 
-   {/*    <InfoContainer>
+      {/*    <InfoContainer>
         <SearchBox>
           <form onSubmit={onSubmit}>
             <SearchBar

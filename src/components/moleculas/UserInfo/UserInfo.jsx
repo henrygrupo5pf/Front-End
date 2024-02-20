@@ -1,69 +1,14 @@
-import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const UsersInfo = ({ info }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [inputValues, setInputValues] = useState({
-    name: '',
-    email: '',
-    password: '',
-    active: info.activeStatus
-  });
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
-  const toggleActive =() => {
-    setInputValues({...inputValues, active: inputValues.active})
-    console.log(inputValues);
-  }
-
-  const handleInputChange = (e) => {
-    setInputValues({
-      ...inputValues,
-      [e.target.name]: e.target.value
-    });
-  };
 
   return (
-    <Container menuOpen={menuOpen}>
-      <div className="id_active"> {info.id} </div>
-      <div className="name">{info.name}</div>
-      <div className="email">{info.email}</div>
-      <div className="password">{info.password}</div>
-      <Dropdown>
-        <Button onClick={toggleMenu}>Modificar Usuario</Button>
-        {menuOpen && (
-          <div className="menu">
-            <input
-              type="text"
-              name="input1"
-              value={inputValues.name}
-              onChange={handleInputChange}
-              placeholder="Nuevo Nombre"
-            />
-            <input
-              type="email"
-              name="input2"
-              value={inputValues.email}
-              onChange={handleInputChange}
-              placeholder="Nuevo Email"
-            />
-            <input
-              type="text"
-              name="input3"
-              value={inputValues.password}
-              onChange={handleInputChange}
-              placeholder="Nueva Contraseña"
-            />
-            <button onClick={toggleActive} className={inputValues.active ? "Activo" : "Inactivo"}>{inputValues.active ? "Activo" : "Inactivo"}</button>
-
-            <Button>Confirmar</Button>
-          </div>
-        
-      )}
-      </Dropdown>
+    <Container>
+      <div className="id"> {info.id}  </div>
+      <div className="name"> {info.name} </div>
+      <div className="email"> {info.email} </div>
     </Container>
   );
 };

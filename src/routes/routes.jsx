@@ -11,9 +11,10 @@ import { UpdateProduct } from "../components/moleculas/ProductInfo/UpdateProduct
 
 
 const MyRoutes = () => {
+  
   const userInfo = useUserStore((store) => store.userAuth)
   let isAdmin = userInfo ? (userInfo.admin === true ? true : false) : (false)
-
+  console.log(isAdmin)
   return (
     <Routes>
       <Route path="/" element={<Home />} />

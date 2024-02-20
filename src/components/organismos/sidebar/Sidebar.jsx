@@ -12,7 +12,7 @@ import { useUserStore } from "../../../Store/UserStore";
 export function Sidebar({ state, setState }) {
   const userInfo = useUserStore((store) => store.userAuth)
   let isAdmin = userInfo ? (userInfo.admin === true ? true : false) : (false)
-console.log(isAdmin);
+
   return (
     <Main $isopen={state.toString()}>
       <span className="Sidebarbutton" onClick={() => setState(!state)}>
@@ -26,11 +26,11 @@ console.log(isAdmin);
           <h2>RentaÚTILES</h2>
         </div>
         {LinksArray.map(({ icon, label, to }) => {
-         
-           if (label === "Dashboard" && isAdmin===false ) {
- 
-             return null
-           }
+
+          if (label === "Dashboard" && isAdmin === false) {
+
+            return null
+          }
 
           return (
             <div

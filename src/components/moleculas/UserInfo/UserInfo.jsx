@@ -6,9 +6,13 @@ export const UsersInfo = ({ info }) => {
 
   return (
     <Container>
-      <div className="id"> {info.id}  </div>
+      <div className={info.activeStatus ? "id" : "id_inactive"}> {info.id}  </div>
       <div className="name"> {info.name} </div>
       <div className="email"> {info.email} </div>
+      <Link to={`/dashboard/updateuser/${info.id}`}>
+        <Button>Editar</Button>
+      </Link>
+      
     </Container>
   );
 };
@@ -16,15 +20,26 @@ export const UsersInfo = ({ info }) => {
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
-
+  align-items: center;
   height: ${({ menuOpen }) => (menuOpen ? '50px' : '50px')};
   transition: height 0.3s ease;
 
-  .id_active {
+  .id{
     width: 30px;
     height: 100%;
     font-size: 16px;
     background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius-left: 5px;
+    text-align: center;
+  }
+
+  .id_inactive{
+    width: 30px;
+    height: 100%;
+    font-size: 16px;
+    background-color: red;
     color: #fff;
     border: none;
     border-radius-left: 5px;
@@ -58,7 +73,7 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-  width: 350px;
+  width: 150px;
   font-size: 16px;
   background-color: #4caf50;
   color: #fff;

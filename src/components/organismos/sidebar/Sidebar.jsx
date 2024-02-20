@@ -10,8 +10,8 @@ import { SidebarCard } from "./SidebarCard";
 import { useUserStore } from "../../../Store/UserStore";
 // eslint-disable-next-line react/prop-types
 export function Sidebar({ state, setState }) {
-  const userInfo = useUserStore((store) => store.userAuth)
-  let isAdmin = userInfo ? (userInfo.admin === true ? true : false) : (false)
+  const {userAuth} = useUserStore()
+  const isAdmin = userAuth && userAuth.admin === true;
 
   return (
     <Main $isopen={state.toString()}>
@@ -28,26 +28,32 @@ export function Sidebar({ state, setState }) {
         {LinksArray.map(({ icon, label, to }) => {
 
           if (label === "Dashboard" && isAdmin === false) {
-
-            return null
+            ///////////////////////////////////////////////////
+            //ESTE IF NUNCA ENTRA EN EVALUACION, ARREGLAR
+            console.log("no hay admin");
+            return (
+              <div></div>
+            )
+          }else{
+            return (
+              <div
+                className={state ? "LinkContainer active" : "LinkContainer"}
+                key={label}
+              >
+                <NavLink
+                  to={to}
+                  className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
+                >
+                  <div className="Linkicon">{icon}</div>
+                  <span className={state ? "label_ver" : "label_oculto"}>
+                    {label}
+                  </span>
+                </NavLink>
+              </div>
+            );
           }
 
-          return (
-            <div
-              className={state ? "LinkContainer active" : "LinkContainer"}
-              key={label}
-            >
-              <NavLink
-                to={to}
-                className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
-              >
-                <div className="Linkicon">{icon}</div>
-                <span className={state ? "label_ver" : "label_oculto"}>
-                  {label}
-                </span>
-              </NavLink>
-            </div>
-          );
+          
         })}
         <Divider />
         <ToggleTema />

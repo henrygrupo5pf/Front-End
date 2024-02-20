@@ -56,7 +56,7 @@ export const ProducDash = () => {
       setQueryProduct(searchProducts);
       setQueryType(searchType);
       setError(null);
-    }, 100);
+    }, 50);
 
     return () => clearTimeout(timerId);
 
@@ -82,9 +82,11 @@ export const ProducDash = () => {
   };
 
   const handleMax = () => {
-    if (page < query.data.totalPages) {
+    if (query) {
+      if (page < query.data.totalPages) {
 
-      setPage(page + 1);
+        setPage(page + 1);
+      }
     }
 
   };

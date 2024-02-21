@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-export const UsersInfo = ({ info }) => {
+export const ProductInfo = ({ info }) => {
 
 
   return (
     <Container>
       <div className={info.activeStatus ? "id" : "id_inactive"}> {info.id}  </div>
       <div className="name"> {info.name} </div>
-      <div className="email"> {info.email} </div>
+      <div className="email"> {info.description} </div>
       <Link to={`/dashboard/updateuser/${info.id}`}>
         <Button>Editar</Button>
       </Link>

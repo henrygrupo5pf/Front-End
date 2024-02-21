@@ -1,145 +1,13 @@
 import styled from 'styled-components';
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { UsersInfo } from "../../components/moleculas/UserInfo/UserInfo";
-import { Link } from 'react-router-dom';
+import { UserDash } from './UserDash';
+import { ProducDash } from './ProductDash';
 
 export const DashBoard = () => {
-  const [searchUsers, setSearchUsers] = useState('');
-  const [searchType, setSearchType] = useState('ALL');
-  const [queryUser, setQueryUser] = useState("");
-  const [queryType, setQueryType] = useState("");
-  const [error, setError] = useState(null);
-
-  const fetchUsers = ({ queryKey }) => {
-    const [queryUser, queryType] = queryKey;
-
-    const url = queryType === "ALL"
-      ? `https://pf-server-93lj.onrender.com`
-      : `https://pf-server-93lj.onrender.com/user/${queryUser}`;
-
-
-    return fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
-        }
-
-        return response.json();
-
-      })
-      .then((data) => {
-
-        if (Array.isArray(data.Users) && data.Users.length === 0) {
-
-          setError("No users found. Please try searching with different parameters");
-        }
-        return data;
-      })
-      .catch((error) => {
-        setError("You have entered a wrong parameter. Remember that ID must be a number ");
-        return 0
-      });
-  };
-
-  const query = useQuery({
-    queryKey: [queryUser, queryType],
-    queryFn: fetchUsers,
-  });
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-    setQueryUser(searchUsers);
-    setQueryType(searchType);
-    setError(null);
-  };
-
-  const onChange = (event) => {
-    setSearchUsers(event.target.value);
-  };
-
-
-  //FALTA LA PARTE DE PRODUCTO 
-
   return (
     <Container>
-      <InfoContainer>
-        <SearchBox>
-          <form onSubmit={onSubmit}>
-            <SearchBar
-              className="search-bar"
-              placeholder="Search for something..."
-              type="search"
-              value={searchUsers}
-              onChange={onChange}
-            />
-            <select
-              value={searchType}
-              onChange={(event) => setSearchType(event.target.value)}
-            >
-              <option value="ALL">ALL</option>
-              <option value="ID">ID</option>
-            </select>
-            <SearchButton type="submit">Search</SearchButton>
-          </form>
-        </SearchBox>
+      <UserDash />
 
-        <UsersContainer>
-          {error ? (
-            <>{error}</>
-          ) : query.isLoading || query.isFetching ?
-            ("Loading..."
-            ) : (Array.isArray(query?.data.Users)) ?
-              (query?.data.Users.map(user => <UserBox><UsersInfo key={user.id} info={user} /></UserBox>)
-              ) : (<UserBox><UsersInfo info={query?.data} /></UserBox>)
-          }
-        </UsersContainer>
-
-        <ButtonsContainer>
-          <Link to="/dashboard/usercreate">
-            <Button > Crear Usuario</Button>
-          </Link>
-        </ButtonsContainer>
-      </InfoContainer>
-
-
-      {/*    <InfoContainer>
-        <SearchBox>
-          <form onSubmit={onSubmit}>
-            <SearchBar
-              className="search-bar"
-              placeholder="Search for something..."
-              type="search"
-              value={searchUsers}
-              onChange={onChange}
-            />
-            <select
-              value={searchType}
-              onChange={(event) => setSearchType(event.target.value)}
-            >
-              <option value="ALL">ALL</option>
-              <option value="ID">ID</option>
-            </select>
-            <SearchButton type="submit">Search</SearchButton>
-          </form>
-        </SearchBox>
-
-        <UsersContainer>
-          {error ? (
-            <>{error}</>
-          ) : query.isLoading || query.isFetching ?
-            ("Loading..."
-            ) : (Array.isArray(query?.data.Users)) ?
-              (query?.data.Users.map(user => <UserBox><UsersInfo key={user.id} info={user} /></UserBox>)
-              ) : (<UserBox><UsersInfo info={query?.data} /></UserBox>)
-          }
-        </UsersContainer>
-
-        <ButtonsContainer>
-          <Button> Crear Usuario</Button>
-          <Button> Modificar Usuario</Button>
-        </ButtonsContainer>
-      </InfoContainer> */}
+      <ProducDash />
     </Container>
   );
 };
@@ -154,6 +22,7 @@ const Container = styled.div`
     justify-content: center;
     width: 100%;
 `
+<<<<<<< HEAD
 const UsersContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -240,4 +109,6 @@ const Button = styled.div`
   width: 350px;
 `;
 
+=======
+>>>>>>> 9c7a1276af4c491b6c69d7794e40a3b402ab6d8a
 

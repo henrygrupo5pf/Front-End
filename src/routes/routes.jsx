@@ -10,8 +10,11 @@ import { useUserStore } from "../Store/UserStore";
 
 
 const MyRoutes = () => {
-  const userInfo = useUserStore((store)=> store.userAuth)
-  const isAdmin = userInfo && userInfo.user.admin === true;
+  const {userAuth} = useUserStore()
+  const isAdmin = userAuth && userAuth.admin === true;
+  //const userInfo = useUserStore((store)=> store.userAuth)
+  //const isAdmin = userInfo && userInfo.user.admin === true;
+  //const isAdmin = userInfo && userInfo.user && userInfo.admin === true;
  
   return (
     <Routes>

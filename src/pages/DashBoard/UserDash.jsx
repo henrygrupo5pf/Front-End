@@ -218,6 +218,11 @@ const Button = styled.div`
   padding: 10px 15px;
   border: 1px solid #ccc;
   width: 350px;
+  transition: background-color 0.3s ease;
+
+&:hover {
+  background-color: #45a049; 
+  }
   
 `;
 

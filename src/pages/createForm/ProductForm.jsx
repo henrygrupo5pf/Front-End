@@ -225,7 +225,7 @@ const Container = styled.div`
     min-width: 120px
   }
   
-  .input, .textarea, .inputDisabled, .textareaDisabled {
+  .input, .inputDisabled, .textareaDisabled {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;

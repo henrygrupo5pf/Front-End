@@ -81,32 +81,9 @@ const Button = styled.button`
   border-radius-left: 5px;
   text-align: center;
   height: 35px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #45a049; 
+    }
 `;
-const ActiveButton = styled.button`
-  width: 150px;
-  font-size: 16px;
-  background-color: #2596be;
-  color: #fff;
-  border: none;
-  border-radius-left: 5px;
-  text-align: center;
-  height: 25px;
-`;
-
-const Dropdown = styled.div`
-display:block
-.Activo, .Inactivo{
-    width: 150px;
-    font-size: 16px;
-
-    color: #fff;
-    border: none;
-    border-radius-left: 5px;
-    text-align: center;
-    height: 25px;
-  }
-
-  .Inactivo{
-    background-color: red;
-  }
-`

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import styled from 'styled-components';
 
 export const Updateuser = () => {
   const TEST_URL = "http://localhost:3001/user";
@@ -49,7 +50,7 @@ export const Updateuser = () => {
     e.preventDefault();
 
     try {
-      const submitFetch = await fetch(`${TEST_URL}/${id}`, {
+      const submitFetch = await fetch(`${BASE_URL}/user/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -68,92 +69,210 @@ export const Updateuser = () => {
   };
 
   return (
-    <div>
+    <Container>
       <>Modificacion de usuarios</>
       {!userData ? (
         "Loading"
-      ) : (<><Link to="/dashboard">
-        <button> Back</button>
+      ) : (<><Link className="Link" to="/dashboard">
+        <Button> Back</Button>
       </Link>
         <form onSubmit={handleOnSubmit}>
-          <label>
+        <div className="input_container">
+        <label>
             ID:
+            </label>
             <input
               type="text"
               value={userData.id}
               readOnly
             />
-          </label>
+        </div>
+          
+          <div className="input_container">
           <label>
             Name:
+            </label>
             <input
               type="text"
               value={userData.name}
               placeholder="Name"
               onChange={(e) => handleInputChange("name", e.target.value)}
             />
-          </label>
+          </div>
+          
+          <div className="input_container">
           <label>
             Email:
+            </label>
             <input
               type="text"
               value={userData.email}
               placeholder="Email"
               onChange={(e) => handleInputChange("email", e.target.value)}
             />
-          </label>
-          <label>
-            Active Status:
-            <input
-              type="text"
-              value={userData.activeStatus}
-              placeholder="Active Status"
-              onChange={(e) => handleInputChange("activeStatus", e.target.value)}
-            />
-          </label>
+          </div>
+          
+          <div className="input_container">
+            <label>
+              Active Status:
+              </label>
+              <input
+                type="text"
+                value={userData.activeStatus}
+                placeholder="Active Status"
+                onChange={(e) => handleInputChange("activeStatus", e.target.value)}
+              />
+          </div>
+          
+          <div className="input_container">
           <label>
             Country:
+            </label>
             <input
               type="text"
               value={userData.country}
               placeholder="Country"
               onChange={(e) => handleInputChange("country", e.target.value)}
             />
-          </label>
+          </div>
+          
+          <div className="input_container">
           <label>
             Admin:
+            </label>
             <input
               type="text"
               value={userData.admin}
               placeholder="Admin"
               onChange={(e) => handleInputChange("admin", e.target.value)}
             />
-          </label>
+          </div>
+          
+          <div className="input_container">
           <label>
             Location:
+            </label>
             <input
               type="text"
               value={userData.location}
               placeholder="Location"
               onChange={(e) => handleInputChange("location", e.target.value)}
             />
-          </label>
+          </div>
+          
+          <div className="input_container">
           <label>
             Password:
+            </label>
             <input
               type="text"
               value={userData.password}
               placeholder="Password"
               onChange={(e) => handleInputChange("password", e.target.value)}
             />
-          </label>
+          </div>
+          
+          
 
-          <button> Submit</button>
+          <Button> Submit</Button>
         </form>
 
         {userSubmited && <p>Usuario actualizado</p>}
       </>
       )}
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .Link{
+      text-decoration: none;
+    }
+    form{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 520px;
+      height: 600px;
+      background-color: white;
+      box-shadow: 5px 10px 17px black;
+      border-radius: 10px;
+    }
+
+    .input_container{
+      display:flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+  
+    label {
+      font-weight: bold;
+      margin-bottom: 8px;
+      min-width: 150px
+    }
+    
+    input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      min-width: 280px;
+    }
+  
+    input:focus{
+      border-color: #66afe9;
+    }
+  
+    select {
+      appearance: none;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      min-width: 280px;
+      cursor: pointer;
+      background-color: #fff;
+    }
+    
+    select:focus {
+      border-color: #66afe9; /* Cambiar color de borde al hacer hover */
+    }
+    
+    select option:first-child {
+      color: #a0a0a0; /* Color para el texto de la opción de "Selecciona una categoría" */
+    }
+    
+    select option:hover {
+      background-color: #f0f0f0; /* Cambiar color de fondo al hacer hover en las opciones */
+    }
+`
+
+const Button = styled.div`
+
+  font-size: 16px;
+  background-color: #4caf50; 
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  width: 250px;
+  text-align:center;
+
+
+&:hover {
+  background-color: #45a049; 
+  }
+`;

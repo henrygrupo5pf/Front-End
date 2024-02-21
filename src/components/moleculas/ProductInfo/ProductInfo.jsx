@@ -8,8 +8,8 @@ export const ProductInfo = ({ info }) => {
     <Container>
       <div className={info.activeStatus ? "id" : "id_inactive"}> {info.id}  </div>
       <div className="name"> {info.name} </div>
-      <div className="email"> {info.description} </div>
-      <Link to={`/dashboard/updateuser/${info.id}`}>
+      <div className="description"> {info.description} </div>
+      <Link to={`/dashboard/updateproduct/${info.id}`}>
         <Button>Editar</Button>
       </Link>
       
@@ -50,12 +50,10 @@ const Container = styled.div`
     width: 180px;
   }
 
-  .password {
-    width: 150px;
-  }
-
-  .email {
+  .description {
     width: 300px;
+    height: 100%;
+    overflow-y: scroll;
   }
 
   .menu {
@@ -81,32 +79,10 @@ const Button = styled.button`
   border-radius-left: 5px;
   text-align: center;
   height: 35px;
-`;
-const ActiveButton = styled.button`
-  width: 150px;
-  font-size: 16px;
-  background-color: #2596be;
-  color: #fff;
-  border: none;
-  border-radius-left: 5px;
-  text-align: center;
-  height: 25px;
-`;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 
-const Dropdown = styled.div`
-display:block
-.Activo, .Inactivo{
-    width: 150px;
-    font-size: 16px;
-
-    color: #fff;
-    border: none;
-    border-radius-left: 5px;
-    text-align: center;
-    height: 25px;
+&:hover {
+  background-color: #45a049; 
   }
-
-  .Inactivo{
-    background-color: red;
-  }
-`
+`;

@@ -132,7 +132,7 @@ export const ProducDash = () => {
         </PaginationContainer>
 
         <ButtonsContainer>
-          <Link to="/dashboard/ProductForm">
+          <Link className='Link' to="/dashboard/ProductForm">
             <Button > Crear Producto</Button>
           </Link>
         </ButtonsContainer>
@@ -219,6 +219,9 @@ const ButtonsContainer = styled.div`
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 80%;
+  .Link{
+    text-decoration: none;
+  }
 `;
 const Button = styled.div`
 
@@ -232,6 +235,11 @@ const Button = styled.div`
   padding: 10px 15px;
   border: 1px solid #ccc;
   width: 350px;
+  transition: background-color 0.3s ease;
+
+&:hover {
+  background-color: #45a049; 
+  }
 `;
 
 const PaginationContainer = styled.div`

@@ -81,6 +81,10 @@ const Button = styled.button`
   border-radius-left: 5px;
   text-align: center;
   height: 35px;
+  &:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
 `;
 const ActiveButton = styled.button`
   width: 150px;

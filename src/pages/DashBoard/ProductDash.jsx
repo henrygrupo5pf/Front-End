@@ -90,6 +90,31 @@ export const ProducDash = () => {
     }
 
   };
+  const toggleProductStatus = async (productId, isActive) => {
+    const url = `https://pf-server-93lj.onrender.com/product/${productId}/toggle-status`; // Ajusta esta URL según sea necesario
+    try {
+      const response = await fetch(url, {
+        method: 'PATCH', // O 'PUT', dependiendo de cómo esté configurado tu backend
+        headers: {
+          'Content-Type': 'application/json',
+          // Aquí deberías incluir cualquier cabecera adicional necesaria, como tokens de autorización
+        },
+        body: JSON.stringify({ isActive }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al actualizar el producto');
+      }
+  
+      // Aquí podrías refrescar la lista de productos o manejar la respuesta de otra manera
+      console.log('Producto actualizado', await response.json());
+      query.refetch(); // Refresca los productos para mostrar el estado actualizado
+    } catch (error) {
+      console.error('Error al cambiar el estado del producto:', error);
+      // Aquí podrías manejar errores, por ejemplo, mostrando un mensaje al usuario
+    }
+  };
+  
 
   return (
     <Container>
@@ -114,7 +139,7 @@ export const ProducDash = () => {
           </form>
         </SearchBox>
 
-        <ProductsContainer>
+        {/* <ProductsContainer>
           {error ? (
             <>{error}</>
           ) : query.isLoading || query.isFetching ?
@@ -123,7 +148,23 @@ export const ProducDash = () => {
               (query?.data.products.map(product => <ProductBox><ProductInfo key={product.id} info={product} /></ProductBox>)
               ) : (<ProductBox><ProductInfo info={query?.data} /></ProductBox>)
           }
-        </ProductsContainer>
+        </ProductsContainer> */}
+         <ProductsContainer>
+        {error ? (
+          <>{error}</>
+        ) : query.isLoading || query.isFetching ? (
+          "Loading..."
+        ) : (
+          Array.isArray(query?.data.products) && query?.data.products.map(product => (
+            <ProductBox key={product.id}>
+              <ProductInfo info={product} />
+              <ToggleButton onClick={() => toggleProductStatus(product.id, !product.isActive)}>
+                {product.isActive ? 'Desactivar' : 'Activar'}
+              </ToggleButton>
+            </ProductBox>
+          ))
+        )}
+      </ProductsContainer>
 
         <PaginationContainer>
           <PaginationButton onClick={handleMin}>Previous</PaginationButton>
@@ -253,6 +294,21 @@ const PaginationButton = styled.div`
 const PaginationText = styled.div`
   border: 1px solid #ccc;
 `;
+const ToggleButton = styled.button`
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #4caf50; 
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #45a049; 
+  }
+`;
+
 
 
 

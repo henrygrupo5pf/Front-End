@@ -10,13 +10,13 @@ export const UpdateProduct = () => {
   const [productData, setProductData] = useState(null);
   const [productSubmited, setProductSubmited] = useState(false)
 
-
   /////////////////////////////////////
   /////////////////////////////////////
   /////////////////////////////////////
   /////////////////////////////////////
   /////////////////////////////////////
   //FALTAN LAS VALIDACIONES DE CADA CAMPO
+  //Y NOTIFICACIONES
   /////////////////////////////////////
   /////////////////////////////////////
   /////////////////////////////////////
@@ -31,6 +31,8 @@ export const UpdateProduct = () => {
           throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
         }
         const data = await response.json();
+        delete data.User
+        delete data.userId
         setProductData(data);
       } catch (error) {
         console.error(error);
@@ -41,6 +43,7 @@ export const UpdateProduct = () => {
   }, [id]);
 
   const handleInputChange = (fieldName, value) => {
+
     setProductData((prevData) => ({
       ...prevData,
       [fieldName]: value,
@@ -50,12 +53,13 @@ export const UpdateProduct = () => {
     e.preventDefault();
 
     try {
+      
       const submitFetch = await fetch(`${BASE_URL}/product/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(productData),
+        body: JSON.stringify({...productData, cost: parseFloat(productData.cost)}),
       });
       if (!submitFetch.ok) {
         throw new Error(`Something went wrong. Try again. Código de error: ${submitFetch.status}`);
@@ -130,8 +134,8 @@ export const UpdateProduct = () => {
               Active Status:
               </label>
               <select
-                value={productData.activestatus}
-                onChange={(e) => handleInputChange("activestatus", e.target.value)}
+                value={productData.activeStatus}
+                onChange={(e) => handleInputChange("activeStatus", e.target.value)}
               >
                 <option value={true}>True</option>
                 <option value={false}>False</option>

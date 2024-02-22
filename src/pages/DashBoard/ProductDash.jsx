@@ -3,6 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { ProductInfo } from "../../components/moleculas/ProductInfo/ProductInfo";
 import { Link } from 'react-router-dom';
+import {useProductsStore} from '../../Store/ProductStore';
+
+
+
 
 
 //FALTA ACTUALIZAR LOS DATOS PARA HACERLO DE PROCUTO. AHORA ES UNA COPIA DE Product
@@ -91,15 +95,17 @@ export const ProducDash = () => {
 
   };
   const toggleProductStatus = async (productId, isActive) => {
-    const url = `https://pf-server-93lj.onrender.com/product/${productId}/toggle-status`; // Ajusta esta URL según sea necesario
+    const url = `https://pf-server-93lj.onrender.com/product/${productId}`; // Ajusta esta URL según sea necesario
     try {
       const response = await fetch(url, {
-        method: 'PATCH', // O 'PUT', dependiendo de cómo esté configurado tu backend
+        method: 'PUT', // O 'PUT', dependiendo de cómo esté configurado tu backend
         headers: {
           'Content-Type': 'application/json',
           // Aquí deberías incluir cualquier cabecera adicional necesaria, como tokens de autorización
         },
-        body: JSON.stringify({ isActive }),
+        // body: JSON.stringify({ isActive }),
+        body: JSON.stringify({ activeStatus: !isActive }),
+
       });
   
       if (!response.ok) {
@@ -139,16 +145,6 @@ export const ProducDash = () => {
           </form>
         </SearchBox>
 
-        {/* <ProductsContainer>
-          {error ? (
-            <>{error}</>
-          ) : query.isLoading || query.isFetching ?
-            ("Loading..."
-            ) : (Array.isArray(query?.data.products)) ?
-              (query?.data.products.map(product => <ProductBox><ProductInfo key={product.id} info={product} /></ProductBox>)
-              ) : (<ProductBox><ProductInfo info={query?.data} /></ProductBox>)
-          }
-        </ProductsContainer> */}
          <ProductsContainer>
         {error ? (
           <>{error}</>
@@ -181,6 +177,7 @@ export const ProducDash = () => {
     </Container>
   );
 };
+
 
 
 const ToggleButton = styled.button`

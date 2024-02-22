@@ -3,10 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { ProductInfo } from "../../components/moleculas/ProductInfo/ProductInfo";
 import { Link } from 'react-router-dom';
-import {useProductsStore} from '../../Store/ProductStore';
-
-
-
 
 
 //FALTA ACTUALIZAR LOS DATOS PARA HACERLO DE PROCUTO. AHORA ES UNA COPIA DE Product
@@ -94,33 +90,6 @@ export const ProducDash = () => {
     }
 
   };
-  const toggleProductStatus = async (productId, isActive) => {
-    const url = `https://pf-server-93lj.onrender.com/product/${productId}`; // Ajusta esta URL según sea necesario
-    try {
-      const response = await fetch(url, {
-        method: 'PUT', // O 'PUT', dependiendo de cómo esté configurado tu backend
-        headers: {
-          'Content-Type': 'application/json',
-          // Aquí deberías incluir cualquier cabecera adicional necesaria, como tokens de autorización
-        },
-        // body: JSON.stringify({ isActive }),
-        body: JSON.stringify({ activeStatus: !isActive }),
-
-      });
-  
-      if (!response.ok) {
-        throw new Error('Error al actualizar el producto');
-      }
-  
-      // Aquí podrías refrescar la lista de productos o manejar la respuesta de otra manera
-      console.log('Producto actualizado', await response.json());
-      query.refetch(); // Refresca los productos para mostrar el estado actualizado
-    } catch (error) {
-      console.error('Error al cambiar el estado del producto:', error);
-      // Aquí podrías manejar errores, por ejemplo, mostrando un mensaje al usuario
-    }
-  };
-  
 
   return (
     <Container>
@@ -145,22 +114,16 @@ export const ProducDash = () => {
           </form>
         </SearchBox>
 
-         <ProductsContainer>
-        {error ? (
-          <>{error}</>
-        ) : query.isLoading || query.isFetching ? (
-          "Loading..."
-        ) : (
-          Array.isArray(query?.data.products) && query?.data.products.map(product => (
-            <ProductBox key={product.id}>
-              <ProductInfo info={product} />
-              <ToggleButton onClick={() => toggleProductStatus(product.id, !product.isActive)}>
-                {product.isActive ? 'Desactivar' : 'Activar'}
-              </ToggleButton>
-            </ProductBox>
-          ))
-        )}
-      </ProductsContainer>
+        <ProductsContainer>
+          {error ? (
+            <>{error}</>
+          ) : query.isLoading || query.isFetching ?
+            ("Loading..."
+            ) : (Array.isArray(query?.data.products)) ?
+              (query?.data.products.map(product => <ProductBox><ProductInfo key={product.id} info={product} /></ProductBox>)
+              ) : (<ProductBox><ProductInfo info={query?.data} /></ProductBox>)
+          }
+        </ProductsContainer>
 
         <PaginationContainer>
           <PaginationButton onClick={handleMin}>Previous</PaginationButton>
@@ -178,55 +141,38 @@ export const ProducDash = () => {
   );
 };
 
-
-
-const ToggleButton = styled.button`
-  padding: 10px 15px;
-  font-size: 16px;
-  background-color: #4caf50; 
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pinter;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #45a049; 
-  }
-`;
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+`
 const ProductsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 80%;
   height: 500px;
   overflow-y: scroll;
-  padding: 10px;
-`;
+  padding: 10px`;
 
 const ProductBox = styled.div`
   border-radius: 5px;
   border: 1px solid black;
-  width: 100%;
+  width: 80%;
   background-color: white;
   margin: 3px;
   height: 100px;
-`;
+  `;
 
 const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+`
 
 const SearchBox = styled.div`
   display: flex;
@@ -251,17 +197,17 @@ const SearchBar = styled.input`
 `;
 
 const SearchButton = styled.button`
-  padding: 10px 15px;
-  font-size: 16px;
-  background-color: #4caf50; 
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+padding: 10px 15px;
+font-size: 16px;
+background-color: #4caf50; 
+color: #fff;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease;
 
-  &:hover {
-    background-color: #45a049; 
+&:hover {
+  background-color: #45a049; 
   }
 `;
 
@@ -277,7 +223,6 @@ const ButtonsContainer = styled.div`
     text-decoration: none;
   }
 `;
-
 const Button = styled.div`
 
   font-size: 16px;
@@ -292,8 +237,8 @@ const Button = styled.div`
   width: 350px;
   transition: background-color 0.3s ease;
 
-  &:hover {
-    background-color: #45a049; 
+&:hover {
+  background-color: #45a049; 
   }
 `;
 
@@ -303,7 +248,7 @@ const PaginationContainer = styled.div`
   margin-top: 10px;
 `;
 
-const PaginationButton = styled.div`
+const PaginationButton = styled.button`
   margin: 0 5px;
   padding: 5px 10px;
   background-color: #4caf50;
@@ -322,11 +267,3 @@ const PaginationButton = styled.div`
 const PaginationText = styled.div`
   margin: 0 5px;
 `;
-
-
-
-
-
-
-
-

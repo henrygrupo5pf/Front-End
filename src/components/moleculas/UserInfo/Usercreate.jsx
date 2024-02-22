@@ -1,9 +1,27 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
+import appFirebase from '../../../credenciales';
+import { getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
+
+const auth = getAuth(appFirebase);
 
 export const Usercreate = () => {
   const BASE_URL = "https://pf-server-93lj.onrender.com";
+
+    /////////////////////////////////////
+  /////////////////////////////////////
+  /////////////////////////////////////
+  /////////////////////////////////////
+  /////////////////////////////////////
+  //FALTAN LAS VALIDACIONES DE CADA CAMPO
+  //Y NOTIFICACIONES
+  /////////////////////////////////////
+  /////////////////////////////////////
+  /////////////////////////////////////
+  /////////////////////////////////////
+  /////////////////////////////////////
+
   const [userForFetch, setUserForFetch] = useState({
     name: "",
     email: "",
@@ -33,6 +51,10 @@ export const Usercreate = () => {
         },
         body: JSON.stringify(userForFetch),
       });
+
+      createUserWithEmailAndPassword(auth, userForFetch.email, userForFetch.password);
+
+      console.log(userForFetch);
     } catch (error) {
       console.error("Error al enviar la solicitud:", error);
     }
@@ -148,7 +170,7 @@ export const Usercreate = () => {
 
         </div>
 
-        <Button>Submit</Button>
+        <button>Submit</button>
       </form>
     </Container>
   );

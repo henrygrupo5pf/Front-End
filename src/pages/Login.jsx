@@ -128,7 +128,7 @@ export const Login = () => {
       }
   
       const userData = await response.json();
-  
+      //Verificando si el usuario es nuevo
       if (!userData.created) {
         Swal.fire({
           icon: "error",

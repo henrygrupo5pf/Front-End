@@ -7,21 +7,12 @@ export const Updateuser = () => {
   const TEST_URL = "http://localhost:3001/user";
   const BASE_URL = "https://pf-server-93lj.onrender.com"
   const { id } = useParams();
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState("");
   const [userSubmited, setUserSubmited] = useState(false)
-
-
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  //FALTAN LAS VALIDACIONES DE CADA CAMPO
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
+  const [notification, setNotification] = useState({
+    type: "",
+    message: ""
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -41,14 +32,33 @@ export const Updateuser = () => {
   }, [id]);
 
   const handleInputChange = (fieldName, value) => {
+     setNotification({type:"", message: "" })
     setUserData((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
   };
+
+  const validateName = (name) => /^[a-zA-Z0-9]+$/.test(name);
+
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const validatePassword = (password) => /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,}$/.test(password);
+
+  const validatePhoneNumber = (phoneNumber) => /^\d{7,13}$/.test(phoneNumber);
+  
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-
+    let aux=0
+   
+    if(!validateName(userData.name) || !validateEmail(userData.email) || !validatePassword(userData.password) || !validatePhoneNumber(userData.phoneNumber)){
+      aux=1
+    }
+    if(aux===1){
+      setNotification({type:"error", message: "° Please check your input fields." })
+      aux=0
+      return;
+    }
     try {
       const submitFetch = await fetch(`${BASE_URL}/user/${id}`, {
         method: 'PUT',
@@ -67,6 +77,8 @@ export const Updateuser = () => {
 
     setUserSubmited(true)
   };
+
+
 
   return (
     <Container>
@@ -176,8 +188,17 @@ export const Updateuser = () => {
           
           
 
-          <button> Submit</button>
-        </form>
+          <Button> Submit</Button>
+        </form> 
+        {notification.type === "error" && (
+        <ErrorBox>
+          {notification.message}
+          {!validateName(userData.name) && <div>° Invalid format. Only alphanumeric characters allowed.</div>}
+          {!validateEmail(userData.email) && <div>° Invalid email format.</div>}
+          {!validatePassword(userData.password) && <div>° Password must contain at least one letter and one number, and be at least 6 characters long.</div>}
+          {!validatePhoneNumber(userData.phoneNumber) && <div>° Invalid phone number format. It should be between 7 and 13 digits and must be numbers.</div>}
+        </ErrorBox>
+      )}
 
         {userSubmited && <p>Usuario actualizado</p>}
       </>
@@ -277,4 +298,14 @@ const Button = styled.div`
 &:hover {
   background-color: #45a049; 
   }
+`;
+
+const ErrorBox = styled.div`
+  background-color: #ff9999;
+  color: #990000;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  width: 300px;
+  align-self: flex-end;
 `;

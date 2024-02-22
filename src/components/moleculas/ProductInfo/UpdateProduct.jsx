@@ -62,6 +62,7 @@ export const UpdateProduct = () => {
         body: JSON.stringify({...productData, cost: parseFloat(productData.cost)}),
       });
       if (!submitFetch.ok) {
+        
         throw new Error(`Something went wrong. Try again. Código de error: ${submitFetch.status}`);
       }
 

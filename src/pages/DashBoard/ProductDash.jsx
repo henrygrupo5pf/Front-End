@@ -182,38 +182,54 @@ export const ProducDash = () => {
   );
 };
 
+
+const ToggleButton = styled.button`
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #4caf50; 
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pinter;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #45a049; 
+  }
+`;
 const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
 const ProductsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80%;
+  width: 100%;
   height: 500px;
   overflow-y: scroll;
-  padding: 10px`;
+  padding: 10px;
+`;
 
 const ProductBox = styled.div`
   border-radius: 5px;
   border: 1px solid black;
-  width: 80%;
+  width: 100%;
   background-color: white;
   margin: 3px;
   height: 100px;
-  `;
+`;
 
 const InfoContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
 
 const SearchBox = styled.div`
   display: flex;
@@ -238,17 +254,17 @@ const SearchBar = styled.input`
 `;
 
 const SearchButton = styled.button`
-padding: 10px 15px;
-font-size: 16px;
-background-color: #4caf50; 
-color: #fff;
-border: none;
-border-radius: 5px;
-cursor: pointer;
-transition: background-color 0.3s ease;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #4caf50; 
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 
-&:hover {
-  background-color: #45a049; 
+  &:hover {
+    background-color: #45a049; 
   }
 `;
 
@@ -264,6 +280,7 @@ const ButtonsContainer = styled.div`
     text-decoration: none;
   }
 `;
+
 const Button = styled.div`
 
   font-size: 16px;
@@ -278,26 +295,21 @@ const Button = styled.div`
   width: 350px;
   transition: background-color 0.3s ease;
 
-&:hover {
-  background-color: #45a049; 
+  &:hover {
+    background-color: #45a049; 
   }
 `;
 
 const PaginationContainer = styled.div`
-  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 `;
 
 const PaginationButton = styled.div`
-  border: 1px solid #ccc;
-`;
-
-const PaginationText = styled.div`
-  border: 1px solid #ccc;
-`;
-const ToggleButton = styled.button`
-  padding: 10px 15px;
-  font-size: 16px;
-  background-color: #4caf50; 
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: #4caf50;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -305,8 +317,13 @@ const ToggleButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #45a049; 
+    background-color: #45a049;
+    transform: scale(1.05);
   }
+`;
+
+const PaginationText = styled.div`
+  margin: 0 5px;
 `;
 
 

@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
-export const Updateuser = () => {
+export const UpdateProduct = () => {
   const TEST_URL = "http://localhost:3001/user";
   const BASE_URL = "https://pf-server-93lj.onrender.com"
   const { id } = useParams();
-  const [userData, setUserData] = useState(null);
-  const [userSubmited, setUserSubmited] = useState(false)
+  const [productData, setProductData] = useState(null);
+  const [productSubmited, setProductSubmited] = useState(false)
 
 
   /////////////////////////////////////
@@ -24,24 +24,24 @@ export const Updateuser = () => {
   /////////////////////////////////////
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchProduct = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/user/${id}`);
+        const response = await fetch(`${BASE_URL}/product/${id}`);
         if (!response.ok) {
           throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
         }
         const data = await response.json();
-        setUserData(data);
+        setProductData(data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchUser();
+    fetchProduct();
   }, [id]);
 
   const handleInputChange = (fieldName, value) => {
-    setUserData((prevData) => ({
+    setProductData((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
@@ -50,12 +50,12 @@ export const Updateuser = () => {
     e.preventDefault();
 
     try {
-      const submitFetch = await fetch(`${BASE_URL}/user/${id}`, {
+      const submitFetch = await fetch(`${BASE_URL}/product/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(productData),
       });
       if (!submitFetch.ok) {
         throw new Error(`Something went wrong. Try again. Código de error: ${submitFetch.status}`);
@@ -65,13 +65,13 @@ export const Updateuser = () => {
       console.error(error);
     }
 
-    setUserSubmited(true)
+    setProductSubmited(true)
   };
 
   return (
     <Container>
       <>Modificacion de usuarios</>
-      {!userData ? (
+      {!productData ? (
         "Loading"
       ) : (<><Link className="Link" to="/dashboard">
         <Button> Back</Button>
@@ -83,32 +83,45 @@ export const Updateuser = () => {
             </label>
             <input
               type="text"
-              value={userData.id}
+              value={productData.id}
               readOnly
+            />
+        </div>
+          
+        <div className="input_container">
+        <label>
+            Name:
+            </label>
+            <input
+              type="text"
+              value={productData.name}
+              placeholder="Name"
+              onChange={(e) => handleInputChange("name", e.target.value)}
             />
         </div>
           
           <div className="input_container">
           <label>
-            Name:
+            Description:
             </label>
             <input
               type="text"
-              value={userData.name}
-              placeholder="Name"
-              onChange={(e) => handleInputChange("name", e.target.value)}
+              value={productData.description}
+              placeholder="Description"
+              onChange={(e) => handleInputChange("description", e.target.value)}
             />
           </div>
           
+          
           <div className="input_container">
           <label>
-            Email:
+            Category:
             </label>
             <input
               type="text"
-              value={userData.email}
-              placeholder="Email"
-              onChange={(e) => handleInputChange("email", e.target.value)}
+              value={productData.category}
+              placeholder="category"
+              onChange={(e) => handleInputChange("category", e.target.value)}
             />
           </div>
           
@@ -116,68 +129,45 @@ export const Updateuser = () => {
             <label>
               Active Status:
               </label>
-              <input
-                type="text"
-                value={userData.activeStatus}
-                placeholder="Active Status"
-                onChange={(e) => handleInputChange("activeStatus", e.target.value)}
-              />
-          </div>
+              <select
+                value={productData.activestatus}
+                onChange={(e) => handleInputChange("activestatus", e.target.value)}
+              >
+                <option value={true}>True</option>
+                <option value={false}>False</option>
+              </select>
+        </div>
           
           <div className="input_container">
           <label>
-            Country:
+            Cost:
             </label>
             <input
-              type="text"
-              value={userData.country}
-              placeholder="Country"
-              onChange={(e) => handleInputChange("country", e.target.value)}
+              type="number"
+              value={productData.cost}
+              placeholder="Cost"
+              onChange={(e) => handleInputChange("cost", e.target.value)}
             />
           </div>
           
           <div className="input_container">
           <label>
-            Admin:
+            Photo:
             </label>
             <input
               type="text"
-              value={userData.admin}
-              placeholder="Admin"
-              onChange={(e) => handleInputChange("admin", e.target.value)}
-            />
-          </div>
-          
-          <div className="input_container">
-          <label>
-            Location:
-            </label>
-            <input
-              type="text"
-              value={userData.location}
-              placeholder="Location"
-              onChange={(e) => handleInputChange("location", e.target.value)}
-            />
-          </div>
-          
-          <div className="input_container">
-          <label>
-            Password:
-            </label>
-            <input
-              type="text"
-              value={userData.password}
-              placeholder="Password"
-              onChange={(e) => handleInputChange("password", e.target.value)}
+              value={productData.photo}
+              placeholder="Photo"
+              onChange={(e) => handleInputChange("photo", e.target.value)}
             />
           </div>
           
           
 
-          <Button> Submit</Button>
+          <button> Submit</button>
         </form>
 
-        {userSubmited && <p>Usuario actualizado</p>}
+        {productSubmited && <p>Usuario actualizado</p>}
       </>
       )}
     </Container>

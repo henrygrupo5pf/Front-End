@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-export const UsersInfo = ({ info }) => {
+export const ProductInfo = ({ info }) => {
 
 
   return (
     <Container>
       <div className={info.activeStatus ? "id" : "id_inactive"}> {info.id}  </div>
       <div className="name"> {info.name} </div>
-      <div className="email"> {info.email} </div>
-      <Link to={`/dashboard/updateuser/${info.id}`}>
+      <div className="description"> {info.description} </div>
+      <Link to={`/dashboard/updateproduct/${info.id}`}>
         <Button>Editar</Button>
       </Link>
       
@@ -50,12 +50,10 @@ const Container = styled.div`
     width: 180px;
   }
 
-  .password {
-    width: 150px;
-  }
-
-  .email {
+  .description {
     width: 300px;
+    height: 100%;
+    overflow-y: scroll;
   }
 
   .menu {
@@ -81,9 +79,10 @@ const Button = styled.button`
   border-radius-left: 5px;
   text-align: center;
   height: 35px;
+  border-radius: 5px;
   transition: background-color 0.3s ease;
 
-  &:hover {
-    background-color: #45a049; 
-    }
+&:hover {
+  background-color: #45a049; 
+  }
 `;

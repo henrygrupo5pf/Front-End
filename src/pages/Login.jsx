@@ -93,7 +93,7 @@ export const Login = () => {
       console.log(userData);
       signInWithEmailAndPassword(auth, user.email, user.password);
       setUserAuth(userData)
-
+      console.log(userData);
     } catch (error) {
       console.log(error);
     }
@@ -131,6 +131,12 @@ export const Login = () => {
   
       if (!userData.created) {
         Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "El correo electrónico ya está en uso. Por favor, utiliza otro correo electrónico.",
+        });
+      } else{
+        Swal.fire({
           icon: "success",
           title: `El usuario ${user.name} ha sido registrado correctamente`,
           showConfirmButton: false,
@@ -138,14 +144,8 @@ export const Login = () => {
         });
         createUserWithEmailAndPassword(auth, user.email, user.password);
         setUserAuth(userData.user);
-      } else  {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "El correo electrónico ya está en uso. Por favor, utiliza otro correo electrónico.",
-        });
       }
-      
+      console.log(userData);
     } catch (error) {
       console.error("Error:", error);
       Swal.fire({

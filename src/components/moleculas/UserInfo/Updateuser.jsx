@@ -116,13 +116,14 @@ export const Updateuser = () => {
             <label>
               Active Status:
               </label>
-              <input
-                type="text"
+              <select
                 value={userData.activeStatus}
-                placeholder="Active Status"
                 onChange={(e) => handleInputChange("activeStatus", e.target.value)}
-              />
-          </div>
+              >
+                <option value={true}>True</option>
+                <option value={false}>False</option>
+              </select>
+        </div>
           
           <div className="input_container">
           <label>
@@ -137,16 +138,17 @@ export const Updateuser = () => {
           </div>
           
           <div className="input_container">
-          <label>
-            Admin:
-            </label>
-            <input
-              type="text"
-              value={userData.admin}
-              placeholder="Admin"
-              onChange={(e) => handleInputChange("admin", e.target.value)}
-            />
-          </div>
+            <label>
+              Admin:
+              </label>
+              <select
+                value={userData.admin}
+                onChange={(e) => handleInputChange("admin", e.target.value)}
+              >
+                <option value={true}>True</option>
+                <option value={false}>False</option>
+              </select>
+        </div>
           
           <div className="input_container">
           <label>
@@ -174,7 +176,7 @@ export const Updateuser = () => {
           
           
 
-          <Button> Submit</Button>
+          <button> Submit</button>
         </form>
 
         {userSubmited && <p>Usuario actualizado</p>}

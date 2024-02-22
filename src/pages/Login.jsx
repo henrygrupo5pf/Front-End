@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Swal from 'sweetalert2'
 import appFirebase from '../credenciales';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
@@ -51,6 +52,7 @@ export const Login = () => {
   // const handleAuthentication = async (authFunction, userData) => {
   //   try {
   //     await authFunction;
+      // console.log('Autenticación exitosa');
   //     const response = await fetch(`${BASE_URL}/user/login`, {
   //   method: 'POST',
   //   headers: {
@@ -59,12 +61,14 @@ export const Login = () => {
   //   body: JSON.stringify({email: user.email, password: user.password}),
   // });
   //     const userApi = await response.json();
+      // console.log('Respuesta de la API:', userApi);
   //     setUserAuth(userApi);
   //     console.log(userApi);
   //   } catch (error) {
   //     setError(error.message);
   //   }
   // };
+
   // Método para manejar el inicio de sesión
   const handleLogin = async () => {
     if (!validateEmail(user.email)) {
@@ -89,13 +93,14 @@ export const Login = () => {
       console.log(userData);
       signInWithEmailAndPassword(auth, user.email, user.password);
       setUserAuth(userData)
-
+      console.log(userData);
     } catch (error) {
       console.log(error);
     }
 
 
   };
+
   // Método para manejar el registro de usuarios
   const handleRegister = async () => {
     if (!validateEmail(user.email)) {
@@ -110,25 +115,45 @@ export const Login = () => {
     try {
 
       const response = await fetch(`${BASE_URL}/user`, {
+        
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(user),
       });
-
-      const userData = await response.json()
-      if (!userData.created) {
-        throw 'Usuario ya registrado';
-      }
       
-      createUserWithEmailAndPassword(auth, user.email, user.password);
-      setUserAuth(userData.user)
-
+      if (!response.ok) {
+        throw new Error('Error en la respuesta del servidor');
+      }
+  
+      const userData = await response.json();
+      //Verificando si el usuario es nuevo
+      if (!userData.created) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "El correo electrónico ya está en uso. Por favor, utiliza otro correo electrónico.",
+        });
+      } else{
+        Swal.fire({
+          icon: "success",
+          title: `El usuario ${user.name} ha sido registrado correctamente`,
+          showConfirmButton: false,
+          timer: 2500
+        });
+        createUserWithEmailAndPassword(auth, user.email, user.password);
+        setUserAuth(userData.user);
+      }
+      console.log(userData);
     } catch (error) {
-      console.log(error);
+      console.error("Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema al registrar el usuario. Por favor, inténtalo de nuevo más tarde.",
+      });
     }
-
   };
 
   const handleGoogleLogin = async () => {

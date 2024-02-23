@@ -153,7 +153,8 @@ export const Login = () => {
       });
 
       const userData = await response.json()
-      if (!userData.activeStatus) {
+      console.log(userData);
+      if (userData.user.activeStatus === false) {
         handleLogout()
         Swal.fire({
           icon: "error",

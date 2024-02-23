@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
+import Swal from 'sweetalert2'
 
 export const Updateuser = () => {
   const TEST_URL = "http://localhost:3001/user";
@@ -99,10 +100,28 @@ export const Updateuser = () => {
         body: JSON.stringify(userData),
       });
       if (!submitFetch.ok) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Error interno. Inténtalo más tarde ",
+        });
         throw new Error(`Something went wrong. Try again. Código de error: ${submitFetch.status}`);
       }
 
       setUserSubmited(true)
+
+      Swal.fire({
+        position: "bottom",
+        icon: "success",
+        title: "Su producto ha sido actualizado correctamente, Actualizando...",
+        showConfirmButton: false,
+        timer: 2500
+      });
+
+      setTimeout(() => {
+
+        window.location.reload();
+      }, 2500);
       return 0
     } catch (error) {
       console.error(error);
@@ -118,7 +137,7 @@ export const Updateuser = () => {
       {!userData ? (
         "Loading"
       ) : (<><Link className="Link" to="/dashboard">
-        <Button> Back</Button>
+        <button> Back</button>
       </Link>
         <form onSubmit={handleOnSubmit}>
           <div className="input_container">
@@ -314,27 +333,28 @@ const Container = styled.div`
     select option:hover {
       background-color: #f0f0f0; /* Cambiar color de fondo al hacer hover en las opciones */
     }
+
+    button{
+      font-size: 16px;
+      background-color: #4caf50; 
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      width: 250px;
+      text-align:center;
+    
+    
+    &:hover {
+      background-color: #45a049; 
+      }
+    
+    }
 `
 
-const Button = styled.div`
-
-  font-size: 16px;
-  background-color: #4caf50; 
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  width: 250px;
-  text-align:center;
-
-
-&:hover {
-  background-color: #45a049; 
-  }
-`;
 
 const ErrorBox = styled.div`
   background-color: #ff9999;

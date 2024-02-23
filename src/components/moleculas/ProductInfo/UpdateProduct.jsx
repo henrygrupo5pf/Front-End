@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
+import Swal from 'sweetalert2'
 
 export const UpdateProduct = () => {
   const TEST_URL = "http://localhost:3001/user";
@@ -20,6 +21,7 @@ export const UpdateProduct = () => {
         const response = await fetch(`${BASE_URL}/product/${id}`);
         if (!response.ok) {
           throw new Error(`Something went wrong. Try again. Código de error: ${response.status}`);
+          
         }
         const data = await response.json();
         delete data.User
@@ -101,9 +103,25 @@ export const UpdateProduct = () => {
           body: JSON.stringify({ ...productData, cost: parseFloat(productData.cost) }),
         });
         if (!submitFetch.ok) {
-
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Error interno. Inténtalo más tarde ",
+          });
           throw new Error(`Something went wrong. Try again. Código de error: ${submitFetch.status}`);
         }
+        Swal.fire({
+          position: "bottom",
+          icon: "success",
+          title: "Su producto ha sido actualizado correctamente, Actualizando...",
+          showConfirmButton: false,
+          timer: 2500
+        });
+
+        setTimeout(() => {
+
+          window.location.reload();
+        }, 2500);
 
       } catch (error) {
         console.error(error);

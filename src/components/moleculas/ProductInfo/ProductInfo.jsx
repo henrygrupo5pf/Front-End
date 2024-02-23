@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Swal from 'sweetalert2'
 
 export const ProductInfo = ({ info }) => {
   const BASE_URL = "https://pf-server-93lj.onrender.com"
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/products/${info.id}`, {
+      const response = await fetch(`${BASE_URL}/product/${info.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -15,8 +16,24 @@ export const ProductInfo = ({ info }) => {
 
       if (response.ok) {
         console.log('Producto eliminado correctamente');
+        Swal.fire({
+          icon: "success",
+          title: `Producto eliminado actualizando...`,
+          showConfirmButton: false,
+          timer: 2500
+        });
+        setTimeout(() => {
+
+          window.location.reload();
+        }, 2500);
+  
       } else {
         console.error('Error al eliminar producto:', response.statusText);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Error al eliminar el producto",
+        });
       }
     } catch (error) {
       console.error('Error al realizar la solicitud DELETE:', error.message);

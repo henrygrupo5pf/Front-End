@@ -272,6 +272,21 @@ export const ProductForm = ({ onSubmit }) => {
     }
   };
 
+  const isLogged = () => {
+        if (!userAuth) {
+          return (
+            <div className="login-center">
+              <h3>Inicia sesión para publicar un producto</h3>
+              <Link to='/login'>
+                <Button type="submit">Iniciar Sesión</Button>
+              </Link>
+            </div>
+          );
+        } else {
+          return (<Button type="submit">Publicar Producto</Button>);
+        }
+      };
+
   return (
     <Container>
       <ToastContainer />

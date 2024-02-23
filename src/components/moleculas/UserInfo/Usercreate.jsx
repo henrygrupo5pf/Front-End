@@ -164,7 +164,7 @@ export const Usercreate = () => {
 
         <Button type="submit">Submit</Button>
       </form>
-
+   
       {notification.type === "error" && (
         <ErrorBox>
           {!validateName(userForFetch.name) && <div>° Invalid format. Only alphanumeric characters allowed.</div>}

@@ -9,10 +9,11 @@ export const Updateuser = () => {
   const { id } = useParams();
   const [userData, setUserData] = useState("");
   const [userSubmited, setUserSubmited] = useState(false)
-  const [notification, setNotification] = useState({
-    type: "",
+  const [error, setError] = useState({
+    result: false,
     message: ""
-  });
+  })
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -31,35 +32,65 @@ export const Updateuser = () => {
     fetchUser();
   }, [id]);
 
+  const validateName = (value) => {
+    return /^[A-Za-z0-9\s]+$/.test(value)
+  }
+
+  const validateEmail = (value) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+  }
+
+  const validatePassword = (value) => {
+    return /^(?=.*[A-Za-z])(?=.*\d).{6,20}$/.test(value)
+  }
+
+  const validatePhoneNumber = (value) => {
+    return /^\d{9,15}$/.test(value)
+  };
+
+
+
+
   const handleInputChange = (fieldName, value) => {
-     setNotification({type:"", message: "" })
     setUserData((prevData) => ({
       ...prevData,
       [fieldName]: value,
-    }));
+    }))
+    if (fieldName === "name") {
+      value === "" ? setError({ result: false }) : validateName(value) ? setError({ result: false }) : setError(
+        {
+          result: true,
+          message: "° Name must be a alfanumeric combination"
+        })
+    }
+    if (fieldName === "email") {
+      value === "" ? setError({ result: false }) : validateEmail(value) ? setError({ result: false }) : setError(
+        {
+          result: true,
+          message: "° Email format is wrong. Please change it"
+        })
+    }
+    if (fieldName === "password") {
+      value === "" ? setError({ result: false }) : validatePassword(value) ? setError({ result: false }) : setError(
+        {
+          result: true,
+          message: "° Password must be a alphanumeric combination and needs to be a between 6 and 20 characters  "
+        })
+    }
+    if (fieldName === "phoneNumber") {
+      value === "" ? setError({ result: false }) : validatePhoneNumber(value) ? setError({ result: false }) : setError(
+        {
+          result: true,
+          message: "° Phone Number must be numeric combination and needs to be between 9 and 15 characters  "
+        })
+    }
   };
 
-  const validateName = (name) => /^[a-zA-Z0-9]+$/.test(name);
 
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const validatePassword = (password) => /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,}$/.test(password);
-
-  const validatePhoneNumber = (phoneNumber) => /^\d{7,13}$/.test(phoneNumber);
-  
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    let aux=0
-   
-    if(!validateName(userData.name) || !validateEmail(userData.email) || !validatePassword(userData.password) || !validatePhoneNumber(userData.phoneNumber)){
-      aux=1
-    }
-    if(aux===1){
-      setNotification({type:"error", message: "° Please check your input fields." })
-      aux=0
-      return;
-    }
-    try {
+    if(!error){ try {
       const submitFetch = await fetch(`${BASE_URL}/user/${id}`, {
         method: 'PUT',
         headers: {
@@ -71,11 +102,12 @@ export const Updateuser = () => {
         throw new Error(`Something went wrong. Try again. Código de error: ${submitFetch.status}`);
       }
 
+      setUserSubmited(true)
+      return 0
     } catch (error) {
       console.error(error);
-    }
-
-    setUserSubmited(true)
+    }}
+    else return console.log("ERROR EN LA LOGICA");
   };
 
 
@@ -89,20 +121,20 @@ export const Updateuser = () => {
         <Button> Back</Button>
       </Link>
         <form onSubmit={handleOnSubmit}>
-        <div className="input_container">
-        <label>
-            ID:
+          <div className="input_container">
+            <label>
+              ID:
             </label>
             <input
               type="text"
               value={userData.id}
               readOnly
             />
-        </div>
-          
+          </div>
+
           <div className="input_container">
-          <label>
-            Name:
+            <label>
+              Name:
             </label>
             <input
               type="text"
@@ -111,10 +143,10 @@ export const Updateuser = () => {
               onChange={(e) => handleInputChange("name", e.target.value)}
             />
           </div>
-          
+
           <div className="input_container">
-          <label>
-            Email:
+            <label>
+              Email:
             </label>
             <input
               type="text"
@@ -123,23 +155,23 @@ export const Updateuser = () => {
               onChange={(e) => handleInputChange("email", e.target.value)}
             />
           </div>
-          
+
           <div className="input_container">
             <label>
               Active Status:
-              </label>
-              <select
-                value={userData.activeStatus}
-                onChange={(e) => handleInputChange("activeStatus", e.target.value)}
-              >
-                <option value={true}>True</option>
-                <option value={false}>False</option>
-              </select>
-        </div>
-          
+            </label>
+            <select
+              value={userData.activeStatus}
+              onChange={(e) => handleInputChange("activeStatus", e.target.value)}
+            >
+              <option value={true}>True</option>
+              <option value={false}>False</option>
+            </select>
+          </div>
+
           <div className="input_container">
-          <label>
-            Country:
+            <label>
+              Country:
             </label>
             <input
               type="text"
@@ -148,23 +180,23 @@ export const Updateuser = () => {
               onChange={(e) => handleInputChange("country", e.target.value)}
             />
           </div>
-          
+
           <div className="input_container">
             <label>
               Admin:
-              </label>
-              <select
-                value={userData.admin}
-                onChange={(e) => handleInputChange("admin", e.target.value)}
-              >
-                <option value={true}>True</option>
-                <option value={false}>False</option>
-              </select>
-        </div>
-          
+            </label>
+            <select
+              value={userData.admin}
+              onChange={(e) => handleInputChange("admin", e.target.value)}
+            >
+              <option value={true}>True</option>
+              <option value={false}>False</option>
+            </select>
+          </div>
+
           <div className="input_container">
-          <label>
-            Location:
+            <label>
+              Location:
             </label>
             <input
               type="text"
@@ -173,10 +205,10 @@ export const Updateuser = () => {
               onChange={(e) => handleInputChange("location", e.target.value)}
             />
           </div>
-          
+
           <div className="input_container">
-          <label>
-            Password:
+            <label>
+              Password:
             </label>
             <input
               type="text"
@@ -185,20 +217,26 @@ export const Updateuser = () => {
               onChange={(e) => handleInputChange("password", e.target.value)}
             />
           </div>
-          
-          
+
+          <div className="input_container">
+            <label>Phone Number:</label>
+            <input
+              type="text"
+              placeholder="Phone Number"
+              onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
+            />
+
+          </div>
+
+
 
           <Button> Submit</Button>
-        </form> 
-        {notification.type === "error" && (
+        </form>
+
         <ErrorBox>
-          {notification.message}
-          {!validateName(userData.name) && <div>° Invalid format. Only alphanumeric characters allowed.</div>}
-          {!validateEmail(userData.email) && <div>° Invalid email format.</div>}
-          {!validatePassword(userData.password) && <div>° Password must contain at least one letter and one number, and be at least 6 characters long.</div>}
-          {!validatePhoneNumber(userData.phoneNumber) && <div>° Invalid phone number format. It should be between 7 and 13 digits and must be numbers.</div>}
+          {error.message}
         </ErrorBox>
-      )}
+
 
         {userSubmited && <p>Usuario actualizado</p>}
       </>

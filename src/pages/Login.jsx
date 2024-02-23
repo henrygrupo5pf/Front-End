@@ -277,7 +277,6 @@ export const Login = () => {
                   <ReservarButton>Reserva un producto</ReservarButton>
                 </Link>
                 <Link to="/productForm" style={{ textDecoration: 'none' }}>
-                  <PublicarButton>Publica un producto</PublicarButton>
                 </Link><LogoutButton onClick={handleLogout}>Cerrar Sesión</LogoutButton>
               </>
             ) : (

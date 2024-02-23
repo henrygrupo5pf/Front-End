@@ -7,7 +7,7 @@ export const ProductInfo = ({ info }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/product/${info.id}`, {
+
       const response = await fetch(`${BASE_URL}/product/${info.id}`, {
         method: 'DELETE',
         headers: {

@@ -9,22 +9,10 @@ export const UpdateProduct = () => {
   const { id } = useParams();
   const [productData, setProductData] = useState(null);
   const [productSubmited, setProductSubmited] = useState(false)
-  const [notification, setNotification] = useState({
-    type: "",
-    message: "",
-  });
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  //FALTAN LAS VALIDACIONES DE CADA CAMPO
-  //Y NOTIFICACIONES
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
+  const [error, setError] = useState({
+    result: false,
+    message: ""
+  })
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -45,58 +33,85 @@ export const UpdateProduct = () => {
     fetchProduct();
   }, [id]);
 
+  
+  const validateName = (value) => {
+    return /^[A-Za-z0-9\s]+$/.test(value)
+  }
+
+  const validateDescription = (value) => {
+    return /^.{1,200}$/.test(value)
+  }
+
+  const validateCost = (value) => {
+    return /^[1-9]\d*$/ && parseFloat(value) > 0;
+  }
+
+  const validatePhoto = (value) => {
+    return /^(ftp|http|https):\/\/[^ "]+$/i.test(value);
+  };
+
   const handleInputChange = (fieldName, value) => {
-    setNotification({ type: "", message: "" })
     setProductData((prevData) => ({
       ...prevData,
       [fieldName]: value,
-    }));
+    }))
+    if (fieldName === "name") {
+      value === "" ? setError({ result: false }) : validateName(value) ? setError({ result: false }) : setError(
+        {
+          result: true,
+          message: "° Name must be a alfanumeric combination"
+        })
+    }
+    if (fieldName === "description") {
+      value === "" ? setError({ result: false }) : validateDescription(value) ? setError({ result: false }) : setError(
+        {
+          result: true,
+          message: "° Description its to longe. Please change it"
+        })
+    }
+    if (fieldName === "cost") {
+      value === "" ? setError({ result: false }) : validateCost(value) ? setError({ result: false }) : setError(
+        {
+          result: true,
+          message: "° Cost must be high than 0 "
+        })
+    }
+    if (fieldName === "photo") {
+      value === "" ? setError({ result: false }) : validatePhoto(value) ? setError({ result: false }) : setError(
+        {
+          result: true,
+          message: "° The URL is incorrect. Please change it "
+        })
+    }
   };
 
   const handleOnSubmit = async (e) => {
-
     e.preventDefault();
-    let aux = 0
-    
-    if (!validateName(productData.name) || !validateDescription(productData.description) || !validateCost(productData.cost) || !validatePhoto(productData.photo)) {
-      aux = 1
-    }
-    if (aux === 1) {
-      setNotification({ type: "error", message: "° Please check your input fields." })
-      
-      aux = 0
-      
-      return;
-    }
-    console.log("2:",notification);
-    try {
+    if (!error) {
 
-      const submitFetch = await fetch(`${BASE_URL}/product/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...productData, cost: parseFloat(productData.cost) }),
-      });
-      if (!submitFetch.ok) {
-        
-        throw new Error(`Something went wrong. Try again. Código de error: ${submitFetch.status}`);
+      try {
+
+        const submitFetch = await fetch(`${BASE_URL}/product/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...productData, cost: parseFloat(productData.cost) }),
+        });
+        if (!submitFetch.ok) {
+
+          throw new Error(`Something went wrong. Try again. Código de error: ${submitFetch.status}`);
+        }
+
+      } catch (error) {
+        console.error(error);
       }
 
-    } catch (error) {
-      console.error(error);
+      setProductSubmited(true)
     }
-
-    setProductSubmited(true)
   };
 
-  const validateName = (name) => /^[a-zA-Z0-9]+$/.test(name);
 
-  const validateDescription = (description) => /^[a-zA-Z0-9\s]{15,500}$/.test(description);
-
-  const validateCost = (cost) => /^\d+(\.\d{1,2})?$/.test(cost) && parseFloat(cost) > 0;
-
-  const validatePhoto = (photo) => /^(ftp|http|https):\/\/[^ "]+$/i.test(photo);
 
 
 
@@ -199,15 +214,9 @@ export const UpdateProduct = () => {
 
           <Button> Submit</Button>
         </form>
-        {notification.type === "error" && (
-          <ErrorBox>
-            {notification.message}
-            {!validateName(productData.name) && <div>° Invalid format name. Only alphanumeric characters allowed.</div>}
-            {!validateDescription(productData.description) && <div>° Description must be longer .</div>}
-            {!validateCost(productData.cost) && <div>° Cost must be a number greater than 0</div>}
-            {!validatePhoto(productData.photo) && <div>° Invalid format photo. Only alphanumeric characters allowed.</div>}
-          </ErrorBox>
-        )}
+        <ErrorBox>
+          {error.message}
+        </ErrorBox>
         {productSubmited && <p>Producto actualizado</p>}
       </>
       )}

@@ -65,12 +65,15 @@ const CheckOut = () => {
           Continuar
         </SubmitButton>
       </FormContainer>
+      
     </Container>
+    
 
   );
 
 };
 export default CheckOut;
+
 
 const Container = styled.div`
 width: 100%;

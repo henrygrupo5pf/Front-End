@@ -2,25 +2,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 import appFirebase from '../../../credenciales';
-import { getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const auth = getAuth(appFirebase);
 
 export const Usercreate = () => {
   const BASE_URL = "https://pf-server-93lj.onrender.com";
-
-    /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  //FALTAN LAS VALIDACIONES DE CADA CAMPO
-  //Y NOTIFICACIONES
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
-  /////////////////////////////////////
 
   const [userForFetch, setUserForFetch] = useState({
     name: "",
@@ -31,6 +18,11 @@ export const Usercreate = () => {
     location: "",
     phoneNumber: "",
     admin: false,
+  });
+
+  const [notification, setNotification] = useState({
+    type: "",
+    message: "",
   });
 
   const handleOnChange = (fieldName, value) => {
@@ -44,6 +36,11 @@ export const Usercreate = () => {
     e.preventDefault();
 
     try {
+      if (!validateName(userForFetch.name) || !validateEmail(userForFetch.email) || !validatePassword(userForFetch.password) || !validatePhoneNumber(userForFetch.phoneNumber)) {
+        setNotification({ type: "error", message: "° Please check your input fields." });
+        return;
+      }
+
       const userFetched = await fetch(`${BASE_URL}/user`, {
         method: "POST",
         headers: {
@@ -54,23 +51,31 @@ export const Usercreate = () => {
 
       createUserWithEmailAndPassword(auth, userForFetch.email, userForFetch.password);
 
+      setNotification({ type: "success", message: "User created successfully." });
       console.log(userForFetch);
     } catch (error) {
       console.error("Error al enviar la solicitud:", error);
+      setNotification({ type: "error", message: "Error creating user. Please try again." });
     }
   };
 
+  const validateName = (name) => /^[a-zA-Z0-9]+$/.test(name);
+
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const validatePassword = (password) => /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,}$/.test(password);
+
+  const validatePhoneNumber = (phoneNumber) => /^\d{7,13}$/.test(phoneNumber);
+
   return (
     <Container>
-      <>Creacion de usuarios</>
+      <div>Creacion de usuarios</div>
       <Link className="Link" to="/dashboard">
-        <Button> Back</Button>
+        <Button>Back</Button>
       </Link>
       <form onSubmit={handleOnSubmit}>
-      <div className="input_container">
-        <label>
-          Country:
-          </label>
+        <div className="input_container">
+          <label>Country:</label>
           <select
             value={userForFetch.country}
             onChange={(e) => handleOnChange("country", e.target.value)}
@@ -80,11 +85,10 @@ export const Usercreate = () => {
             <option value="Country2">Country2</option>
             <option value="Country3">Country3</option>
           </select>
-      </div>
-      <div className="input_container">
-        <label>
-          Location:
-          </label>
+        </div>
+
+        <div className="input_container">
+          <label>Location:</label>
           <select
             value={userForFetch.location}
             onChange={(e) => handleOnChange("location", e.target.value)}
@@ -94,33 +98,30 @@ export const Usercreate = () => {
             <option value="Location2">Location2</option>
             <option value="Location3">Location3</option>
           </select>
+        </div>
 
-      </div>
-      <div className="input_container">
-        <label>
-          Name:
-          </label>
+        <div className="input_container">
+          <label>Name:</label>
           <input
             type="text"
             placeholder="Name"
             onChange={(e) => handleOnChange("name", e.target.value)}
           />
+
         </div>
+
         <div className="input_container">
-        <label>
-          Email:
-          </label>
+          <label>Email:</label>
           <input
             type="text"
             placeholder="Email"
             onChange={(e) => handleOnChange("email", e.target.value)}
           />
-        
+
         </div>
+
         <div className="input_container">
-        <label>
-          Active Status:
-          </label>
+          <label>Active Status:</label>
           <select
             value={userForFetch.activestatus}
             onChange={(e) => handleOnChange("activestatus", e.target.value)}
@@ -128,37 +129,30 @@ export const Usercreate = () => {
             <option value={true}>True</option>
             <option value={false}>False</option>
           </select>
-      
         </div>
 
         <div className="input_container">
-        <label>
-          Password:
-          </label>
+          <label>Password:</label>
           <input
             type="text"
             placeholder="Password"
             onChange={(e) => handleOnChange("password", e.target.value)}
           />
-        
+
         </div>
 
         <div className="input_container">
-        <label>
-          Phone Number:
-          </label>
+          <label>Phone Number:</label>
           <input
             type="text"
             placeholder="Phone Number"
             onChange={(e) => handleOnChange("phoneNumber", e.target.value)}
           />
-        
+
         </div>
 
         <div className="input_container">
-        <label>
-          Admin:
-          </label>
+          <label>Admin:</label>
           <select
             value={userForFetch.admin}
             onChange={(e) => handleOnChange("admin", e.target.value)}
@@ -166,16 +160,24 @@ export const Usercreate = () => {
             <option value={false}>False</option>
             <option value={true}>True</option>
           </select>
-        
-
         </div>
 
-        <button>Submit</button>
+        <Button type="submit">Submit</Button>
       </form>
+   
+      {notification.type === "error" && (
+        <ErrorBox>
+          {!validateName(userForFetch.name) && <div>° Invalid format. Only alphanumeric characters allowed.</div>}
+          {!validateEmail(userForFetch.email) && <div>° Invalid email format.</div>}
+          {!validatePassword(userForFetch.password) && <div>° Password must contain at least one letter and one number, and be at least 6 characters long.</div>}
+          {!validatePhoneNumber(userForFetch.phoneNumber) && <div>° Invalid phone number format. It should be between 7 and 13 digits and must be numbers.</div>}
+          {notification.message}
+        </ErrorBox>
+      )}
     </Container>
   );
-};
 
+};
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -237,20 +239,19 @@ const Container = styled.div`
     }
     
     select:focus {
-      border-color: #66afe9; /* Cambiar color de borde al hacer hover */
+      border-color: #66afe9; 
     }
     
     select option:first-child {
-      color: #a0a0a0; /* Color para el texto de la opción de "Selecciona una categoría" */
+      color: #a0a0a0; 
     }
     
     select option:hover {
-      background-color: #f0f0f0; /* Cambiar color de fondo al hacer hover en las opciones */
+      background-color: #f0f0f0; 
     }
-`
+`;
 
 const Button = styled.div`
-
   font-size: 16px;
   background-color: #4caf50; 
   color: #fff;
@@ -263,8 +264,17 @@ const Button = styled.div`
   width: 250px;
   text-align:center;
 
-
-&:hover {
-  background-color: #45a049; 
+  &:hover {
+    background-color: #45a049; 
   }
+`;
+
+const ErrorBox = styled.div`
+  background-color: #ff9999;
+  color: #990000;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  width: 300px;
+  align-self: flex-end;
 `;

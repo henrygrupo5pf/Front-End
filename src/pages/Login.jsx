@@ -48,28 +48,6 @@ export const Login = () => {
 
     return () => unsubscribe();
   }, [setUserAuth]);
-
-  // const handleAuthentication = async (authFunction, userData) => {
-  //   try {
-  //     await authFunction;
-      // console.log('Autenticación exitosa');
-  //     const response = await fetch(`${BASE_URL}/user/login`, {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({email: user.email, password: user.password}),
-  // });
-  //     const userApi = await response.json();
-      // console.log('Respuesta de la API:', userApi);
-  //     setUserAuth(userApi);
-  //     console.log(userApi);
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
-
-  // Método para manejar el inicio de sesión
   const handleLogin = async () => {
     if (!validateEmail(user.email)) {
       setError("El correo electrónico no es válido");
@@ -90,13 +68,13 @@ export const Login = () => {
         body: JSON.stringify({ email: user.email, password: user.password }),
       });
       const userData = await response.json()
-      if (!userData.ok) {
+      /* if (!userData.ok) {
         console.log(userData);
         throw new Error(`Something went wrong. Try again. Código de error: ${userData}`);
-      }
+      } */
+      console.log(userData);
       signInWithEmailAndPassword(auth, user.email, user.password);
       setUserAuth(userData)
-      console.log(userData);
     } catch (error) {
       console.log(error);
     }

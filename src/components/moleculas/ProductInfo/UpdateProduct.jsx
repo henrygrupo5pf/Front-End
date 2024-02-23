@@ -9,7 +9,10 @@ export const UpdateProduct = () => {
   const { id } = useParams();
   const [productData, setProductData] = useState(null);
   const [productSubmited, setProductSubmited] = useState(false)
-
+  const [notification, setNotification] = useState({
+    type: "",
+    message: "",
+  });
   /////////////////////////////////////
   /////////////////////////////////////
   /////////////////////////////////////
@@ -43,23 +46,37 @@ export const UpdateProduct = () => {
   }, [id]);
 
   const handleInputChange = (fieldName, value) => {
-
+    setNotification({ type: "", message: "" })
     setProductData((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
   };
-  const handleOnSubmit = async (e) => {
-    e.preventDefault();
 
-    try {
+  const handleOnSubmit = async (e) => {
+
+    e.preventDefault();
+    let aux = 0
+    
+    if (!validateName(productData.name) || !validateDescription(productData.description) || !validateCost(productData.cost) || !validatePhoto(productData.photo)) {
+      aux = 1
+    }
+    if (aux === 1) {
+      setNotification({ type: "error", message: "° Please check your input fields." })
       
+      aux = 0
+      
+      return;
+    }
+    console.log("2:",notification);
+    try {
+
       const submitFetch = await fetch(`${BASE_URL}/product/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({...productData, cost: parseFloat(productData.cost)}),
+        body: JSON.stringify({ ...productData, cost: parseFloat(productData.cost) }),
       });
       if (!submitFetch.ok) {
         
@@ -73,6 +90,17 @@ export const UpdateProduct = () => {
     setProductSubmited(true)
   };
 
+  const validateName = (name) => /^[a-zA-Z0-9]+$/.test(name);
+
+  const validateDescription = (description) => /^[a-zA-Z0-9\s]{15,500}$/.test(description);
+
+  const validateCost = (cost) => /^\d+(\.\d{1,2})?$/.test(cost) && parseFloat(cost) > 0;
+
+  const validatePhoto = (photo) => /^(ftp|http|https):\/\/[^ "]+$/i.test(photo);
+
+
+
+
   return (
     <Container>
       <>Modificacion de usuarios</>
@@ -82,20 +110,20 @@ export const UpdateProduct = () => {
         <Button> Back</Button>
       </Link>
         <form onSubmit={handleOnSubmit}>
-        <div className="input_container">
-        <label>
-            ID:
+          <div className="input_container">
+            <label>
+              ID:
             </label>
             <input
               type="text"
               value={productData.id}
               readOnly
             />
-        </div>
-          
-        <div className="input_container">
-        <label>
-            Name:
+          </div>
+
+          <div className="input_container">
+            <label>
+              Name:
             </label>
             <input
               type="text"
@@ -103,11 +131,11 @@ export const UpdateProduct = () => {
               placeholder="Name"
               onChange={(e) => handleInputChange("name", e.target.value)}
             />
-        </div>
-          
+          </div>
+
           <div className="input_container">
-          <label>
-            Description:
+            <label>
+              Description:
             </label>
             <input
               type="text"
@@ -116,11 +144,11 @@ export const UpdateProduct = () => {
               onChange={(e) => handleInputChange("description", e.target.value)}
             />
           </div>
-          
-          
+
+
           <div className="input_container">
-          <label>
-            Category:
+            <label>
+              Category:
             </label>
             <input
               type="text"
@@ -129,23 +157,23 @@ export const UpdateProduct = () => {
               onChange={(e) => handleInputChange("category", e.target.value)}
             />
           </div>
-          
+
           <div className="input_container">
             <label>
               Active Status:
-              </label>
-              <select
-                value={productData.activeStatus}
-                onChange={(e) => handleInputChange("activeStatus", e.target.value)}
-              >
-                <option value={true}>True</option>
-                <option value={false}>False</option>
-              </select>
-        </div>
-          
+            </label>
+            <select
+              value={productData.activeStatus}
+              onChange={(e) => handleInputChange("activeStatus", e.target.value)}
+            >
+              <option value={true}>True</option>
+              <option value={false}>False</option>
+            </select>
+          </div>
+
           <div className="input_container">
-          <label>
-            Cost:
+            <label>
+              Cost:
             </label>
             <input
               type="number"
@@ -154,10 +182,10 @@ export const UpdateProduct = () => {
               onChange={(e) => handleInputChange("cost", e.target.value)}
             />
           </div>
-          
+
           <div className="input_container">
-          <label>
-            Photo:
+            <label>
+              Photo:
             </label>
             <input
               type="text"
@@ -166,13 +194,21 @@ export const UpdateProduct = () => {
               onChange={(e) => handleInputChange("photo", e.target.value)}
             />
           </div>
-          
-          
 
-          <button> Submit</button>
+
+
+          <Button> Submit</Button>
         </form>
-
-        {productSubmited && <p>Usuario actualizado</p>}
+        {notification.type === "error" && (
+          <ErrorBox>
+            {notification.message}
+            {!validateName(productData.name) && <div>° Invalid format name. Only alphanumeric characters allowed.</div>}
+            {!validateDescription(productData.description) && <div>° Description must be longer .</div>}
+            {!validateCost(productData.cost) && <div>° Cost must be a number greater than 0</div>}
+            {!validatePhoto(productData.photo) && <div>° Invalid format photo. Only alphanumeric characters allowed.</div>}
+          </ErrorBox>
+        )}
+        {productSubmited && <p>Producto actualizado</p>}
       </>
       )}
     </Container>
@@ -270,4 +306,14 @@ const Button = styled.div`
 &:hover {
   background-color: #45a049; 
   }
+`;
+
+const ErrorBox = styled.div`
+  background-color: #ff9999;
+  color: #990000;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  width: 300px;
+  align-self: flex-end;
 `;

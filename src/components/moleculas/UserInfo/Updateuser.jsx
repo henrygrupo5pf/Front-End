@@ -90,7 +90,7 @@ export const Updateuser = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    if(!error){ try {
+    if(!error.result){ try {
       const submitFetch = await fetch(`${BASE_URL}/user/${id}`, {
         method: 'PUT',
         headers: {
@@ -228,7 +228,7 @@ export const Updateuser = () => {
 
           </div>
 
-          <Button> Submit</Button>
+          <button> Submit</button>
         </form>
 
         <ErrorBox>

@@ -19,10 +19,10 @@ const CheckOut = () => {
       userId: userInfo
     };
     console.log(requestBody);
-
+    
 
     try {
-      const response = await fetch(`${TEST_URL}/checkout`, {
+      const response = await fetch(`${BASE_URL}/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -5,28 +5,29 @@ import { InfinitySpin } from 'react-loader-spinner';
 //Intente usar useHistory pero no me deja. Me salta error de vite
 
 const Success = () => {
-    useEffect(() => {
-        let countdown = 5;
+  useEffect(() => {
+    let countdown = 5;
 
-        const countdownInterval = setInterval(() => {
-            if (countdown === 0) {
-                window.location.href = 'https://pf-front-end.onrender.com/#/checkout/success';
-            }
-            countdown -= 1;
-        }, 1000);
+    const countdownInterval = setInterval(() => {
+      console.log(countdown);
+      if (countdown === 0) {
+        window.location.href = 'https://pf-front-end.onrender.com/';
+      }
+      countdown -= 1;
+    }, 1000);
 
-        return () => clearInterval(countdownInterval);
-    }, []);
+    return () => clearInterval(countdownInterval);
+  }, []);
 
-    return (
-        <Container>
-            <SuccessContainer>
-                <SuccessMessage>Thank you for your purchase</SuccessMessage>
-                <CountdownMessage>You will be redirected to the Homepage in a few seconds</CountdownMessage>
-                <InfinitySpin />
-            </SuccessContainer>
-        </Container>
-    );
+  return (
+    <Container>
+      <SuccessContainer>
+        <SuccessMessage>Thank you for your purchase</SuccessMessage>
+        <CountdownMessage>You will be redirected to the Homepage in a few seconds</CountdownMessage>
+        <InfinitySpin />
+      </SuccessContainer>
+    </Container>
+  );
 };
 
 export default Success;

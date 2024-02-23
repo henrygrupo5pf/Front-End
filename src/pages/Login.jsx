@@ -67,6 +67,7 @@ export const Login = () => {
         },
         body: JSON.stringify({ email: user.email, password: user.password }),
       });
+      console.log(response);
       const userData = await response.json()
       /* if (!userData.ok) {
         console.log(userData);

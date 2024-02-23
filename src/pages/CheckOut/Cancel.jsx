@@ -10,10 +10,10 @@ const Cancel = () => {
 
     const countdownInterval = setInterval(() => {
       if (countdown === 0) {
-        window.location.href = 'https://pf-front-end.onrender.com/#/checkout/success';
+        window.location.href = 'https://pf-front-end.onrender.com/';
       }
       countdown -= 1;
-    }, 1000); 
+    }, 1000);
 
     return () => clearInterval(countdownInterval);
   }, []);

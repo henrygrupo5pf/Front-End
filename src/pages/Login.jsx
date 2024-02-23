@@ -153,8 +153,19 @@ export const Login = () => {
       });
 
       const userData = await response.json()
+      console.log(userData);
+      if (userData.user.activeStatus === false) {
+        handleLogout()
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Este usuario esta deshabilitado.",
+        });
+      }else{
+        setUserAuth(userData.user);
+      }
 
-      setUserAuth(userData.user);
+      
     } catch (error) {
       setError(error.message);
     }
@@ -293,7 +304,6 @@ export const Login = () => {
 export default Login;
 
 const BackGround=styled.div`
-height: 100vh;
 
 `;
 
@@ -312,6 +322,7 @@ max-width: 396px;
 width: 90%; 
 justify-content: center;
 text-align: center;
+height: 100vh;
 
 `;
 
@@ -336,8 +347,6 @@ const Input = styled.input`
   border-radius: 5px;
   display: block;
   margin-left: 30px
-  
-  
 
 `;
 const ContainerBtn = styled.div`

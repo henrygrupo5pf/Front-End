@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 
 export const UsersInfo = ({ info }) => {
-  const BASE_URL = "https://pf-server-93lj.onrender.com"
+  const BASE_URL = "https://pf-server-93lj.onrender.com";
+
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/users/${info.id}`, {
+      const response = await fetch(`${BASE_URL}/user/${info.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -14,14 +16,16 @@ export const UsersInfo = ({ info }) => {
       });
 
       if (response.ok) {
-        console.log('Producto eliminado correctamente');
+        console.log('Dato eliminado correctamente');
+        window.location.reload();
       } else {
-        console.error('Error al eliminar producto:', response.statusText);
+        console.error('Error al eliminar el dato:', response.statusText);
       }
     } catch (error) {
       console.error('Error al realizar la solicitud DELETE:', error.message);
     }
   };
+
   return (
     <Container>
       <div className={info.activeStatus ? "id" : "id_inactive"}> {info.id}  </div>
@@ -34,6 +38,7 @@ export const UsersInfo = ({ info }) => {
     </Container>
   );
 };
+
 
 const Container = styled.div`
   display: flex;

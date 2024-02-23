@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 
 export const ProductInfo = ({ info }) => {
   const BASE_URL = "https://pf-server-93lj.onrender.com"
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/products/${info.id}`, {
+      const response = await fetch(`${BASE_URL}/product/${info.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -15,6 +16,9 @@ export const ProductInfo = ({ info }) => {
 
       if (response.ok) {
         console.log('Producto eliminado correctamente');
+        window.location.reload();
+
+        console.log(swDeleted);
       } else {
         console.error('Error al eliminar producto:', response.statusText);
       }
@@ -22,6 +26,7 @@ export const ProductInfo = ({ info }) => {
       console.error('Error al realizar la solicitud DELETE:', error.message);
     }
   };
+
 
   return (
     <Container>

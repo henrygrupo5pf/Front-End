@@ -38,7 +38,7 @@ export const UserDash = () => {
         return data;
       })
       .catch((error) => {
-        setError("You have entered a wrong parameter. Remember that ID must be a number ");
+        setError("No users found. Please try searching with different parameters");
         return 0
       });
   };

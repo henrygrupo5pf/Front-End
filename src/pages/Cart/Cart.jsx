@@ -1,4 +1,114 @@
-import React from 'react';
+// import React from 'react';
+// import { useCartStore } from "../../Store/CartStore";
+// import { useNavigate } from "react-router-dom";
+// import styled from "styled-components";
+// import { useUserStore } from '../../Store/UserStore';
+// import { Link } from 'react-router-dom';
+
+// const Cart = () => {
+//   const { userAuth } = useUserStore()
+//   const { cartItems, removeFromCart, clearCart } = useCartStore();
+//   const navigate = useNavigate();
+
+//   const handleGoHome = () => {
+//     navigate('/');
+//   };
+
+//   const handleCheckOut = () => {
+//     navigate("/checkOut");
+//   };
+
+//   // Función auxiliar para calcular la cantidad de días entre dos fechas
+//   const calculateDays = (startDate, endDate) => {
+//     const oneDay = 24 * 60 * 60 * 1000; // milisegundos en un día
+//     const diffDays = Math.round(Math.abs((endDate - startDate) / oneDay));
+//     return diffDays + 1; // +1 para incluir ambos días en el conteo
+//   };
+
+//   // Calcula el total basado en el costo por día y el número de días reservados para cada producto
+//   const total = cartItems.reduce((acc, item) => {
+//     const startDate = new Date(item.startDate);
+//     const endDate = new Date(item.endDate);
+//     const diffDays = calculateDays(startDate, endDate);
+//     return acc + (Number(item.cost) * diffDays);
+//   }, 0);
+
+//   const isLogged = () => {
+//     if (userAuth) {
+//       return (
+//         <Button onClick={handleCheckOut}>Continuar con la compra</Button>
+//       )
+//     }
+
+//     return (
+//       <LoginContainer>
+
+//         <Link to='/login'>
+//           <ButtonLogin type="submit"> Iniciar Sesion </ButtonLogin>
+//         </Link>
+//         <h5>Debes iniciar sesion primero</h5>
+//       </LoginContainer>
+//     )
+//   }
+
+//   return (
+//     <Container>
+//       <SubContainer>
+//         {cartItems.length > 0 ? (
+//           cartItems.map((item) => (<>
+         
+//             <CardContainer key={item.id}>
+//               <Options>
+//                 <ButtonOption onClick={() => removeFromCart(item.id)}>Eliminar producto</ButtonOption>
+//               </Options>
+//               <MiniCard>
+//                 <ProductInfo>
+//                   <h5>{item.name}</h5>
+//                   <img className={"img"} src={item.photo} alt={item.name} />
+//                   <h2>${Number(item.cost).toFixed(2)}/ Dia</h2>
+//                 </ProductInfo>
+
+//                 <ReservationInfo>
+//                   <h4>Inicio: {new Date(item.startDate).toLocaleDateString()}</h4>
+//                   <h4>Entrega: {new Date(item.endDate).toLocaleDateString()}</h4>
+//                   <h4>Días reservados: {calculateDays(new Date(item.startDate), new Date(item.endDate))}</h4>
+//                   <h4>Subtotal: ${(Number(item.cost) * calculateDays(new Date(item.startDate), new Date(item.endDate))).toFixed(2)}</h4>
+//                 </ReservationInfo>
+
+//               </MiniCard>
+
+//             </CardContainer>
+//               </>
+//           ))
+          
+//         ) : (
+//           <h1>No hay productos en el carrito.</h1>
+//         )}
+//         <FinalContainer>
+//           <Button onClick={clearCart}>Limpiar carrito</Button>
+//           <Button onClick={handleGoHome}>Regresar a comprar</Button>
+//           {isLogged()}
+//         </FinalContainer>
+//       </SubContainer>
+//     </Container>
+//   );
+// };
+
+// export default Cart;
+
+// import React from 'react';
+// import { useCartStore } from "../../Store/CartStore";
+// import { useNavigate } from "react-router-dom";
+// import styled from "styled-components";
+// import { useUserStore } from '../../Store/UserStore';
+// import { Link } from 'react-router-dom';
+
+// const Cart = () => {
+//   const { userAuth } = useUserStore();
+//   const { cartItems, removeFromCart, clearCart } = useCartStore();
+//   const navigate = useNavigate();
+
+import React, { useEffect } from 'react'; // Asegúrate de importar useEffect
 import { useCartStore } from "../../Store/CartStore";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -6,26 +116,42 @@ import { useUserStore } from '../../Store/UserStore';
 import { Link } from 'react-router-dom';
 
 const Cart = () => {
-  const { userAuth } = useUserStore()
-  const { cartItems, removeFromCart, clearCart } = useCartStore();
+  const { userAuth } = useUserStore();
+  const { cartItems, removeFromCart, clearCart, error, clearError } = useCartStore(state => ({
+    cartItems: state.cartItems,
+    removeFromCart: state.removeFromCart,
+    clearCart: state.clearCart,
+    error: state.error,
+    clearError: state.clearError,
+  }));
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      alert(error);
+      clearError();
+    }
+  }, [error, clearError]);
 
   const handleGoHome = () => {
     navigate('/');
   };
 
   const handleCheckOut = () => {
+    if (!userAuth) {
+      alert("Por favor, inicia sesión para continuar con la compra.");
+      navigate("/login");
+      return;
+    }
     navigate("/checkOut");
   };
 
-  // Función auxiliar para calcular la cantidad de días entre dos fechas
   const calculateDays = (startDate, endDate) => {
     const oneDay = 24 * 60 * 60 * 1000; // milisegundos en un día
-    const diffDays = Math.round(Math.abs((endDate - startDate) / oneDay));
+    const diffDays = Math.round(Math.abs((new Date(endDate).getTime() - new Date(startDate).getTime()) / oneDay));
     return diffDays + 1; // +1 para incluir ambos días en el conteo
   };
 
-  // Calcula el total basado en el costo por día y el número de días reservados para cada producto
   const total = cartItems.reduce((acc, item) => {
     const startDate = new Date(item.startDate);
     const endDate = new Date(item.endDate);
@@ -33,68 +159,60 @@ const Cart = () => {
     return acc + (Number(item.cost) * diffDays);
   }, 0);
 
-  const isLogged = () => {
-    if (userAuth) {
-      return (
-        <Button onClick={handleCheckOut}>Continuar con la compra</Button>
-      )
-    }
-
-    return (
-      <LoginContainer>
-
-        <Link to='/login'>
-          <ButtonLogin type="submit"> Iniciar Sesion </ButtonLogin>
-        </Link>
-        <h5>Debes iniciar sesion primero</h5>
-      </LoginContainer>
-    )
-  }
-
   return (
     <Container>
       <SubContainer>
         {cartItems.length > 0 ? (
-          cartItems.map((item) => (<>
-         
-            <CardContainer key={item.id}>
-              <Options>
-                <ButtonOption onClick={() => removeFromCart(item.id)}>Eliminar producto</ButtonOption>
-              </Options>
-              <MiniCard>
-                <ProductInfo>
-                  <h5>{item.name}</h5>
-                  <img className={"img"} src={item.photo} alt={item.name} />
-                  <h2>${Number(item.cost).toFixed(2)}/ Dia</h2>
-                </ProductInfo>
+          cartItems.map((item) => (
+            <React.Fragment key={item.id}>
+              <CardContainer>
+                <Options>
+                  <ButtonOption onClick={() => removeFromCart(item.id)}>Eliminar producto</ButtonOption>
+                </Options>
+                <MiniCard>
+                  <ProductInfo>
+                    <h5>{item.name}</h5>
+                    <img className={"img"} src={item.photo} alt={item.name} />
+                    <h2>${Number(item.cost).toFixed(2)}/ Día</h2>
+                  </ProductInfo>
 
-                <ReservationInfo>
-                  <h4>Inicio: {new Date(item.startDate).toLocaleDateString()}</h4>
-                  <h4>Entrega: {new Date(item.endDate).toLocaleDateString()}</h4>
-                  <h4>Días reservados: {calculateDays(new Date(item.startDate), new Date(item.endDate))}</h4>
-                  <h4>Subtotal: ${(Number(item.cost) * calculateDays(new Date(item.startDate), new Date(item.endDate))).toFixed(2)}</h4>
-                </ReservationInfo>
-
-              </MiniCard>
-
-            </CardContainer>
-              </>
+                  <ReservationInfo>
+                    <h4>Inicio: {new Date(item.startDate).toLocaleDateString()}</h4>
+                    <h4>Entrega: {new Date(item.endDate).toLocaleDateString()}</h4>
+                    <h4>Días reservados: {calculateDays(new Date(item.startDate), new Date(item.endDate))}</h4>
+                    <h4>Subtotal: ${(Number(item.cost) * calculateDays(new Date(item.startDate), new Date(item.endDate))).toFixed(2)}</h4>
+                  </ReservationInfo>
+                </MiniCard>
+              </CardContainer>
+            </React.Fragment>
           ))
-          
         ) : (
           <h1>No hay productos en el carrito.</h1>
         )}
         <FinalContainer>
           <Button onClick={clearCart}>Limpiar carrito</Button>
           <Button onClick={handleGoHome}>Regresar a comprar</Button>
-          {isLogged()}
+          {userAuth ? (
+            <Button onClick={handleCheckOut}>Continuar con la compra</Button>
+          ) : (
+            <LoginContainer>
+              <Link to='/login'>
+                <ButtonLogin type="submit">Iniciar Sesión</ButtonLogin>
+              </Link>
+              <h5>Debes iniciar sesión primero</h5>
+            </LoginContainer>
+          )}
         </FinalContainer>
+        <h2>Total: ${total.toFixed(2)}</h2>
       </SubContainer>
     </Container>
   );
 };
 
 export default Cart;
+
+// Aquí deberías definir o importar tus componentes estilizados como Container, SubContainer, CardContainer, etc.
+
 
 
 

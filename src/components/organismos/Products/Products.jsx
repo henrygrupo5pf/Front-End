@@ -23,7 +23,7 @@ const fetchProducts = ({ queryKey }) => {
 
 
   const url = params.toString() === ""
-    ? `https://pf-server-93lj.onrender.com/product`
+    ? `https://pf-server-93lj.onrender.com/product/active`
     : `https://pf-server-93lj.onrender.com/product/filter?${params.toString()}`
 
   /* ? `https://pf-server-93lj.onrender.com/product` 

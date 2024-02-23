@@ -68,7 +68,10 @@ export const Login = () => {
         body: JSON.stringify({ email: user.email, password: user.password }),
       });
       const userData = await response.json()
-      console.log(userData);
+      if (!userData.ok) {
+        console.log(userData);
+        throw new Error(`Something went wrong. Try again. Código de error: ${userData}`);
+      }
       signInWithEmailAndPassword(auth, user.email, user.password);
       setUserAuth(userData)
       console.log(userData);
@@ -269,7 +272,7 @@ export const Login = () => {
               <>
                 <Titulo>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</Titulo>
                 {isRegistering()}
-                {error && <Error>{error}</Error>}
+                {error && <Errorcomp>{error}</Errorcomp>}
                 <ContainerBtn>
                   <RegisterButton onClick={registrando ? handleRegister : handleLogin}>{registrando ? 'Registrarse' : 'Iniciar Sesión'}</RegisterButton>
                   <Button onClick={handleForgotPassword}>¿Olvidaste tu contraseña?</Button>
@@ -372,7 +375,7 @@ const GoogleLoginButton = styled(Button)`
   color: white;
 `;
 
-const Error = styled.p`
+const Errorcomp = styled.p`
 color: red;
 margin-top: 10px;
 `;

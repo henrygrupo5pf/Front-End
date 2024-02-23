@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Swal from 'sweetalert2'
 
 export const UsersInfo = ({ info }) => {
-  const BASE_URL = "https://pf-server-93lj.onrender.com"
+  const BASE_URL = "https://pf-server-93lj.onrender.com";
+
 
   const handleDelete = async () => {
     try {
@@ -38,6 +39,7 @@ export const UsersInfo = ({ info }) => {
       console.error('Error al realizar la solicitud DELETE:', error.message);
     }
   };
+
   return (
     <Container>
       <div className={info.activeStatus ? "id" : "id_inactive"}> {info.id}  </div>
@@ -50,6 +52,7 @@ export const UsersInfo = ({ info }) => {
     </Container>
   );
 };
+
 
 const Container = styled.div`
   display: flex;

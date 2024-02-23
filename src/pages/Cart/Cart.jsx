@@ -49,6 +49,29 @@ const Cart = () => {
     return acc + (Number(item.cost) * diffDays);
   }, 0);
 
+  const isLogged = () => {
+    console.log(cartItems.length);
+    if (userAuth) {
+      if(cartItems.length!=0){
+
+        return (
+          <Button onClick={handleCheckOut}>Continuar con la compra</Button>
+        )
+      }
+      return null
+    }
+
+    return (
+      <LoginContainer>
+
+        <Link to='/login'>
+          <ButtonLogin type="submit"> Iniciar Sesion </ButtonLogin>
+        </Link>
+        <h5>Debes iniciar sesion primero</h5>
+      </LoginContainer>
+    )
+  }
+
   return (
     <Container>
       <SubContainer>
@@ -125,6 +148,7 @@ const Container = styled.div`
   box-shadow: 5px 10px 17px black;
   border-radius: 10px;
   margin: auto;
+  overflow-x: auto;
 
   `
 
@@ -138,7 +162,8 @@ const MiniCard = styled.div`
   background-color: white;
   border-radius: 5px;
   box-shadow: 5px 10px 17px black;
-  overflow: auto; /* Cambiado de hidden a auto para permitir desplazamiento si es necesario */
+  overflow-x: auto; /* Cambiado de hidden a auto para permitir desplazamiento si es necesario */
+  white-space: nowrap; 
 `;
 
 const ProductInfo = styled.div`
@@ -172,6 +197,7 @@ align-items: center;
 justify-content: space-around;
 width: 70%;
 margin: 20px;
+
 
 `
 const Options = styled.div`

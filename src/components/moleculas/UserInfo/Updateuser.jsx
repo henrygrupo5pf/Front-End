@@ -228,8 +228,6 @@ export const Updateuser = () => {
 
           </div>
 
-
-
           <Button> Submit</Button>
         </form>
 

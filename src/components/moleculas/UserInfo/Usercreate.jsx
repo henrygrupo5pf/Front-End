@@ -4,6 +4,10 @@ import styled from 'styled-components';
 import appFirebase from '../../../credenciales';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
+
+
+
+///se elimina por el delete
 const auth = getAuth(appFirebase);
 
 export const Usercreate = () => {
@@ -36,10 +40,7 @@ export const Usercreate = () => {
     e.preventDefault();
 
     try {
-      if (!validateName(userForFetch.name) || !validateEmail(userForFetch.email) || !validatePassword(userForFetch.password) || !validatePhoneNumber(userForFetch.phoneNumber)) {
-        setNotification({ type: "error", message: "° Please check your input fields." });
-        return;
-      }
+
 
       const userFetched = await fetch(`${BASE_URL}/user`, {
         method: "POST",
@@ -59,13 +60,7 @@ export const Usercreate = () => {
     }
   };
 
-  const validateName = (name) => /^[a-zA-Z0-9]+$/.test(name);
 
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-  const validatePassword = (password) => /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,}$/.test(password);
-
-  const validatePhoneNumber = (phoneNumber) => /^\d{7,13}$/.test(phoneNumber);
 
   return (
     <Container>
@@ -165,15 +160,7 @@ export const Usercreate = () => {
         <Button type="submit">Submit</Button>
       </form>
    
-      {notification.type === "error" && (
-        <ErrorBox>
-          {!validateName(userForFetch.name) && <div>° Invalid format. Only alphanumeric characters allowed.</div>}
-          {!validateEmail(userForFetch.email) && <div>° Invalid email format.</div>}
-          {!validatePassword(userForFetch.password) && <div>° Password must contain at least one letter and one number, and be at least 6 characters long.</div>}
-          {!validatePhoneNumber(userForFetch.phoneNumber) && <div>° Invalid phone number format. It should be between 7 and 13 digits and must be numbers.</div>}
-          {notification.message}
-        </ErrorBox>
-      )}
+  
     </Container>
   );
 

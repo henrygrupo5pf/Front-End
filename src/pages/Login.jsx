@@ -68,13 +68,13 @@ export const Login = () => {
         body: JSON.stringify({ email: user.email, password: user.password }),
       });
       const userData = await response.json()
-      if (!userData.ok) {
+      /* if (!userData.ok) {
         console.log(userData);
         throw new Error(`Something went wrong. Try again. Código de error: ${userData}`);
-      }
+      } */
+      console.log(userData);
       signInWithEmailAndPassword(auth, user.email, user.password);
       setUserAuth(userData)
-      console.log(userData);
     } catch (error) {
       console.log(error);
     }

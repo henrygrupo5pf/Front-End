@@ -321,6 +321,7 @@ max-width: 396px;
 width: 90%; 
 justify-content: center;
 text-align: center;
+height: 100vh;
 
 `;
 

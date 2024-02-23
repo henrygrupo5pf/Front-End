@@ -113,12 +113,6 @@ export const UserDash = () => {
           <PaginationText>Page {page}</PaginationText>
           <PaginationButton onClick={handleMax}>Next</PaginationButton>
         </PaginationContainer>
-
-        <ButtonsContainer>
-          <Link className='Link' to="/dashboard/usercreate">
-            <Button > Crear Usuario</Button>
-          </Link>
-        </ButtonsContainer>
       </InfoContainer>
     </Container>
   );

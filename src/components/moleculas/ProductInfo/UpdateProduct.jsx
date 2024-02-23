@@ -85,12 +85,12 @@ export const UpdateProduct = () => {
     }
   };
 
-    console.log("afuera: ", error);
+   
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    console.log(error);
+
     if (!error.result) {
-      console.log("adentro: ",error);
+  
       try {
 
         const submitFetch = await fetch(`${BASE_URL}/product/${id}`, {
